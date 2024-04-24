@@ -11,19 +11,22 @@ RM					=	rm -rf
 INCLUDES			=	includes/
 DEFAULT_INCLUDES	=	-I /usr/local/includes
 
-LEXER_FILES			=
-LEXER				=	$(addprefix srcs/Lexer, $(LEXER_FILES))
+LEXER_FILES			=	lexer.c
+LEXER				=	$(addprefix srcs/Lexer/, $(LEXER_FILES))
 
-PARSER_FILES		=
-PARSER				=	$(addprefix srcs/Parser, $(PARSER_FILES))
+PARSER_FILES		=	parser.c
+PARSER				=	$(addprefix srcs/Parser/, $(PARSER_FILES))
 
-EXPANDER_FILES		=
-EXPANDER			=	$(addprefix srcs/Expander, $(EXPANDER_FILES))
+EXPANDER_FILES		=	expander.c
+EXPANDER			=	$(addprefix srcs/Expander/, $(EXPANDER_FILES))
 
-EXECUTOR_FILES		=
-EXECUTOR			=	$(addprefix srcs/Executor, $(EXECUTOR_FILES))
+BUILTIN_FILES		=	builtins.c
+BUILTINS			=	$(addprefix Builtins/, $(BUILTIN_FILES))
 
-SRCS				=	$(LEXER) $(PARSER) $(EXAPNDER) $(EXECUTOR) minishell.c #malloc.c
+EXECUTOR_FILES		=	$(BUILTINS) executor.c
+EXECUTOR			=	$(addprefix srcs/Executor/, $(EXECUTOR_FILES))
+
+SRCS				=	$(LEXER) $(PARSER) $(EXPANDER) $(EXECUTOR) minishell.c #malloc.c
 SRCS_PATH			=	srcs/
 
 OBJ_DIR				=	objects/
