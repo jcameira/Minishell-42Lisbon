@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/04/24 14:23:22 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:57:15 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@
 # include <signal.h>
 # include <dirent.h>
 
-# define WRONG_ARG_N "Minishell needs to be executed with no additional arguments.\n"
+# define WRONG_ARG_N "Minishell needs to be executed with no additional \
+						arguments.\n"
 
 typedef struct s_ast
 {
@@ -46,7 +47,7 @@ typedef struct s_simplecmd
 typedef struct s_command
 {
 	t_simplecmd	**simplecmd_arr;
-	int 		simplecmd_nbr;
+	int			simplecmd_nbr;
 	char		*infile;
 	int			fd_in;
 	char		*outfile;

@@ -6,18 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/04/24 21:03:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:40:47 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int argc, char **argv, char **envp)
-{
-	if (argc != 1)
-		return (error_message(WRONG_ARG_N), 1);
-	(void) argv;
-	//->preferably duplicate stdin and stdout now to be able to reset later
+//->preferably duplicate stdin and stdout now to be able to reset later
 	//(still debatable, could easily be done only on the execution stage)
 	//->copy enviroment variables into minishell struct
 	//->increment shell level (if no enviroment variables then set to 1)
@@ -49,5 +42,13 @@ int	main(int argc, char **argv, char **envp)
 	//		  write "^\Quit (core dumped)" as well
 	//->start minishell loop (show Minishell prompt and wait for user input,
 	//send the line written to the lexer)
+
+#include "minishell.h"
+
+int	main(int argc, char **argv, char **envp)
+{
+	if (argc != 1)
+		return (error_message(WRONG_ARG_N), 1);
+	(void) argv;
 	return (0);
 }
