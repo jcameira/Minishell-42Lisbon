@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:00:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/01 01:39:10 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:03:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ char	**increment_shlvl(char **array)
 	int		i;
 
 	i = -1;
+	lvl = NULL;
 	while (array[++i])
 	{
 		if (!ft_strncmp(SHLVL, array[i], 6))
@@ -111,7 +112,8 @@ char	**increment_shlvl(char **array)
 	}
 	tmp_str = ft_strjoin(SHLVL, lvl);
 	free(array[i]);
-	free(lvl);
+	if (lvl)
+		free(lvl);
 	array[i] = ft_strdup(tmp_str);
 	free(tmp_str);
 	return (array);

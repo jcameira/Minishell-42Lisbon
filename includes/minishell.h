@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/01 02:10:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:55:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_minishell
 	int					original_stdin;
 	int					original_stdout;
 	int					original_stderr;
-	struct sigaction	signals;
+	// struct sigaction	interactive_sa;
 }				t_minishell;
 
 char	**arrdup(char **array);
@@ -79,5 +79,7 @@ char	**increment_shlvl(char **array);
 char	**set_shlvl(char **array);
 char	**set_pwd(char **array);
 void	free_arr(char **array);
+void	signals_init(void);
+void	interactive_handler(int sig);
 
 #endif

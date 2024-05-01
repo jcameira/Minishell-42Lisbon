@@ -32,7 +32,7 @@ EXECUTOR_FILES		=	$(BUILTIN_FILES) executor.c
 EXECUTOR_PATH		=	srcs/Executor/
 EXECUTOR			=	$(addprefix $(EXECUTOR_PATH), $(EXECUTOR_FILES))
 
-SRCS				=	$(LEXER_FILES) $(PARSER_FILES) $(EXPANDER_FILES) $(EXECUTOR_FILES) inits.c memory_handle.c minishell.c utils.c #malloc.c
+SRCS				=	$(LEXER_FILES) $(PARSER_FILES) $(EXPANDER_FILES) $(EXECUTOR_FILES) inits.c memory_handle.c minishell.c signals.c utils.c #malloc.c
 SRCS_PATH			=	srcs/
 
 OBJ_DIR				=	objects/

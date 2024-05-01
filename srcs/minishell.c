@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/01 01:54:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:53:19 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 //->initialize any other needed variables (about the single global
 //variables we can use, I was thinking of using it only to save the
 //latest exit code, but could probably scale it to a struct to handle any
-//signal related stuff)
+//signal related stuff) - MOSTLY DONE, TRYING TO FIGURE OUT IF SOMETHING IS LEFT
 //->initialize signals
 //	->Interractive mode (Minishell prompt)
 //		->Ctrl-C should write "^C" and show new prompt, if anything is
@@ -49,6 +49,7 @@ void	msh_loop(t_minishell *msh)
 {
 	char	*line;
 
+	signals_init();
 	while (1)
 	{
 		line = readline(msh->prompt);
