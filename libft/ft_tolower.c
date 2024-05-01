@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 12:24:21 by jcameira          #+#    #+#             */
-/*   Updated: 2023/10/03 13:59:57 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:20:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
 int	ft_tolower(int c)
 {

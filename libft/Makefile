@@ -1,9 +1,13 @@
 NAME = libft.a
 
-CC = cc
-AR = ar rcs
-RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror
+CC 					= cc
+AR 					= ar rcs
+RM 					= rm -rf
+CFLAGS 				= -Wall -Wextra -Werror
+IFLAGS				= -I $(INCLUDES)
+
+INCLUDES			=	../includes/
+DEFAULT_INCLUDES	=	-I /usr/local/includes
 
 SRCS = ft_isalpha.c ft_isdigit.c ft_alnum.c ft_isascii.c ft_isprint.c \
 		ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \
@@ -23,7 +27,7 @@ TOTAL_SRCS          =   $(words $(SRCS))
 FILES				=	0
 
 $(OBJ_DIR)%.o:		$(SRCS_PATH)%.c
-					@$(CC) $(CFLAGS) -c $< -o $@ && \
+					@$(CC) $(CFLAGS) $(IFLAGS) $(DEFAULT_INCLUDES) -c $< -o $@ && \
 					$(eval FILES=$(shell echo $$(($(FILES) + 1)))) \
 					$(call PRINT_PROGRESS,$(TOTAL_SRCS),$(GRN),$(YELLOW)Compiling$(DEFAULT) $@)
 

@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 19:07:12 by jcameira          #+#    #+#             */
-/*   Updated: 2023/11/18 12:43:34 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:19:58 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
 int	ft_strcmp(const char *str1, const char *str2)
 {

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/04/25 12:57:15 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/01 02:10:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,16 @@
 # include <sys/stat.h>
 # include <signal.h>
 # include <dirent.h>
+# include <termios.h>
+# include <libft.h>
+
+# define MSH_PROMPT "Minishell >$"
+# define SHLVL "SHLVL="
+# define SET_SHLVL "SHLVL=1"
+# define PWD "PWD="
 
 # define WRONG_ARG_N "Minishell needs to be executed with no additional \
-						arguments.\n"
+arguments.\n"
 
 typedef struct s_ast
 {
@@ -58,9 +65,19 @@ typedef struct s_command
 
 typedef struct s_minishell
 {
-	char		**envp;
-	int			stdin;
-	int			stdout;
+	char				**envp;
+	char				*prompt;
+	int					original_stdin;
+	int					original_stdout;
+	int					original_stderr;
+	struct sigaction	signals;
 }				t_minishell;
+
+char	**arrdup(char **array);
+void	minishell_init(t_minishell *msh, char **envp);
+char	**increment_shlvl(char **array);
+char	**set_shlvl(char **array);
+char	**set_pwd(char **array);
+void	free_arr(char **array);
 
 #endif

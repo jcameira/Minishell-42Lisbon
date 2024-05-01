@@ -1,9 +1,10 @@
-NAME	= minishell
+NAME				=	minishell
 
 CC					=	cc
 CFLAGS				=	-Wall -Wextra -Werror -g
 IFLAGS				=	-I $(INCLUDES)
-SANITIZE			=	-g -fsanitize=thread -pthread
+EXTRA_LIBS			=	-lreadline
+SANITIZE			=	-fsanitize=thread -pthread
 RANDOM_MALLOC		=	-Xlinker --wrap=malloc
 AR					=	ar rcs
 RM					=	rm -rf
@@ -27,46 +28,54 @@ BUILTIN_FILES		=	builtins.c
 BUILTIN_PATH		=	Builtins/
 BUILTINS			=	$(addprefix $(BUILTIN_PATH_PATH), $(BUILTIN_FILES))
 
-EXECUTOR_FILES		=	$(BUILTINS) executor.c
+EXECUTOR_FILES		=	$(BUILTIN_FILES) executor.c
 EXECUTOR_PATH		=	srcs/Executor/
 EXECUTOR			=	$(addprefix $(EXECUTOR_PATH), $(EXECUTOR_FILES))
 
-SRCS				=	$(LEXER) $(PARSER) $(EXPANDER) $(EXECUTOR) minishell.c #malloc.c
+SRCS				=	$(LEXER_FILES) $(PARSER_FILES) $(EXPANDER_FILES) $(EXECUTOR_FILES) inits.c memory_handle.c minishell.c utils.c #malloc.c
 SRCS_PATH			=	srcs/
 
 OBJ_DIR				=	objects/
 OBJS				=	$(SRCS:%.c=$(OBJ_DIR)%.o)
 ALL_OBJECTS			=	$(OBJ_DIR)*.o
 
+LIBFT_PATH			=	libft
+LIBFT				=	$(LIBFT_PATH)/libft.a
+
 TOTAL_SRCS			=	$(words $(SRCS))
 TOTAL_OBJS			=	$(words $(wildcard $(OBJ_DIR)*))
 FILES				=	0
 
-$(OBJ_DIR)%.o:		$(SRCS_PATH)%.c
+vpath %.c $(SRCS_PATH) $(LEXER_PATH) $(PARSER_PATH) $(EXPANDER_PATH) $(EXECUTOR_PATH)$(BUILTIN_PATH) $(EXECUTOR_PATH)
+
+$(OBJ_DIR)%.o: 		%.c
 					@$(CC) $(CFLAGS) $(IFLAGS) $(DEFAULT_INCLUDES) -c $< -o $@ && \
 					$(eval FILES=$(shell echo $$(($(FILES) + 1)))) \
 					$(call PRINT_PROGRESS,$(TOTAL_SRCS),$(GRN),$(YELLOW)Compiling$(DEFAULT) $@)
 
 all:				$(NAME)
 
-$(NAME):			$(OBJ_DIR) $(OBJS)
-					@$(CC) $(CFLAGS) $(IFLAGS) $(OBJS) -o $@
-					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
-					@if norminette philo | grep -q -v "OK!"; then \
-						norminette philo | grep -v OK!; echo "Norminette has$(RED) errors!$(DEFAULT)"; \
+$(NAME):			$(OBJ_DIR) $(LIBFT) $(OBJS) 
+					@$(CC) $(CFLAGS) $(IFLAGS) $(EXTRA_LIBS) $(ALL_OBJECTS) -o $@
+					@echo "\033[2F\033[0K$(CYAN)$@$(DEFAULT) successfully created\033[E"
+					@if norminette | grep -q -v "OK!"; then \
+						norminette | grep -v OK!; echo "Norminette has$(RED) errors!$(DEFAULT)"; \
 					else \
 						echo "Norminette$(GRN) OK!!$(DEFAULT)"; \
 					fi
 
-sanitize:			$(OBJ_DIR) $(OBJS)
-					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(OBJS) -o $(NAME)
+sanitize:			$(OBJ_DIR) $(LIBFT) $(OBJS)
+					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(EXTRA_LIBS) $(ALL_OBJECTS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
-random_m:			$(OBJ_DIR) $(OBJS)
-					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(RANDOM_MALLOC) $(OBJS) -o $(NAME)
+random_m:			$(OBJ_DIR) $(LIBFT) $(OBJS)
+					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(RANDOM_MALLOC) $(EXTRA_LIBS) $(ALL_OBJECTS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
 bonus:				$(NAME)
+
+$(LIBFT):
+					@make -s -C $(LIBFT_PATH) all
 
 $(OBJ_DIR):
 					@mkdir -p $@
@@ -87,6 +96,10 @@ fclean:				clean
 					@if [ -e "$(NAME)" ]; then \
 						$(RM) $(NAME); \
 						echo "$(PURPLE)$(NAME)$(DEFAULT) deleted"; \
+					fi
+					@if [ -e "$(LIBFT)" ]; then \
+						$(RM) $(LIBFT); \
+						echo "$(PURPLE)$(LIBFT)$(DEFAULT) deleted"; \
 					fi
 
 re:					fclean all

@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:12:35 by jcameira          #+#    #+#             */
-/*   Updated: 2023/10/07 20:29:26 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:19:04 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
 static int	num_len(int n)
 {

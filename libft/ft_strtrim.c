@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 14:29:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/02/20 10:19:01 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:20:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
 static int	check_charset(char c, char const *charset)
 {

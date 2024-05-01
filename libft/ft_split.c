@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 14:45:23 by jcameira          #+#    #+#             */
-/*   Updated: 2024/02/10 16:27:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:19:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
 int	word_count(char const *str, char c)
 {

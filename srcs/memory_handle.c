@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   memory_handle.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/03 16:21:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/04/30 12:19:44 by jcameira         ###   ########.fr       */
+/*   Created: 2024/05/01 01:14:41 by jcameira          #+#    #+#             */
+/*   Updated: 2024/05/01 01:16:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include <minishell.h>
 
-void	ft_putendl_fd(char *str, int fd)
+void	free_arr(char **array)
 {
-	ft_putstr_fd(str, fd);
-	ft_putchar_fd('\n', fd);
+	int	i;
+
+	if (!array)
+		return ;
+	i = -1;
+	while (array[++i])
+		free(array[i]);
+	free(array);
 }

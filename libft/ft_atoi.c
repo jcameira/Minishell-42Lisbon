@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 13:37:55 by jcameira          #+#    #+#             */
-/*   Updated: 2023/10/27 19:47:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:18:48 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
 long long int	ft_atoi(const char *str)
 {

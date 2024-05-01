@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 13:18:45 by jcameira          #+#    #+#             */
-/*   Updated: 2023/10/05 00:30:42 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:20:26 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
 char	*ft_strnstr(const char *str, const char *substr, size_t len)
 {
