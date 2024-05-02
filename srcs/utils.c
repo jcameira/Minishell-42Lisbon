@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:00:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 03:37:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:26:25 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**arrdup(char **array)
 	if (!(*array))
 		return (NULL);
 	size = array_size(array);
-	new_arr = malloc(sizeof(char *) * size);
+	new_arr = malloc(sizeof(char *) * (size + 1));
 	i = -1;
 	while (array[++i])
 		new_arr[i] = ft_strdup(array[i]);

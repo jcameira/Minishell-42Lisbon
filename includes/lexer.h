@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 03:28:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:25:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@
 # define UNCLOSED_PARENTESIS "minishell: syntax error unclosed parentesis\n"
 
 void	lexer(char *line);
-int		check_odd_tokens(char *line);
+int		check_odd_number_tokens(char *line);
 
 #endif
