@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 03:27:41 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:25:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@
 //>
 //>>
 
-//wait for the subshell to finish execution before continuing
+//->check for initial syntax errors in the line - DONE
+//->if there is anything in parentesis open a subshell and send it there to be
+//executed
+//->wait for the subshell to finish execution before continuing
 //->create an ast with these tokens
 //->read through the entire line looking for one of these tokens, then assign
 //it to a node and send everything to the left of the token to be veryfied on
@@ -38,6 +41,6 @@
 
 void	lexer(char *line)
 {
-	if (!check_odd_tokens(line))
+	if (!check_odd_number_tokens(line))
 		return ;
 }

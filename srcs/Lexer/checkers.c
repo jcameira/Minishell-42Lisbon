@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 03:29:07 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:25:15 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <lexer.h>
 
-static int	validate_odd_tokens(int s_q, int d_q, int o_p, int c_p)
+static int	validate_odd_number_tokens(int s_q, int d_q, int o_p, int c_p)
 {
 	if (s_q % 2 != 0)
 	{
@@ -32,7 +32,7 @@ static int	validate_odd_tokens(int s_q, int d_q, int o_p, int c_p)
 	return (1);
 }
 
-int	check_odd_tokens(char *line)
+int	check_odd_number_tokens(char *line)
 {
 	int	i;
 	int	s_quotes;
@@ -56,6 +56,6 @@ int	check_odd_tokens(char *line)
 		else if (line[i] == ')')
 			close_parentesis++;
 	}
-	return (validate_odd_tokens(s_quotes, d_quotes, open_parentesis,
+	return (validate_odd_number_tokens(s_quotes, d_quotes, open_parentesis,
 			close_parentesis));
 }

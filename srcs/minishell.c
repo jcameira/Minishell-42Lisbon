@@ -6,12 +6,12 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 03:36:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:22:27 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //->preferably duplicate stdin and stdout now to be able to reset later
-//	(still debatable, could easily be done only on the execution stage) - KINDA DONE
+//	(still debatable, could easily be done only on the execution stage) - DONE (SUBJECT TO CHANGE)
 //->copy enviroment variables into minishell struct - DONE
 //->increment shell level (if no enviroment variables then set to 1) - DONE
 //->if no enviroment variables set PWD, else update PWD - DONE
@@ -20,15 +20,15 @@
 //latest exit code, but could probably scale it to a struct to handle any
 //signal related stuff) - MOSTLY DONE, TRYING TO FIGURE OUT IF SOMETHING IS LEFT
 //->initialize signals
-//	->Interractive mode (Minishell prompt)
+//	->Interractive mode (Minishell prompt) - DONE
 //		->Ctrl-C should write "^C" and show new prompt, if anything is
 //		  written in the previous prompt write "^C" and show new prompt
-//		  as well but don't add to history
+//		  as well but don't add to history - DONE
 //		->Ctrl-D should exit minishell on empty prompt or indicates EOF
 //		  if something is already written on the prompt, which effectively
-//		  does nothing in this case
+//		  does nothing in this case - DONE
 //		->Ctrl-\ does nothing with or without anything written in the
-//		  prompt
+//		  prompt - DONE
 //	->During execution of other processes
 //		->Ctrl-C should send a SIGINT signal, effectively ending the
 //		  current process in a controlled manner, meaning it gives the
@@ -41,7 +41,8 @@
 //		  same as SIGINT but produces a core dump on top of it, it should
 //		  write "^\Quit (core dumped)" as well
 //->start minishell loop (show Minishell prompt and wait for user input,
-//send the line written to the lexer) - IN PROCESS
+//add to history, if SIGINT signal is sent in the middle of writing or the line
+//is only whitespaces don't add to history send the line written to the lexer) - MOSTLY DONE
 
 #include <minishell.h>
 #include <lexer.h>
@@ -59,7 +60,6 @@ void	msh_loop(t_minishell *msh)
 		if (!line[0] || is_white_space(line))
 		{
 			free(line);
-			printf("Here\n");
 			continue ;
 		}
 		add_history(line);
