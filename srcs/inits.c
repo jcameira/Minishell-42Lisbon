@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/01 21:53:13 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 02:41:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 void	signals_init(void)
 {
-	struct sigaction	sa;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
-	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = interactive_handler;
-	sigaddset(&sa.sa_mask, SIGINT);
-	sigaction(SIGINT, &sa, 0);
-	sigaddset(&sa.sa_mask, SIGQUIT);
-	sigaction(SIGQUIT, &sa, 0);
+	sa_int.sa_flags = SA_RESTART;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_handler = interactive_handler;
+	sigaddset(&sa_int.sa_mask, SIGINT);
+	sigaction(SIGINT, &sa_int, 0);
+	sa_quit.sa_flags = 0;
+	sigemptyset(&sa_quit.sa_mask);
+	sa_quit.sa_handler = SIG_IGN;
+	sigaddset(&sa_quit.sa_mask, SIGQUIT);
+	sigaction(SIGQUIT, &sa_quit, 0);
 }
 
 void	minishell_init(t_minishell *msh, char **envp)

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/01 21:53:19 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 03:36:54 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 //send the line written to the lexer) - IN PROCESS
 
 #include <minishell.h>
+#include <lexer.h>
 
 void	msh_loop(t_minishell *msh)
 {
@@ -53,8 +54,16 @@ void	msh_loop(t_minishell *msh)
 	while (1)
 	{
 		line = readline(msh->prompt);
-		if (line)
-			add_history(line);
+		if (!line)
+			exit_shell(msh);
+		if (!line[0] || is_white_space(line))
+		{
+			free(line);
+			printf("Here\n");
+			continue ;
+		}
+		add_history(line);
+		lexer(line);
 		free(line);
 	}
 }
@@ -62,14 +71,11 @@ void	msh_loop(t_minishell *msh)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	msh;
-	//int			i = -1;
 
 	(void) argv;
 	if (argc != 1)
 		return (ft_putstr_fd(WRONG_ARG_N, 2), 1);
 	minishell_init(&msh, envp);
-	//while (msh.envp[++i])
-	//	printf("%s\n", msh.envp[i]);
 	msh_loop(&msh);
 	free_arr(msh.envp);
 	return (0);

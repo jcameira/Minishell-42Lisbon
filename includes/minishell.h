@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/01 21:55:46 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 03:34:26 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,14 @@ typedef struct s_minishell
 
 char	**arrdup(char **array);
 void	minishell_init(t_minishell *msh, char **envp);
+int		array_size(char **array);
 char	**increment_shlvl(char **array);
 char	**set_shlvl(char **array);
 char	**set_pwd(char **array);
+int		is_white_space(char *line);
 void	free_arr(char **array);
 void	signals_init(void);
 void	interactive_handler(int sig);
+void	exit_shell(t_minishell *msh);
 
 #endif

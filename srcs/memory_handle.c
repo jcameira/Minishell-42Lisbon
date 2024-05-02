@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 01:14:41 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/01 01:16:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 02:46:09 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,11 @@ void	free_arr(char **array)
 	while (array[++i])
 		free(array[i]);
 	free(array);
+}
+
+void	exit_shell(t_minishell *msh)
+{
+	free_arr(msh->envp);
+	printf("exit\n");
+	exit(1);
 }

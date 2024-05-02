@@ -12,7 +12,7 @@ RM					=	rm -rf
 INCLUDES			=	includes/
 DEFAULT_INCLUDES	=	-I /usr/local/includes
 
-LEXER_FILES			=	lexer.c
+LEXER_FILES			=	checkers.c lexer.c
 LEXER_PATH			=	srcs/Lexer/
 LEXER				=	$(addprefix $(LEXER_PATH), $(LEXER_FILES))
 
@@ -32,7 +32,7 @@ EXECUTOR_FILES		=	$(BUILTIN_FILES) executor.c
 EXECUTOR_PATH		=	srcs/Executor/
 EXECUTOR			=	$(addprefix $(EXECUTOR_PATH), $(EXECUTOR_FILES))
 
-SRCS				=	$(LEXER_FILES) $(PARSER_FILES) $(EXPANDER_FILES) $(EXECUTOR_FILES) inits.c memory_handle.c minishell.c signals.c utils.c #malloc.c
+SRCS				=	$(LEXER_FILES) $(PARSER_FILES) $(EXPANDER_FILES) $(EXECUTOR_FILES) env_utils.c inits.c memory_handle.c minishell.c signals.c utils.c #malloc.c
 SRCS_PATH			=	srcs/
 
 OBJ_DIR				=	objects/
@@ -56,7 +56,7 @@ $(OBJ_DIR)%.o: 		%.c
 all:				$(NAME)
 
 $(NAME):			$(OBJ_DIR) $(LIBFT) $(OBJS) 
-					@$(CC) $(CFLAGS) $(IFLAGS) $(EXTRA_LIBS) $(ALL_OBJECTS) -o $@
+					@$(CC) $(CFLAGS) $(IFLAGS) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $@
 					@echo "\033[2F\033[0K$(CYAN)$@$(DEFAULT) successfully created\033[E"
 					@if norminette | grep -q -v "OK!"; then \
 						norminette | grep -v OK!; echo "Norminette has$(RED) errors!$(DEFAULT)"; \
@@ -65,11 +65,11 @@ $(NAME):			$(OBJ_DIR) $(LIBFT) $(OBJS)
 					fi
 
 sanitize:			$(OBJ_DIR) $(LIBFT) $(OBJS)
-					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(EXTRA_LIBS) $(ALL_OBJECTS) -o $(NAME)
+					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
 random_m:			$(OBJ_DIR) $(LIBFT) $(OBJS)
-					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(RANDOM_MALLOC) $(EXTRA_LIBS) $(ALL_OBJECTS) -o $(NAME)
+					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(RANDOM_MALLOC) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
 bonus:				$(NAME)

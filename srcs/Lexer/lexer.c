@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/04/24 21:14:28 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/02 03:27:41 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,3 +33,11 @@
 //quotes
 //->when there is no other recognizible tokens to be found, assign the remaining
 //words to a node and send the ast to the parser to finish parsing
+
+#include <lexer.h>
+
+void	lexer(char *line)
+{
+	if (!check_odd_tokens(line))
+		return ;
+}
