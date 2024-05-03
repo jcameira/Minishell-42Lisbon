@@ -12,7 +12,7 @@ RM					=	rm -rf
 INCLUDES			=	includes/
 DEFAULT_INCLUDES	=	-I /usr/local/includes
 
-LEXER_FILES			=	checkers.c lexer.c
+LEXER_FILES			=	checkers.c lexer.c subshell.c
 LEXER_PATH			=	srcs/Lexer/
 LEXER				=	$(addprefix $(LEXER_PATH), $(LEXER_FILES))
 

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 14:25:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/03 16:18:55 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@
 
 void	lexer(char *line)
 {
-	if (!check_odd_number_tokens(line))
+	bool	subshell;
+
+	subshell = false;
+	if (!check_odd_number_tokens(line, &subshell))
 		return ;
+	if (subshell)
+		open_subshell(line);
 }
