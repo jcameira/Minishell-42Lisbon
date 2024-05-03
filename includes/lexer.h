@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 14:25:20 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/03 13:10:39 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@
 # define UNCLOSED_S_QUOTES "minishell: syntax error unclosed single quotes\n"
 # define UNCLOSED_D_QUOTES "minishell: syntax error unclosed double quotes\n"
 # define UNCLOSED_PARENTESIS "minishell: syntax error unclosed parentesis\n"
+
+enum e_tokens
+{
+	
+}
+
+typedef struct s_ast
+{
+	char			*type;
+	char			*content;
+	struct s_ast	*left;
+	struct s_ast	*right;
+}				t_ast;
 
 void	lexer(char *line);
 int		check_odd_number_tokens(char *line);

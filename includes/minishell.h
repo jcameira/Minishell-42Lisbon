@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 03:34:26 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/03 13:07:39 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,7 @@
 # define WRONG_ARG_N "Minishell needs to be executed with no additional \
 arguments.\n"
 
-typedef struct s_ast
-{
-	char			*type;
-	char			*content;
-	struct s_ast	*left;
-	struct s_ast	*right;
-}				t_ast;
+
 typedef struct s_simplecmd
 {
 	int		arg_nbr;
