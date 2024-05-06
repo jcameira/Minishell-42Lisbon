@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/06 19:48:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:11:24 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,19 @@
 
 void	lexer(char *line)
 {
-	bool	subshell;
+	t_token_list	*token_list;
+	bool			subshell;
 
 	subshell = false;
 	if (!check_odd_number_tokens(line, &subshell))
 		return ;
-	if (subshell)
-		open_subshell(line);
+	// if (subshell)
+	// 	open_subshell(line);
+	while (line)
+		add_new_token(&token_list, new_token(get_token_type(get_next_token(line))));
+	while (token_list)
+	{
+		printf("%d\n", token_list->token_type);
+		token_list = token_list->next;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_export.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/06 18:02:45 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:59:18 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,5 @@ void	mini_export(t_minishell *msh, t_simplecmd *cmd)
 			return ;
 		}
 	}
-	msh->envp[i] = add_env(msh->envp[i], cmd->arg_arr[1]);
+	msh->envp = add_env(&msh->envp[i], cmd->arg_arr[1]);
 }

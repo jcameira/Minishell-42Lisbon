@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/06 18:38:15 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/06 21:02:04 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ void	add_new_token(t_token_list **token_list, t_token_list *new)
 	if (!token_list)
 		return ;
 	if (!*token_list)
+	{
 		*token_list = new;
 		return ;
+	}
 	last = last_token(*token_list);
 	last->next = new;
 }
@@ -110,15 +112,15 @@ char	*get_next_token(char *cmd_line)
 		else if (cmd_line[i] == '"' && in_quotes)
 			in_quotes = false;
 		else if (cmd_line[i] == '"' && !in_quotes)
-			return (cmd_line[i]);
+			return (cmd_line + i);
 		else if ((cmd_line[i] == '<' || cmd_line[i] == '>') && !in_quotes)
-			return (cmd_line[i]);
+			return (cmd_line + i);
 		else if ((cmd_line[i] == '|' || cmd_line[i] == '&') && !in_quotes)
-			return (cmd_line[i]);
+			return (cmd_line + i);
 		else if ((cmd_line[i] == '(' || cmd_line[i] == ')') && !in_quotes)
-			return (cmd_line[i]);
-		else if (isalnum(cmd_line[i]) && !in_quotes)
-			return (cmd_line[i]);
+			return (cmd_line + i);
+		else if (ft_isalnum(cmd_line[i]) && !in_quotes)
+			return (cmd_line + i);
 	}
 	return (NULL);
 }

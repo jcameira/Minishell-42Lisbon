@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/06 17:30:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:06:59 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,12 @@ typedef struct s_ast
 void	lexer(char *line);
 int		check_odd_number_tokens(char *line, bool *subshell);
 void	open_subshell(char *line);
+t_token_list	*new_token(int	type);
+void	add_new_token(t_token_list **token_list, t_token_list *new);
+t_token_list	*last_token(t_token_list *token_list);
+t_token_list	*set_token_type(t_token_list *token, int type);
+int	get_token_type(char	*c);
+int	iswhitespace(int c);
+char	*get_next_token(char *cmd_line);
 
 #endif

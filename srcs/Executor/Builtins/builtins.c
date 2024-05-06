@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:46:55 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/06 15:38:39 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/06 21:02:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 int	(*buitin_arr(char *command))(t_minishell *msh, t_simplecmd *cmd)
 {
 	static void	*builtin[7][2] = {
-	{"cd", mini_cd},
+	{"cd", /*mini_cd*/},
 	{"echo", mini_echo},
 	{"pwd", mini_pwd},
 	{"export", mini_export},
@@ -47,4 +47,5 @@ int	(*buitin_arr(char *command))(t_minishell *msh, t_simplecmd *cmd)
 				return (builtin[i][1]);
 		}
 	}
+	return (NULL);
 }
