@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:00:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/02 14:26:25 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/06 18:02:22 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**arrdup(char **array)
 	return (new_arr);
 }
 
-int	is_white_space(char *line)
+int	full_white_space(char *line)
 {
 	int	i;
 

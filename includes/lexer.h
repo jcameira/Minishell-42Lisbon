@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/03 16:23:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:30:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,18 @@ typedef enum s_tokens
 	LESSER,
 	D_LESSER,
 	GREATER,
-	D_GREATER
+	D_GREATER,
+	L_PARENTESIS,
+	R_PARENTESIS,
+	WORD,
+	BAD_TOKEN
 }				t_tokens;
+
+typedef struct s_token_list
+{
+	int					token_type;
+	struct s_token_list	*next;
+}				t_token_list;
 
 typedef struct s_ast
 {

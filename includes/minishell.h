@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/03 13:07:39 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/06 18:01:02 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int		array_size(char **array);
 char	**increment_shlvl(char **array);
 char	**set_shlvl(char **array);
 char	**set_pwd(char **array);
-int		is_white_space(char *line);
+int		full_white_space(char *line);
 void	free_arr(char **array);
 void	signals_init(void);
 void	interactive_handler(int sig);
