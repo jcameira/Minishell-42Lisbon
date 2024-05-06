@@ -41,6 +41,11 @@
 
 void	lexer(char *line)
 {
-	if (!check_odd_number_tokens(line))
+	bool	subshell;
+
+	subshell = false;
+	if (!check_odd_number_tokens(line, &subshell))
 		return ;
+	if (subshell)
+		open_subshell(line);
 }
