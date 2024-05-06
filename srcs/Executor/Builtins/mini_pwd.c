@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_pwd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:48:05 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/06 16:26:55 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:59:29 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	mini_pwd(t_minishell *msh, t_simplecmd *cmd)
 	int		j;
 	
 	i = -1;
+	(void)cmd;
 	while (msh->envp[++i])
 	{
 		if (!ft_strncmp(msh->envp[i], "PWD=", 4))
