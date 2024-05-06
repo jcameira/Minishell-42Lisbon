@@ -6,7 +6,7 @@
 /*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/06 15:19:09 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:48:09 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	msh_loop(t_minishell *msh)
 		line = readline(msh->prompt);
 		if (!line)
 			exit_shell(msh);
-		if (!line[0] || is_white_space(line))
+		if (!line[0] || full_white_space(line))
 		{
 			free(line);
 			continue ;
