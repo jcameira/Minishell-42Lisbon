@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/06 20:11:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:29:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,13 @@ void	lexer(char *line)
 		return ;
 	// if (subshell)
 	// 	open_subshell(line);
-	while (line)
-		add_new_token(&token_list, new_token(get_token_type(get_next_token(line))));
+	// while (line)
+	// 	add_new_token(&token_list, new_token(get_token_type(get_next_token(line))));
+	
+	token_list = get_initial_list(line);
 	while (token_list)
 	{
-		printf("%d\n", token_list->token_type);
+		printf("TOKEN TYPE = %d TOKEN DATA = %s\n", token_list->token_type, token_list->content);
 		token_list = token_list->next;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/08 14:24:26 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/08 21:49:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 	int		i;
 	int		j;
 	
-	if (cmd->arg_arr[1] == ".." )
+	//if (cmd->arg_arr[1] == '..' )
 		
-	if (cmd->arg_arr[1] == "-" )
+	if (*cmd->arg_arr[1] == '-' )
 	{
 		i = -1;
 		while (msh->envp[++i])
