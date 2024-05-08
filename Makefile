@@ -4,7 +4,7 @@ CC					=	cc
 CFLAGS				=	-Wall -Wextra -Werror -g
 IFLAGS				=	-I $(INCLUDES)
 EXTRA_LIBS			=	-lreadline
-SANITIZE			=	-fsanitize=thread -pthread
+SANITIZE			=	-fsanitize=address
 RANDOM_MALLOC		=	-Xlinker --wrap=malloc
 AR					=	ar rcs
 RM					=	rm -rf
