@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/08 21:52:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:31:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ void	add_new_token(t_token_list **token_list, t_token_list *new)
 	}
 	last = last_token(*token_list);
 	last->next = new;
+}
+
+void	add_token_middle_list(t_token_list **token_list, t_token_list *new)
+{
+	t_token_list	*tmp;
+
+	if (!token_list)
+		return ;
+	if (!*token_list)
+		*token_list = new;
+	tmp = (*token_list)->next;
+	(*token_list)->next = new;
+	last_token(new)->next = tmp;
 }
 
 t_token_list	*last_token(t_token_list *token_list)
@@ -155,6 +168,7 @@ char	*get_initial_token_data(char *line, int *i)
 t_token_list	*get_initial_list(char *line)
 {
 	t_token_list	*token_list;
+	t_token_list	*new;
 	char			*tmp;
 	int				i;
 
@@ -166,8 +180,117 @@ t_token_list	*get_initial_list(char *line)
 			i++;
 		tmp = get_initial_token_data(line, &i);
 		if (tmp)
-			add_new_token(&token_list, new_token(NO_TYPE, tmp));
+		{
+			new = new_token(NO_TYPE, tmp);
+			add_new_token(&token_list, new);
+		}
 		i++;
 	}
 	return (token_list);
+}
+
+t_token_list	*refine_list(t_token_list **initial_list)
+{
+	t_token_list	*new_list;
+	t_token_list	*new;
+
+	new_list = NULL;
+	while (*initial_list)
+	{
+		new = new_token(NO_TYPE, (*initial_list)->content);
+		split_operator_tokens(&new);
+		add_new_token(&new_list, new);
+		*initial_list = (*initial_list)->next;
+	}
+	return (new_list);
+}
+
+int	is_operator_token(char	*c)
+{
+	return (!ft_strncmp(c, "&&", 2) || *c == '|' || *c == '<'
+		|| *c == '>' || *c == '(' || *c == ')');
+}
+
+void	skip_operator_token(t_token_list *node, int *i)
+{
+	if (!ft_strncmp(&(node->content[*i]), "&&", 2)
+		|| !ft_strncmp(&(node->content[*i]), "||", 2)
+		|| !ft_strncmp(&(node->content[*i]), "<<", 2)
+		|| !ft_strncmp(&(node->content[*i]), ">>", 2))
+		*i += 2;
+	else if (node->content[*i] == '|' || node->content[*i] == '<'
+		|| node->content[*i] == '>' || node->content[*i] == '('
+		|| node->content[*i] == ')')
+		(*i)++;
+}
+char	**split_by_position(char *line, int i)
+{
+	char	**arr;
+	int		len;
+
+	len = ft_strlen(line);
+	arr = malloc(sizeof(char *) * 3);
+	arr[0] = ft_substr(line, 0, i);
+	arr[1] = ft_substr(line, i, len);
+	arr[2] = NULL;
+	return (arr);
+}
+
+void	execute_split(t_token_list **node, int *i)
+{
+	t_token_list	*back_node;
+	char			**split_arr;
+
+	split_arr = split_by_position((*node)->content, *i);
+	printf("%s %p %p\n", (*node)->content, (*node), (*node)->next);
+	free((*node)->content);
+	(*node)->content = split_arr[0];
+	printf("%s %p %p\n", (*node)->content, (*node), (*node)->next);
+	back_node = new_token(NO_TYPE, split_arr[1]);
+	printf("%s %p\n", back_node->content, back_node->next);
+	add_token_middle_list(node, back_node);
+}
+
+void	split_node(t_token_list **node, int *i)
+{
+	// t_token_list	*tmp;
+
+	// tmp = *node;
+	if (*i == 0)
+	{
+		printf("Here\n");
+		skip_operator_token(*node, i);
+	}
+	if ((*node)->content[*i])
+	{
+		execute_split(node, i);
+		*node = (*node)->next;
+		*i = 0;
+	}
+	// *node = tmp;
+}
+
+void	split_operator_tokens(t_token_list **node)
+{
+	t_token_list	*tmp;
+	int	i;
+
+	i = 0;
+	tmp = *node;
+	while ((*node)->content[i])
+	{
+		printf("Here -> %c\n", (*node)->content[i]);
+		if ((*node)->content[i] == '\'')
+			skip_until_char((*node)->content, &i, '\'');
+		else if ((*node)->content[i] == '"')
+			skip_until_char((*node)->content, &i, '"');
+		else if(is_operator_token(&((*node)->content[i])))
+		{
+			split_node(node, &i);
+			printf("i = %d\n", i);
+			continue ;
+		}
+		i++;
+	}
+	*node = tmp;
 }
