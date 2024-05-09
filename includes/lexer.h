@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/08 14:56:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:19:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,12 @@ t_token_list	*last_token(t_token_list *token_list);
 void			skip_until_char(char *line, int *i, char c);
 char			*get_initial_token_data(char *line, int *i);
 t_token_list	*get_initial_list(char *line);
+t_token_list	*refine_list(t_token_list **initial_list);
+int				is_operator_token(char	*c);
+void			skip_operator_token(t_token_list *node, int *i);
+char			**split_by_position(char *line, int i);
+void			execute_split(t_token_list **node, int *i);
+void			split_node(t_token_list **node, int *i);
+void			split_operator_tokens(t_token_list **node);
 
 #endif

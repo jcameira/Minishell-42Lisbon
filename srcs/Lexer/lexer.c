@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/08 14:29:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/09 10:08:04 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	lexer(char *line)
 	// 	add_new_token(&token_list, new_token(get_token_type(get_next_token(line))));
 	
 	token_list = get_initial_list(line);
+	token_list = refine_list(&token_list);
 	while (token_list)
 	{
 		printf("TOKEN TYPE = %d TOKEN DATA = %s\n", token_list->token_type, token_list->content);
