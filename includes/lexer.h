@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/10 15:18:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:40:09 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,12 @@ typedef struct s_ast
 	struct s_ast	*right;
 }				t_ast;
 
-void	lexer(char *line);
-int		check_odd_number_tokens(char *line, bool *subshell);
-void	open_subshell(char *line);
-// t_token_list	*set_token_type(t_token_list *token, int type);
-int	get_token_type(char	*c);
+void			free_token_list(t_token_list *list);
+void			lexer(char *line);
+int				check_odd_number_tokens(char *line);
+void			open_subshell(char *line);
+t_token_list	*set_token_types(t_token_list *token_list);
+int				get_token_type(char	*c);
 // int	iswhitespace(int c);
 // char	*get_next_token(char *cmd_line);
 t_token_list	*new_token(int	type, char *data);
@@ -86,7 +87,7 @@ t_token_list	*last_token(t_token_list *token_list);
 void			skip_until_char(char *line, int *i, char c);
 char			*get_initial_token_data(char *line, int *i);
 t_token_list	*get_initial_list(char *line);
-t_token_list	*refine_list(t_token_list **initial_list);
+t_token_list	*refine_list(t_token_list *initial_list);
 int				is_operator_token(char	*c);
 void			skip_operator_token(t_token_list *node, int *i);
 char			**split_by_position(char *line, int i);

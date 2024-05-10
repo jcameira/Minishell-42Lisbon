@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkers.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/06 15:19:18 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:03:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	validate_odd_number_tokens(int s_q, int d_q, int o_p, int c_p)
 	return (1);
 }
 
-int	check_odd_number_tokens(char *line, bool *subshell)
+int	check_odd_number_tokens(char *line)
 {
 	int	i;
 	int	s_quotes;
@@ -56,7 +56,5 @@ int	check_odd_number_tokens(char *line, bool *subshell)
 		else if (line[i] == ')')
 			close_par++;
 	}
-	if (open_par > 0)
-		*subshell = true;
 	return (validate_odd_number_tokens(s_quotes, d_quotes, open_par, close_par));
 }

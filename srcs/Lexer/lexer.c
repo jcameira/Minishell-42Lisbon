@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/10 15:55:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:48:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,21 @@ void	print_list(t_token_list *token_list)
 void	lexer(char *line)
 {
 	t_token_list	*token_list;
-	t_token_list	*tmp;
-	bool			subshell;
+	// t_token_list	*tmp;
+	// bool			subshell;
 
-	subshell = false;
-	if (!check_odd_number_tokens(line, &subshell))
+	// subshell = false;
+	if (!check_odd_number_tokens(line))
 		return ;
-	// if (subshell)
-	// 	open_subshell(line);
-	// while (line)
-	// 	add_new_token(&token_list, new_token(get_token_type(get_next_token(line))));
-	
 	token_list = get_initial_list(line);
-	token_list = refine_list(&token_list);
-	tmp = token_list;
-	while (token_list)
+	if (!token_list)
 	{
-		token_list->token_type = get_token_type(token_list->content);
-		//printf("TOKEN TYPE = %d TOKEN DATA = %s\n", token_list->token_type, token_list->content);
-		token_list = token_list->next;
+		//print error
+		return ;
 	}
-	token_list = tmp;
 	print_list(token_list);
+	token_list = refine_list(token_list);
+	token_list = set_token_types(token_list);
+	print_list(token_list);
+	free_token_list(token_list);
 }

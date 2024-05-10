@@ -3,7 +3,7 @@
 
     Memcheck:Leak
 
-    match-leak-kinds: reachable, definite
+    match-leak-kinds: reachable
 
     ...
 
@@ -15,7 +15,7 @@
 
     Memcheck:Leak
 
-    match-leak-kinds: reachable, definite
+    match-leak-kinds: reachable
 
     ...
 
