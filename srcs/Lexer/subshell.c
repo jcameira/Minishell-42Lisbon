@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:23:06 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/03 17:46:37 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:58:23 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,12 @@ void	open_subshell(char *line)
 			if (line[i] == '(')
 				parentesis++;
 			if (line[i] == ')')
-			{
 				parentesis--;
-				printf("%d\n", parentesis);
-			}
 			i++;
 		}
 		if (start && len)
 		{
-			printf("Start -> %d\nSize -> %d\n", start ,len);
 			subline = ft_substr(line, start, --len);
-			printf("%s\n", subline);
 			//lexer(subline);
 			free(subline);
 			start = 0;

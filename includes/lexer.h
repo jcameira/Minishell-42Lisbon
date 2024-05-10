@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/09 14:19:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:18:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,19 @@
 # define UNCLOSED_D_QUOTES "minishell: syntax error unclosed double quotes\n"
 # define UNCLOSED_PARENTESIS "minishell: syntax error unclosed parentesis\n"
 
+# define PRINT_NO_TYPE	"NO_TYPE"
+# define PRINT_AND	"AND"
+# define PRINT_OR	"OR"
+# define PRINT_PIPE	"PIPE"
+# define PRINT_LESSER	"LESSER"
+# define PRINT_D_LESSER	"D_LESSER"
+# define PRINT_GREATER	"GREATER"
+# define PRINT_D_GREATER	"D_GREATER"
+# define PRINT_L_PARENTESIS	"L_PARENTESIS"
+# define PRINT_R_PARENTESIS	"R_PARENTESIS"
+# define PRINT_WORD	"WORD"
+# define PRINT_BAD_TOKEN	"BAD_TOKEN"
+# define PRINT_END	"END"
 typedef enum s_tokens
 {
 	NO_TYPE = 0,
@@ -64,7 +77,7 @@ void	lexer(char *line);
 int		check_odd_number_tokens(char *line, bool *subshell);
 void	open_subshell(char *line);
 // t_token_list	*set_token_type(t_token_list *token, int type);
-// int	get_token_type(char	*c);
+int	get_token_type(char	*c);
 // int	iswhitespace(int c);
 // char	*get_next_token(char *cmd_line);
 t_token_list	*new_token(int	type, char *data);

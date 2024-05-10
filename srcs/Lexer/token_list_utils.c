@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/09 16:31:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:58:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,31 +73,31 @@ t_token_list	*last_token(t_token_list *token_list)
 // 	return (token);
 // }
 
-// int	get_token_type(char	*c)
-// {
-// 	if (*c == '&')
-// 		return (AND);
-// 	else if (*c == '|' && *(c + 1) == '|')
-// 		return (OR);
-// 	else if (*c == '|')
-// 		return (PIPE);
-// 	else if (*c == '<' && *(c + 1) == '<')
-// 		return (D_LESSER);
-// 	else if (*c == '<')
-// 		return (LESSER);
-// 	else if (*c == '>' && *(c + 1) == '>')
-// 		return (D_GREATER);
-// 	else if (*c == '>')
-// 		return (GREATER);
-// 	else if (*c == '(')
-// 		return (L_PARENTESIS);
-// 	else if (*c == ')')
-// 		return (R_PARENTESIS);
-// 	else if (ft_isprint(*c))
-// 		return (WORD);
-// 	else
-// 		return (BAD_TOKEN);
-// }
+int	get_token_type(char	*c)
+{
+	if (*c == '&')
+		return (AND);
+	else if (*c == '|' && *(c + 1) == '|')
+		return (OR);
+	else if (*c == '|')
+		return (PIPE);
+	else if (*c == '<' && *(c + 1) == '<')
+		return (D_LESSER);
+	else if (*c == '<')
+		return (LESSER);
+	else if (*c == '>' && *(c + 1) == '>')
+		return (D_GREATER);
+	else if (*c == '>')
+		return (GREATER);
+	else if (*c == '(')
+		return (L_PARENTESIS);
+	else if (*c == ')')
+		return (R_PARENTESIS);
+	else if (ft_isprint(*c))
+		return (WORD);
+	else
+		return (BAD_TOKEN);
+}
 
 // int	iswhitespace(int c)
 // {
@@ -242,12 +242,9 @@ void	execute_split(t_token_list **node, int *i)
 	char			**split_arr;
 
 	split_arr = split_by_position((*node)->content, *i);
-	printf("%s %p %p\n", (*node)->content, (*node), (*node)->next);
 	free((*node)->content);
 	(*node)->content = split_arr[0];
-	printf("%s %p %p\n", (*node)->content, (*node), (*node)->next);
 	back_node = new_token(NO_TYPE, split_arr[1]);
-	printf("%s %p\n", back_node->content, back_node->next);
 	add_token_middle_list(node, back_node);
 }
 
@@ -257,10 +254,7 @@ void	split_node(t_token_list **node, int *i)
 
 	// tmp = *node;
 	if (*i == 0)
-	{
-		printf("Here\n");
 		skip_operator_token(*node, i);
-	}
 	if ((*node)->content[*i])
 	{
 		execute_split(node, i);
@@ -279,7 +273,6 @@ void	split_operator_tokens(t_token_list **node)
 	tmp = *node;
 	while ((*node)->content[i])
 	{
-		printf("Here -> %c\n", (*node)->content[i]);
 		if ((*node)->content[i] == '\'')
 			skip_until_char((*node)->content, &i, '\'');
 		else if ((*node)->content[i] == '"')
@@ -287,7 +280,6 @@ void	split_operator_tokens(t_token_list **node)
 		else if(is_operator_token(&((*node)->content[i])))
 		{
 			split_node(node, &i);
-			printf("i = %d\n", i);
 			continue ;
 		}
 		i++;
