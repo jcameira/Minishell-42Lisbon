@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/10 18:40:09 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/11 19:00:22 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <string.h>
-# include <stdbool.h>
 # include <errno.h>
 # include <libft.h>
 
@@ -27,6 +26,8 @@
 # define UNCLOSED_S_QUOTES "minishell: syntax error unclosed single quotes\n"
 # define UNCLOSED_D_QUOTES "minishell: syntax error unclosed double quotes\n"
 # define UNCLOSED_PARENTESIS "minishell: syntax error unclosed parentesis\n"
+
+# define NO_SPACE "No more space left in device\n"
 
 # define PRINT_NO_TYPE	"NO_TYPE"
 # define PRINT_AND	"AND"
@@ -74,25 +75,19 @@ typedef struct s_ast
 }				t_ast;
 
 void			free_token_list(t_token_list *list);
+void			free_arr(char **array);
 void			lexer(char *line);
 int				check_odd_number_tokens(char *line);
-void			open_subshell(char *line);
 t_token_list	*set_token_types(t_token_list *token_list);
-int				get_token_type(char	*c);
-// int	iswhitespace(int c);
-// char	*get_next_token(char *cmd_line);
+int				set_token_type(char	*c);
 t_token_list	*new_token(int	type, char *data);
 void			add_new_token(t_token_list **token_list, t_token_list *new);
+void			add_token_middle_list(t_token_list **token_list, t_token_list *new);
 t_token_list	*last_token(t_token_list *token_list);
 void			skip_until_char(char *line, int *i, char c);
-char			*get_initial_token_data(char *line, int *i);
 t_token_list	*get_initial_list(char *line);
 t_token_list	*refine_list(t_token_list *initial_list);
 int				is_operator_token(char	*c);
-void			skip_operator_token(t_token_list *node, int *i);
-char			**split_by_position(char *line, int i);
-void			execute_split(t_token_list **node, int *i);
-void			split_node(t_token_list **node, int *i);
-void			split_operator_tokens(t_token_list **node);
+t_token_list	*split_operator_tokens(t_token_list *node);
 
 #endif

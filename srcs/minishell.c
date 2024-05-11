@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/09 14:41:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/11 20:17:04 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		return (ft_putstr_fd(WRONG_ARG_N, 2), 1);
 	minishell_init(&msh, envp);
+	if (!msh.envp)
+		return (1);
 	msh_loop(&msh);
 	free_arr(msh.envp);
 	return (0);
