@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/10 18:03:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/11 17:16:34 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ int	check_odd_number_tokens(char *line)
 	int	i;
 	int	s_quotes;
 	int	d_quotes;
-	int	open_par;
-	int	close_par;
+	int	o_par;
+	int	c_par;
 
 	i = -1;
 	s_quotes = 0;
 	d_quotes = 0;
-	open_par = 0;
-	close_par = 0;
+	o_par = 0;
+	c_par = 0;
 	while (line[++i])
 	{
 		if (line[i] == '\'')
@@ -52,9 +52,15 @@ int	check_odd_number_tokens(char *line)
 		else if (line[i] == '\"')
 			d_quotes++;
 		else if (line[i] == '(')
-			open_par++;
+			o_par++;
 		else if (line[i] == ')')
-			close_par++;
+			c_par++;
 	}
-	return (validate_odd_number_tokens(s_quotes, d_quotes, open_par, close_par));
+	return (validate_odd_number_tokens(s_quotes, d_quotes, o_par, c_par));
+}
+
+int	is_operator_token(char	*c)
+{
+	return (!ft_strncmp(c, "&&", 2) || *c == '|' || *c == '<'
+		|| *c == '>' || *c == '(' || *c == ')');
 }

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/10 18:48:20 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/11 20:16:53 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,20 @@
 
 //->check for initial syntax errors in the line - DONE
 //->if there is anything in parentesis open a subshell and send it there to be
-//executed
-//->wait for the subshell to finish execution before continuing
-//->create an ast with these tokens
+//executed - DON'T DO HERE
+//->wait for the subshell to finish execution before continuing - DON'T DO HERE
+//->create a list of tokens DONE
 //->read through the entire line looking for one of these tokens, then assign
 //it to a node and send everything to the left of the token to be veryfied on
 //the left node, and send everything to the right of the token to be verified on
-//the right node
+//the right node - IN PARSER DUMB FUCK
 //->handle the presence of parentesis by opening a subshell and sending
 //everything inside the parentesis to the lexer of said subshell to start the
-//parsing process
+//parsing process - IN EXECUTOR DUMB FUCK
 //->preferably handle quotes here, or at least any possible errors from unclosed
-//quotes
+//quotes - HANDLED I THINK
 //->when there is no other recognizible tokens to be found, assign the remaining
-//words to a node and send the ast to the parser to finish parsing
+//words to a node and send the ast to the parser to finish parsing - IN PARSER DUMB FUCK
 
 #include <lexer.h>
 
@@ -72,21 +72,18 @@ void	print_list(t_token_list *token_list)
 void	lexer(char *line)
 {
 	t_token_list	*token_list;
-	// t_token_list	*tmp;
-	// bool			subshell;
 
-	// subshell = false;
 	if (!check_odd_number_tokens(line))
 		return ;
 	token_list = get_initial_list(line);
 	if (!token_list)
-	{
-		//print error
 		return ;
-	}
-	print_list(token_list);
+	//print_list(token_list);
 	token_list = refine_list(token_list);
+	if (!token_list)
+		return ;
 	token_list = set_token_types(token_list);
-	print_list(token_list);
+	//print_list(token_list);
+	printf("Complete\n");
 	free_token_list(token_list);
 }

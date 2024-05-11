@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/09 15:25:47 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/11 21:30:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,23 @@ void	signals_init(void)
 void	minishell_init(t_minishell *msh, char **envp)
 {
 	msh->envp = arrdup(envp);
+	//if (!msh->envp)
+	//	return ;
 	if (!msh->envp)
 	{
 		msh->envp = set_pwd(msh->envp);
+		if (!msh->envp)
+			return(free(msh->envp));
 		msh->envp = set_shlvl(msh->envp);
+		if (!msh->envp)
+			return(free(msh->envp));
 	}
 	else
+	{
 		msh->envp = increment_shlvl(msh->envp);
+		if (!msh->envp)
+			return (free(msh->envp));
+	}
 	msh->prompt = MSH_PROMPT;
 	msh->original_stdin = dup(STDIN_FILENO);
 	msh->original_stdout = dup(STDOUT_FILENO);
