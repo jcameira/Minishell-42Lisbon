@@ -2,6 +2,7 @@
     "files.associations": {
         "array": "c",
         "minishell.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "builtins.h": "c"
     }
 }

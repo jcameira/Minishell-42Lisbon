@@ -24,7 +24,7 @@ EXPANDER_FILES		=	expander.c
 EXPANDER_PATH		=	srcs/Expander/
 EXPANDER			=	$(addprefix $(EXPANDER_PATH), $(EXPANDER_FILES))
 
-BUILTIN_FILES		=	builtins.c mini_cd.c mini_echo.c mini_env.c mini_export.c mini_pwd.c mini_unset.c
+BUILTIN_FILES		=	builtins.c mini_cd.c mini_echo.c mini_env.c mini_export.c mini_pwd.c mini_unset.c units_builtins.c
 BUILTIN_PATH		=	Builtins/
 BUILTINS			=	$(addprefix $(BUILTIN_PATH_PATH), $(BUILTIN_FILES))
 

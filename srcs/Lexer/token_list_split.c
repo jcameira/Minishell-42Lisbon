@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:18:41 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/11 18:59:09 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:07:22 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static t_token_list	*split_node(t_token_list *node, int *i)
 	{
 		node = execute_split(node, i);
 		if (!node)
-			return(NULL);
+			return (NULL);
 		node = node->next;
 		*i = 0;
 	}
@@ -86,7 +86,7 @@ static t_token_list	*split_node(t_token_list *node, int *i)
 t_token_list	*split_operator_tokens(t_token_list *node)
 {
 	t_token_list	*tmp;
-	int	i;
+	int				i;
 
 	i = 0;
 	tmp = node;

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:00:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/11 20:05:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:33:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ char	**arrdup(char **array)
 	int		size;
 	int		i;
 
-	if (!(*array))
-		return (NULL);
 	size = array_size(array);
 	new_arr = malloc(sizeof(char *) * (size + 1));
 	if (!new_arr)

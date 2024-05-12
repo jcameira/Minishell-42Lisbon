@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   units_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/10 16:22:26 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/12 15:52:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *macro)
 	int		lenght;
 	int		i;
 	int		j;
-	
+
 	i = -1;
 	lenght = ft_strlen(macro);
 	(void)cmd;

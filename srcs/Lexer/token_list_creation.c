@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/11 20:16:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/12 15:22:18 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	set_token_type(char	*c)
 
 void	skip_until_char(char *line, int *i, char c)
 {
-	while(line[++(*i)] && line[*i] != c)
+	while (line[++(*i)] && line[*i] != c)
 		continue ;
 }
 
