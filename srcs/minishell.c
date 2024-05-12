@@ -6,12 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/11 20:17:04 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:47:40 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //->preferably duplicate stdin and stdout now to be able to reset later
-//	(still debatable, could easily be done only on the execution stage) - DONE (SUBJECT TO CHANGE)
+//	(still debatable, could easily be done only on the execution stage)
+//- DONE (SUBJECT TO CHANGE)
 //->copy enviroment variables into minishell struct - DONE
 //->increment shell level (if no enviroment variables then set to 1) - DONE
 //->if no enviroment variables set PWD, else update PWD - DONE
@@ -42,7 +43,8 @@
 //		  write "^\Quit (core dumped)" as well
 //->start minishell loop (show Minishell prompt and wait for user input,
 //add to history, if SIGINT signal is sent in the middle of writing or the line
-//is only whitespaces don't add to history send the line written to the lexer) - MOSTLY DONE
+//is only whitespaces don't add to history send the line written to the lexer)
+//- MOSTLY DONE
 
 #include <minishell.h>
 #include <lexer.h>

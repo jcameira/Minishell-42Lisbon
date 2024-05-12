@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/11 16:17:14 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:40:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 char	*find_slash(char *path)
 {
-	int	i;
-	int	j;
-	char *new_path;
+	int		i;
+	int		j;
+	char	*new_path;
 
 	i = -1;
 	j = 0;
-	while(path[++i])
+	while (path[++i])
 	{
-		if (path[i] == "/")
+		if (path[i] == '/')
 			j = i;
 	}
 	i = 0;
@@ -31,19 +31,18 @@ char	*find_slash(char *path)
 	{
 		new_path[i] = path[i];
 	}
-	new_path[i] = NULL;
+	new_path[i] = '\0';
 	free(path);
-	return(new_path);
+	return (new_path);
 }
 
 void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 {
 	char	*cur_path;
 	char	*final_path;
-	int		i;
 	int		j;
 	int		flag;
-	
+
 	flag = 0;
 	cur_path = getcwd(NULL, 0);
 	if (cmd->arg_nbr == 1)
@@ -59,9 +58,9 @@ void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 	if (cmd->arg_nbr > 2)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
-		return;
+		return ;
 	}
-	if (cmd->arg_arr[1] == '..' )
+	if (!ft_strncmp(cmd->arg_arr[1], "..", 2))
 		final_path = find_slash(cur_path);
 	else if (*cmd->arg_arr[1] == '-' )
 		final_path = find_path(msh, cmd, OLDPWD);
@@ -72,20 +71,21 @@ void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 		ft_putendl_fd("cd: No such file or directory", 1);
 		free(final_path);
 		free(cur_path);
-		return (1);
+		return ;
 	}
+	j = -1;
 	while (msh->envp[++j])
 	{
 		if (!ft_strncmp(msh->envp[++j], PWD, 4))
 		{
-			free(msh->envp[i]);
-			msh->envp[i] = ft_strjoin(PWD, final_path);
+			free(msh->envp[j]);
+			msh->envp[j] = ft_strjoin(PWD, final_path);
 			flag++;
 		}
 		if (!ft_strncmp(msh->envp[++j], OLDPWD, 7))
 		{
-			free(msh->envp[i]);
-			msh->envp[i] = ft_strjoin(OLDPWD, cur_path);
+			free(msh->envp[j]);
+			msh->envp[j] = ft_strjoin(OLDPWD, cur_path);
 			flag++;
 		}
 		if (flag == 2)

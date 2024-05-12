@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/11 20:16:53 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:54:05 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@
 //->preferably handle quotes here, or at least any possible errors from unclosed
 //quotes - HANDLED I THINK
 //->when there is no other recognizible tokens to be found, assign the remaining
-//words to a node and send the ast to the parser to finish parsing - IN PARSER DUMB FUCK
+//words to a node and send the ast to the parser to finish parsing - IN PARSER
+//DUMB FUCK
 
 #include <lexer.h>
 
@@ -78,12 +79,9 @@ void	lexer(char *line)
 	token_list = get_initial_list(line);
 	if (!token_list)
 		return ;
-	//print_list(token_list);
 	token_list = refine_list(token_list);
 	if (!token_list)
 		return ;
 	token_list = set_token_types(token_list);
-	//print_list(token_list);
-	printf("Complete\n");
 	free_token_list(token_list);
 }

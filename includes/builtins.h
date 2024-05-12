@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/08 14:21:40 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/12 15:55:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
-# include "minishell.h"
+
+# include <minishell.h>
+# include <libft.h>
 
 # define PWD "PWD="
 # define OLDPWD "OLDPWD="
@@ -24,5 +26,6 @@ void	mini_env(t_minishell *msh, t_simplecmd *cmd);
 void	mini_export(t_minishell *msh, t_simplecmd *cmd);
 void	mini_pwd(t_minishell *msh, t_simplecmd *cmd);
 void	mini_unset(t_minishell *msh, t_simplecmd *cmd);
+char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *macro);
 
 #endif

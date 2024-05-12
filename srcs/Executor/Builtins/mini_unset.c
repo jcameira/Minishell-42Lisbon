@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_unset.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:48:08 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/10 17:53:04 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:40:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,15 @@ char	**rm_env(char **array, char *old_env)
 	return (new_arr);
 }
 
-
 void	mini_unset(t_minishell *msh, t_simplecmd *cmd)
 {
 	int		i;
-	
+
 	i = -1;
-	
 	while (msh->envp[++i])
 	{
-		if (!ft_strncmp(cmd->arg_arr[1], msh->envp[i], ft_strlen(cmd->arg_arr[1])))
+		if (!ft_strncmp(cmd->arg_arr[1], msh->envp[i],
+				ft_strlen(cmd->arg_arr[1])))
 		{
 			msh->envp = rm_env(msh->envp, cmd->arg_arr[1]);
 			return ;

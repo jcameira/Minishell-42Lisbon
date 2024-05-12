@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:14:11 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/11 19:09:32 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:07:13 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <lexer.h>
 
-t_token_list	*new_token(int	type, char *data)
+t_token_list	*new_token(int type, char *data)
 {
 	t_token_list	*new;
 
