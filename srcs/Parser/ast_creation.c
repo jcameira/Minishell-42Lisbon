@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ast_creation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/03 14:10:45 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 19:57:08 by jcameira         ###   ########.fr       */
+/*   Created: 2024/05/13 22:40:43 by jcameira          #+#    #+#             */
+/*   Updated: 2024/05/13 23:48:36 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include <parser.h>
 
-char	*ft_strjoin(char const *str1, char const *str2)
+t_ast	*create_ast(t_token_list **token_list)
 {
-	size_t	str_len1;
-	size_t	str_len2;
-	char	*new_str;
+	t_ast	*node;
 
-	str_len1 = ft_strlen(str1);
-	str_len2 = ft_strlen(str2);
-	new_str = malloc(sizeof (char) * (str_len1 + str_len2 + 1));
-	if (!new_str)
+	if (!token_list)
 		return (NULL);
-	ft_memmove((void *)(new_str), str1, str_len1);
-	ft_memmove((void *)(new_str + str_len1), str2, str_len2);
-	new_str[str_len1 + str_len2] = '\0';
-	return (new_str);
+	node = NULL;
+	if (check_full_cmd_line_subshell(*token_list))
+	{
+		node = new_ast_node(*token_list);
+		if (!node)
+			return (NULL);
+		trim_parentesis_nodes(token_list);
+	}
+	return (node);
 }

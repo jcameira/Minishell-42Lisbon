@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 17:20:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:48:55 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,12 @@
 
 void	parser(t_token_list *token_list)
 {
-	t_ast	*node;
+	t_ast	*root;
 
-	if (check_full_cmd_line_subshell(token_list))
-		node = new_ast_node(token_list);
+	root = create_ast(&token_list);
+	if (!root)
+		return ;
+	printf("TYPE: %s		CONTENT: %s\n", root->type, root->content);
+	print_list(token_list);
+	free_token_list(token_list);
 }
