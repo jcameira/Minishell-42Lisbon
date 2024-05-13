@@ -6,22 +6,9 @@
 /*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:46:55 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/08 13:40:26 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:52:35 by mpais-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//Builtin functions to be made
-//->echo (need to be able to handle -n option)
-//->cd (only with relative or absolute path, should be easy enough to add only
-//cd, cd .. and cd - but totally not mandatory, just easy enough)
-//->pwd
-//->export
-//->unset
-//->env
-//->exit
-
-//Was thinking of a way to do this in a function array that is itself a callable
-//function that "turns itself" into the correct builtin to be executed
 
 #include <builtins.h>
 

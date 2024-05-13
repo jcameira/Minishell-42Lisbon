@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:00:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/12 16:33:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:48:17 by mpais-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,50 @@ int	full_white_space(char *line)
 			return (0);
 	}
 	return (1);
+}
+
+int	number_lines(char **matrix)
+{
+	int	i;
+
+	i = 0;
+	while (matrix[i])
+		i++;
+	return (i);
+}
+
+void	create_copy(char **matrix, char **env)
+{
+	int		i;
+
+	i = -1;
+	while (++i < number_lines(env))
+		matrix[i] = ft_strdup(env[i]);
+	matrix[i] = NULL;
+}
+
+void	bubble_sort(char **matrix)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+	int		size;
+
+	size = 0;
+	while (matrix[size])
+		size++;
+	i = -1;
+	while (++i < size - 1)
+	{
+		j = -1;
+		while (++j < size - i - 1)
+		{
+			if (ft_strcmp(matrix[j], matrix[j + 1]) > 0)
+			{
+				tmp = matrix[j];
+				matrix[j] = matrix[j + 1];
+				matrix[j + 1] = tmp;
+			}
+		}
+	}
 }

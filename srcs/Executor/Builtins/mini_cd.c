@@ -3,47 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   mini_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/12 16:40:57 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:44:28 by mpais-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <builtins.h>
 
-char	*find_slash(char *path)
+void	aux_cd(char **msh_envp, char *cur_path, char *final_path)
 {
-	int		i;
-	int		j;
-	char	*new_path;
-
-	i = -1;
-	j = 0;
-	while (path[++i])
+	int	j;
+	int	flag;
+	
+	j = -1;
+	flag = 0;
+	while (msh_envp[++j])
 	{
-		if (path[i] == '/')
-			j = i;
+		if (!ft_strncmp(msh_envp[++j], PWD, 4))
+		{
+			free(msh_envp[j]);
+			msh_envp[j] = ft_strjoin(PWD, final_path);
+			flag++;
+		}
+		if (!ft_strncmp(msh_envp[++j], OLDPWD, 7))
+		{
+			free(msh_envp[j]);
+			msh_envp[j] = ft_strjoin(OLDPWD, cur_path);
+			flag++;
+		}
+		if (flag == 2)
+			return ;
 	}
-	i = 0;
-	new_path = malloc(sizeof (char) * (j + 1));
-	while (i < j)
-	{
-		new_path[i] = path[i];
-	}
-	new_path[i] = '\0';
-	free(path);
-	return (new_path);
 }
 
 void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 {
 	char	*cur_path;
 	char	*final_path;
-	int		j;
-	int		flag;
 
-	flag = 0;
 	cur_path = getcwd(NULL, 0);
 	if (cmd->arg_nbr == 1)
 	{
@@ -51,7 +50,6 @@ void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 		if (!final_path)
 		{
 			ft_putstr_fd("cd: HOME not set\n", 2);
-			free(final_path);
 			return ;
 		}
 	}
@@ -73,22 +71,5 @@ void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 		free(cur_path);
 		return ;
 	}
-	j = -1;
-	while (msh->envp[++j])
-	{
-		if (!ft_strncmp(msh->envp[++j], PWD, 4))
-		{
-			free(msh->envp[j]);
-			msh->envp[j] = ft_strjoin(PWD, final_path);
-			flag++;
-		}
-		if (!ft_strncmp(msh->envp[++j], OLDPWD, 7))
-		{
-			free(msh->envp[j]);
-			msh->envp[j] = ft_strjoin(OLDPWD, cur_path);
-			flag++;
-		}
-		if (flag == 2)
-			return ;
-	}
+	aux_cd(msh->envp, cur_path, final_path);
 }
