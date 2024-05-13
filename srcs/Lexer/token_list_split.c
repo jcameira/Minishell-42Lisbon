@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:18:41 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/12 16:07:22 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 22:00:08 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ static t_token_list	*execute_split(t_token_list *node, int *i)
 	if (!split_arr)
 		return (free(node->content), NULL);
 	free(node->content);
-	node->content = split_arr[0];
+	node->content = ft_strdup(split_arr[0]);
 	back_node = new_token(NO_TYPE, split_arr[1]);
 	if (!back_node)
 		return (free_arr(split_arr), NULL);
+	free_arr(split_arr);
 	add_token_middle_list(&node, back_node);
 	return (node);
 }

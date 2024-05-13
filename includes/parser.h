@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 14:55:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 23:44:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,15 @@ typedef struct s_ast
 	struct s_ast	*right;
 }				t_ast;
 
-char	*set_ast_node_type(t_token_list *token_node);
-char	*get_node_content(t_token_list *token_node);
+char			*set_ast_node_type(t_token_list *token_node);
+char			*get_node_content(t_token_list *token_node);
+char			*get_subshell_content(t_token_list *token_node);
+int				check_full_cmd_line_subshell(t_token_list *token_list);
+void			trim_parentesis_nodes(t_token_list **token_list);
+t_ast			*new_ast_node(t_token_list *token_node);
+void			free_token_list_node(t_token_list **node);
+void			print_list(t_token_list *token_list);
+void			free_token_list(t_token_list *list);
+t_ast			*create_ast(t_token_list **token_list);
 
 #endif
