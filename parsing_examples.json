@@ -1,0 +1,163 @@
+{
+	"type": "Script",
+	"commands": [
+	  {
+		"type": "Subshell",
+		"list": {
+		  "type": "CompoundList",
+		  "commands": [
+			{
+			  "type": "LogicalExpression",
+			  "op": "or",
+			  "left": {
+				"type": "LogicalExpression",
+				"op": "and",
+				"left": {
+				  "type": "Pipeline",
+				  "commands": [
+					{
+					  "type": "Command",
+					  "name": {
+						"text": "grep",
+						"type": "Word"
+					  },
+					  "suffix": [
+						{
+						  "type": "Redirect",
+						  "op": {
+							"text": "<",
+							"type": "less"
+						  },
+						  "file": {
+							"text": "in",
+							"type": "Word"
+						  },
+						  "numberIo": {
+							"text": "42",
+							"type": "io_number"
+						  }
+						}
+					  ]
+					},
+					{
+					  "type": "Command",
+					  "name": {
+						"text": "wc",
+						"type": "Word"
+					  },
+					  "suffix": [
+						{
+						  "text": "-l",
+						  "type": "Word"
+						}
+					  ]
+					}
+				  ]
+				},
+				"right": {
+				  "type": "Subshell",
+				  "list": {
+					"type": "CompoundList",
+					"commands": [
+					  {
+						"type": "LogicalExpression",
+						"op": "or",
+						"left": {
+						  "type": "Command",
+						  "name": {
+							"text": "/bin/echo",
+							"type": "Word"
+						  },
+						  "suffix": [
+							{
+							  "text": "1",
+							  "type": "Word"
+							},
+							{
+							  "text": "2",
+							  "type": "Word"
+							},
+							{
+							  "text": "3",
+							  "type": "Word"
+							},
+							{
+							  "type": "Redirect",
+							  "op": {
+								"text": ">",
+								"type": "great"
+							  },
+							  "file": {
+								"text": "tmp_out",
+								"type": "Word"
+							  },
+							  "numberIo": {
+								"text": "4",
+								"type": "io_number"
+							  }
+							}
+						  ]
+						},
+						"right": {
+						  "type": "Command",
+						  "name": {
+							"text": "/bin/echo",
+							"type": "Word"
+						  },
+						  "suffix": [
+							{
+							  "type": "Redirect",
+							  "op": {
+								"text": ">",
+								"type": "great"
+							  },
+							  "file": {
+								"text": "tmp_out",
+								"type": "Word"
+							  },
+							  "numberIo": {
+								"text": "2",
+								"type": "io_number"
+							  }
+							},
+							{
+							  "type": "Redirect",
+							  "op": {
+								"text": ">>",
+								"type": "dgreat"
+							  },
+							  "file": {
+								"text": "tmp_out",
+								"type": "Word"
+							  }
+							},
+							{
+							  "text": "tmp_out",
+							  "type": "Word"
+							}
+						  ]
+						}
+					  }
+					]
+				  }
+				}
+			  },
+			  "right": {
+				"type": "Command",
+				"name": {
+				  "text": "exit",
+				  "type": "Word"
+				},
+				"suffix": [
+				  {
+					"text": "1",
+					"type": "Word"
+				  }
+				]
+			  }
+			}
+		  ]
+		}
+	  }
+	]
+  }

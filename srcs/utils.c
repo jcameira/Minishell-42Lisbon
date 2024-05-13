@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:00:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 15:48:17 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:27:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,26 +63,6 @@ int	full_white_space(char *line)
 			return (0);
 	}
 	return (1);
-}
-
-int	number_lines(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	while (matrix[i])
-		i++;
-	return (i);
-}
-
-void	create_copy(char **matrix, char **env)
-{
-	int		i;
-
-	i = -1;
-	while (++i < number_lines(env))
-		matrix[i] = ft_strdup(env[i]);
-	matrix[i] = NULL;
 }
 
 void	bubble_sort(char **matrix)

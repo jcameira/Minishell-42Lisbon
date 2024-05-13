@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/04/24 17:19:31 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:20:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,3 +23,13 @@
 //->check for any possible errors coming from bad command lines (this could and
 //probably should be checked only in the lexer)
 //->send the complete command table to the expander
+
+#include <parser.h>
+
+void	parser(t_token_list *token_list)
+{
+	t_ast	*node;
+
+	if (check_full_cmd_line_subshell(token_list))
+		node = new_ast_node(token_list);
+}
