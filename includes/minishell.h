@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/12 15:52:27 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:48:55 by mpais-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ void	free_arr(char **array);
 void	signals_init(void);
 void	interactive_handler(int sig);
 void	exit_shell(t_minishell *msh);
-
+int		number_lines(char **matrix);
+void	create_copy(char **matrix, char **env);
+void	bubble_sort(char **matrix);
 #endif
