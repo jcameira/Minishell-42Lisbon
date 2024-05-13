@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_export.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/13 16:15:06 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:27:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	print_declare(char **env)
 	int		i;
 
 	i = -1;
-	copy_env = malloc(sizeof(char *) * (number_lines(env) + 1));
-	create_copy(copy_env, env);
+	copy_env = arrdup(env);
 	bubble_sort(copy_env);
 	while (copy_env[++i])
 	{

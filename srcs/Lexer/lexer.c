@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/12 16:54:05 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/13 14:31:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,27 +45,27 @@ void	print_list(t_token_list *token_list)
 	while (token_list)
 	{
 		if (token_list->token_type == AND)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_AND, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_AND, token_list->content);
 		else if (token_list->token_type == OR)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_OR, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_OR, token_list->content);
 		else if (token_list->token_type == PIPE)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_PIPE, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_PIPE, token_list->content);
 		else if (token_list->token_type == LESSER)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_LESSER, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_LESSER, token_list->content);
 		else if (token_list->token_type == D_LESSER)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_D_GREATER, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_D_GREATER, token_list->content);
 		else if (token_list->token_type == GREATER)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_GREATER, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_GREATER, token_list->content);
 		else if (token_list->token_type == D_GREATER)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_D_GREATER, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_D_GREATER, token_list->content);
 		else if (token_list->token_type == L_PARENTESIS)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_L_PARENTESIS, token_list->content);
+			printf("TOKEN TYPE = %s 	TOKEN DATA = %s\n", PRINT_L_PARENTESIS, token_list->content);
 		else if (token_list->token_type == R_PARENTESIS)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_R_PARENTESIS, token_list->content);
+			printf("TOKEN TYPE = %s 	TOKEN DATA = %s\n", PRINT_R_PARENTESIS, token_list->content);
 		else if (token_list->token_type == WORD)
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_WORD, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_WORD, token_list->content);
 		else
-			printf("TOKEN TYPE = %s TOKEN DATA = %s\n", PRINT_BAD_TOKEN, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_BAD_TOKEN, token_list->content);
 		token_list = token_list->next;
 	}
 }
@@ -83,5 +83,6 @@ void	lexer(char *line)
 	if (!token_list)
 		return ;
 	token_list = set_token_types(token_list);
+	print_list(token_list);
 	free_token_list(token_list);
 }
