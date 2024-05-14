@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:59:16 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 23:46:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:37:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,31 @@ char	*get_subshell_content(t_token_list *token_node)
 	return (content);
 }
 
-int	check_full_cmd_line_subshell(t_token_list *token_list)
+int	check_for_node(t_token_list *token_list, t_ast_token_type type)
+{
+	t_token_list	*tmp;
+
+	tmp = token_list;
+	while (tmp)
+	{
+		if (tmp->token_type == L_PARENTESIS)
+			skip_subshell(&tmp);
+		else if (type == AND_OR_SEQUENCE && (tmp->token_type == AND
+				|| tmp->token_type == OR))
+			return (1);
+		else if (type == PIPE_SEQUENCE && tmp->token_type == PIPE)
+			return (1);
+		else if (type == REDIRECTION && (tmp->token_type == LESSER
+				|| tmp->token_type == D_LESSER || tmp->token_type == GREATER
+				|| tmp->token_type == D_GREATER))
+			return (1);
+		else if (type == WORD && tmp->token_type == WORD)
+			return (1);
+		tmp = tmp->next;
+	}
+}
+
+int	check_for_subshell(t_token_list *token_list)
 {
 	t_token_list	*tmp;
 	int				parentesis;
