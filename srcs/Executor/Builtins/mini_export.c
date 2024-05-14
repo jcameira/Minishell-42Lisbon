@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_export.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/13 19:29:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:02:30 by mpais-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,7 @@ void	aux_export(char **msh_envp, char *cmd_argarr, char **tmp_cmd)
 void	mini_export(t_minishell *msh, t_simplecmd *cmd)
 {
 	char	**tmp_cmd;
-	// char	**tmp_env;
 	int		i;
-	// int		j;
 
 	if (cmd->arg_nbr == 1)
 		print_declare(msh->envp);

@@ -6,7 +6,7 @@
 /*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/13 16:44:28 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:16:34 by mpais-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	aux_cd(char **msh_envp, char *cur_path, char *final_path)
 {
 	int	j;
 	int	flag;
-	
+
 	j = -1;
 	flag = 0;
 	while (msh_envp[++j])
@@ -34,8 +34,10 @@ void	aux_cd(char **msh_envp, char *cur_path, char *final_path)
 			flag++;
 		}
 		if (flag == 2)
-			return ;
+			break ;
 	}
+	free(final_path);
+	free(cur_path);
 }
 
 void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
@@ -44,32 +46,29 @@ void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 	char	*final_path;
 
 	cur_path = getcwd(NULL, 0);
+	if (cmd->arg_nbr > 2)
+		return (ft_putstr_fd("cd: too many arguments\n", 2));
 	if (cmd->arg_nbr == 1)
 	{
 		final_path = find_path(msh, cmd, HOME);
 		if (!final_path)
-		{
-			ft_putstr_fd("cd: HOME not set\n", 2);
-			return ;
-		}
+			return (ft_putstr_fd("cd: HOME not set\n", 2));
 	}
-	if (cmd->arg_nbr > 2)
-	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
-		return ;
-	}
-	if (!ft_strncmp(cmd->arg_arr[1], "..", 2))
+	else if (!ft_strncmp(cmd->arg_arr[1], "..", 2))
 		final_path = find_slash(cur_path);
 	else if (*cmd->arg_arr[1] == '-' )
+	{
 		final_path = find_path(msh, cmd, OLDPWD);
+		if (!final_path)
+			return (ft_putstr_fd("cd: OLDPWD not set\n", 2));
+	}
 	else
 		final_path = ft_strjoin(cur_path, cmd->arg_arr[1]);
 	if (chdir(final_path) == -1)
 	{
-		ft_putendl_fd("cd: No such file or directory", 1);
 		free(final_path);
 		free(cur_path);
-		return ;
+		return (ft_putendl_fd("cd: No such file or directory", 1));
 	}
 	aux_cd(msh->envp, cur_path, final_path);
 }
