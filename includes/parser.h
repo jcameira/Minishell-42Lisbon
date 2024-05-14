@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 23:44:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:49:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,17 @@
 # define PRINT_R_PARENTESIS	"R_PARENTESIS"
 # define PRINT_WORD	"WORD"
 
-typedef enum s_tokens
+typedef enum s_ast_node_type
+{
+	NO_TYPE = 0,
+	AND_OR_SEQUENCE,
+	PIPE_SEQUENCE,
+	SUBSHELL,
+	REDIRECTION,
+	WORD
+}				t_ast_token_type;
+
+typedef enum s_token_list_types
 {
 	NO_TYPE = 0,
 	AND,
@@ -49,9 +59,8 @@ typedef enum s_tokens
 	L_PARENTESIS,
 	R_PARENTESIS,
 	WORD,
-	BAD_TOKEN,
-	END
-}				t_tokens;
+	BAD_TOKEN
+}				t_list_token_types;
 
 typedef struct s_token_list
 {
@@ -72,12 +81,14 @@ typedef struct s_ast
 char			*set_ast_node_type(t_token_list *token_node);
 char			*get_node_content(t_token_list *token_node);
 char			*get_subshell_content(t_token_list *token_node);
-int				check_full_cmd_line_subshell(t_token_list *token_list);
+int				check_for_subshell(t_token_list *token_list);
 void			trim_parentesis_nodes(t_token_list **token_list);
 t_ast			*new_ast_node(t_token_list *token_node);
 void			free_token_list_node(t_token_list **node);
 void			print_list(t_token_list *token_list);
 void			free_token_list(t_token_list *list);
-t_ast			*create_ast(t_token_list **token_list);
+t_ast			*add_ast_node(t_token_list **token_list);
+t_ast			*new_regular_node(t_token_list **token_list, t_ast_token_type type);
+t_ast			*new_subshell_node(t_token_list **token_list);
 
 #endif
