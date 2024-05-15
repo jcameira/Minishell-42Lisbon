@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:33:02 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 23:47:57 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:00:26 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,13 @@ t_ast	*new_ast_node(t_token_list *token_node)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	new->type = set_ast_node_type(token_node);
 	if (!strncmp(new->type, PRINT_SUBSHELL, ft_strlen(PRINT_SUBSHELL)))
-	{
 		new->content = get_subshell_content(token_node);
-		if (!new->content)
-			return (NULL);
-	}
+	else if (!strncmp(new->type, PRINT_WORD, ft_strlen(PRINT_WORD)))
+		new->content = get_simple_command_content(token_node);
 	else
-	{
 		new->content = get_node_content(token_node);
-		if (!new->content)
-			return (NULL);
-	}
+	if (!new->content)
+		return (NULL);
 	new->subshell_ast = NULL;
 	new->left = NULL;
 	new->right = NULL;

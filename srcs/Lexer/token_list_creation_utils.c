@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:14:11 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/12 16:07:13 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:05:01 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_token_list	*last_token(t_token_list *token_list)
 	return (tmp);
 }
 
-t_token_list	*set_token_types(t_token_list *token_list)
+t_token_list	*set_token_list_types(t_token_list *token_list)
 {
 	t_token_list	*tmp;
 
