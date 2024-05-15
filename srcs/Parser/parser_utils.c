@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:59:16 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/14 20:37:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:23:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*add_more_content(char *content, t_token_list *node, int par)
 {
 	char			*tmp_content;
 
-	if (node->next->token_type == R_PARENTESIS && par == 1)
+	if (par == 1)
 		tmp_content = ft_strjoin(content, " ");
 	else
 		tmp_content = ft_strdup(content);
@@ -92,6 +92,27 @@ char	*get_subshell_content(t_token_list *token_node)
 	return (content);
 }
 
+char	*get_simple_command_content(t_token_list *token_node)
+{
+	t_token_list	*tmp_node;
+	char			*content;
+
+	tmp_node = token_node;
+	content = malloc(sizeof(char));
+	if (!content)
+		return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	content[0] = '\0';
+	while (tmp_node && tmp_node->token_type == WORD)
+	{
+		if (tmp_node->next)
+			content = add_more_content(content, tmp_node, 1);
+		else
+			content = add_more_content(content, tmp_node, 0);
+		tmp_node = tmp_node->next;
+	}
+	return (content);
+}
+
 int	check_for_node(t_token_list *token_list, t_ast_token_type type)
 {
 	t_token_list	*tmp;
@@ -110,10 +131,11 @@ int	check_for_node(t_token_list *token_list, t_ast_token_type type)
 				|| tmp->token_type == D_LESSER || tmp->token_type == GREATER
 				|| tmp->token_type == D_GREATER))
 			return (1);
-		else if (type == WORD && tmp->token_type == WORD)
+		else if (type == SIMPLE_COMMAND && tmp->token_type == WORD)
 			return (1);
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 int	check_for_subshell(t_token_list *token_list)

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/14 12:04:11 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/15 22:35:39 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,44 @@
 
 #include <parser.h>
 
+int height(t_ast *node)
+{
+    if (node == NULL) {
+        return 0;
+    } else {
+        int leftHeight = height(node->left);
+        int rightHeight = height(node->right);
+
+        if (leftHeight > rightHeight) {
+            return leftHeight + 1;
+        } else {
+            return rightHeight + 1;
+        }
+    }
+}
+
+void print_level(t_ast *root, int level, int curr_lvl)
+{
+    if (root == NULL) {
+        return;
+    }
+    if (level == 1) {
+        printf("LEVEL: %d	TYPE: %s		CONTENT: %s\n", curr_lvl, root->type, root->content);
+    } else if (level > 1) {
+        print_level(root->left, level - 1, curr_lvl + 1);
+		print_level(root->subshell_ast, level - 1, curr_lvl + 1);
+        print_level(root->right, level - 1, curr_lvl + 1);
+    }
+}
+
+void print_ast(t_ast *root) {
+    int h = height(root);
+    for (int i = 1; i <= h; i++) {
+        print_level(root, i, 0);
+    }
+    printf("\n");
+}
+
 void	parser(t_token_list *token_list)
 {
 	t_ast	*root;
@@ -33,7 +71,7 @@ void	parser(t_token_list *token_list)
 	root = add_ast_node(&token_list);
 	if (!root)
 		return ;
-	printf("TYPE: %s		CONTENT: %s\n", root->type, root->content);
-	print_list(token_list);
-	free_token_list(token_list);
+	print_ast(root);
+	//printf("TYPE: %s		CONTENT: %s\n", root->type, root->content);
+	//free_token_list(token_list);
 }

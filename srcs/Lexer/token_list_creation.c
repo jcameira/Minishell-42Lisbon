@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/12 15:22:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:04:13 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <lexer.h>
 
-int	set_token_type(char	*c)
+t_token_list_types	set_token_type(char	*c)
 {
 	if (*c == '&')
 		return (AND);

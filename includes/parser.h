@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/14 20:49:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:05:54 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@
 
 typedef enum s_ast_node_type
 {
-	NO_TYPE = 0,
+	BAD_TYPE = 0,
 	AND_OR_SEQUENCE,
 	PIPE_SEQUENCE,
 	SUBSHELL,
 	REDIRECTION,
-	WORD
+	SIMPLE_COMMAND,
 }				t_ast_token_type;
 
-typedef enum s_token_list_types
+typedef enum s_token_list_type
 {
 	NO_TYPE = 0,
 	AND,
@@ -60,11 +60,11 @@ typedef enum s_token_list_types
 	R_PARENTESIS,
 	WORD,
 	BAD_TOKEN
-}				t_list_token_types;
+}				t_token_list_type;
 
 typedef struct s_token_list
 {
-	int					token_type;
+	t_token_list_type	token_type;
 	char				*content;
 	struct s_token_list	*next;
 }				t_token_list;
@@ -81,7 +81,9 @@ typedef struct s_ast
 char			*set_ast_node_type(t_token_list *token_node);
 char			*get_node_content(t_token_list *token_node);
 char			*get_subshell_content(t_token_list *token_node);
+char			*get_simple_command_content(t_token_list *token_node);
 int				check_for_subshell(t_token_list *token_list);
+int				check_for_node(t_token_list *token_list, t_ast_token_type type);
 void			trim_parentesis_nodes(t_token_list **token_list);
 t_ast			*new_ast_node(t_token_list *token_node);
 void			free_token_list_node(t_token_list **node);
@@ -90,5 +92,7 @@ void			free_token_list(t_token_list *list);
 t_ast			*add_ast_node(t_token_list **token_list);
 t_ast			*new_regular_node(t_token_list **token_list, t_ast_token_type type);
 t_ast			*new_subshell_node(t_token_list **token_list);
+t_ast			*new_simple_command_node(t_token_list **token_list);
+void			skip_subshell(t_token_list **token_list);
 
 #endif

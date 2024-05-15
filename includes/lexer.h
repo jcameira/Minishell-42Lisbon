@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 19:26:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:06:30 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define PRINT_BAD_TOKEN	"BAD_TOKEN"
 # define PRINT_END	"END"
 
-typedef enum s_tokens
+typedef enum s_token_list_type
 {
 	NO_TYPE = 0,
 	AND,
@@ -58,31 +58,31 @@ typedef enum s_tokens
 	WORD,
 	BAD_TOKEN,
 	END
-}				t_tokens;
+}				t_token_list_type;
 
 typedef struct s_token_list
 {
-	int					token_type;
+	t_token_list_type	token_type;
 	char				*content;
 	struct s_token_list	*next;
 }				t_token_list;
 
-void			free_token_list(t_token_list *list);
-void			free_arr(char **array);
-void			lexer(char *line);
-int				check_odd_number_tokens(char *line);
-t_token_list	*set_token_types(t_token_list *token_list);
-int				set_token_type(char	*c);
-t_token_list	*new_token(int type, char *data);
-void			add_new_token(t_token_list **token_list, t_token_list *new);
-void			add_token_middle_list(t_token_list **token_list,
+void				free_token_list(t_token_list *list);
+void				free_arr(char **array);
+void				lexer(char *line);
+int					check_odd_number_tokens(char *line);
+t_token_list		*set_token_list_types(t_token_list *token_list);
+t_token_list_type	set_token_type(char	*c);
+t_token_list		*new_token(int type, char *data);
+void				add_new_token(t_token_list **token_list, t_token_list *new);
+void				add_token_middle_list(t_token_list **token_list,
 					t_token_list *new);
-t_token_list	*last_token(t_token_list *token_list);
-void			skip_until_char(char *line, int *i, char c);
-t_token_list	*get_initial_list(char *line);
-t_token_list	*refine_list(t_token_list *initial_list);
-int				is_operator_token(char	*c);
-t_token_list	*split_operator_tokens(t_token_list *node);
-void			parser(t_token_list *token_list);
+t_token_list		*last_token(t_token_list *token_list);
+void				skip_until_char(char *line, int *i, char c);
+t_token_list		*get_initial_list(char *line);
+t_token_list		*refine_list(t_token_list *initial_list);
+int					is_operator_token(char	*c);
+t_token_list		*split_operator_tokens(t_token_list *node);
+void				parser(t_token_list *token_list);
 
 #endif
