@@ -6,7 +6,7 @@
 /*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/14 15:16:34 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/05/15 11:00:23 by mpais-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@ void	aux_cd(char **msh_envp, char *cur_path, char *final_path)
 	free(cur_path);
 }
 
+int	chdir_cd(char *cur_path, char *final_path)
+{
+	if (chdir(final_path) == -1)
+	{
+		free(final_path);
+		free(cur_path);
+		return (ft_putendl_fd("cd: No such file or directory", 1), 0);
+	}
+	return (1);
+}
+
 void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 {
 	char	*cur_path;
@@ -64,11 +75,7 @@ void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 	}
 	else
 		final_path = ft_strjoin(cur_path, cmd->arg_arr[1]);
-	if (chdir(final_path) == -1)
-	{
-		free(final_path);
-		free(cur_path);
-		return (ft_putendl_fd("cd: No such file or directory", 1));
-	}
+	if (!chdir_cd(cur_path, final_path))
+		return ;
 	aux_cd(msh->envp, cur_path, final_path);
 }
