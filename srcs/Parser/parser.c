@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/16 15:05:46 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:56:04 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,5 @@ void	parser(t_token_list *token_list)
 	if (!root)
 		return ;
 	print_ast(root);
+    free_ast(root);
 }
