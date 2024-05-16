@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/15 19:05:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:11:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef enum s_ast_node_type
 	PIPE_SEQUENCE,
 	SUBSHELL,
 	REDIRECTION,
-	SIMPLE_COMMAND,
+	SIMPLE_COMMAND
 }				t_ast_token_type;
 
 typedef enum s_token_list_type
