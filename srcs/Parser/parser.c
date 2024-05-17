@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/16 15:56:04 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 12:22:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,44 +26,56 @@
 
 #include <parser.h>
 
-int height(t_ast *node)
+int	height(t_ast *node)
 {
-    if (node == NULL)
-        return (0);
-    else
-    {
-        int leftHeight = height(node->left);
-        int rightHeight = height(node->right);
-        int subshell = height(node->subshell_ast);
+	int	leftheight;
+	int	rightheight;
+	int	subshell;
+	int	maxheight;
 
-        int maxHeight = leftHeight;
-        if (subshell > maxHeight)
-            maxHeight = subshell;
-        if (rightHeight > maxHeight)
-            maxHeight = rightHeight;
-        
-        return (maxHeight + 1);
-    }
+	if (node == NULL)
+		return (0);
+	else
+	{
+		leftheight = height(node->left);
+		rightheight = height(node->right);
+		subshell = height(node->subshell_ast);
+		maxheight = leftheight;
+		if (subshell > maxheight)
+			maxheight = subshell;
+		if (rightheight > maxheight)
+			maxheight = rightheight;
+		return (maxheight + 1);
+	}
 }
 
-void print_level(t_ast *root, int level, int curr_lvl)
+void	print_level(t_ast *root, int level, int curr_lvl)
 {
-    if (root == NULL)
-        return ;
-    if (level == 1)
-        printf("LEVEL: %d	TYPE: %s		CONTENT: %s\n", curr_lvl, root->type, root->content);
-    else if (level > 1)
-    {
-        print_level(root->left, level - 1, curr_lvl + 1);
+	if (root == NULL)
+		return ;
+	if (level == 1)
+		printf("LEVEL: %d	TYPE: %s		CONTENT: %s\n",
+			curr_lvl, root->type, root->content);
+	else if (level > 1)
+	{
+		print_level(root->left, level - 1, curr_lvl + 1);
 		print_level(root->subshell_ast, level - 1, curr_lvl + 1);
-        print_level(root->right, level - 1, curr_lvl + 1);
-    }
+		print_level(root->right, level - 1, curr_lvl + 1);
+	}
 }
 
-void print_ast(t_ast *root) {
-    int h = height(root);
-    for (int i = 1; i <= h; i++)
-        print_level(root, i, 0);
+void	print_ast(t_ast *root)
+{
+	int	h;
+	int	i;
+
+	h = height(root);
+	i = 1;
+	while (i <= h)
+	{
+		print_level(root, i, 0);
+		i++;
+	}
 }
 
 void	parser(t_token_list *token_list)
@@ -74,5 +86,5 @@ void	parser(t_token_list *token_list)
 	if (!root)
 		return ;
 	print_ast(root);
-    free_ast(root);
+	free_ast(root);
 }

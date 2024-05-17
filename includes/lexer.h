@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/15 19:06:30 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 12:44:31 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_token_list_type	set_token_type(char	*c);
 t_token_list		*new_token(int type, char *data);
 void				add_new_token(t_token_list **token_list, t_token_list *new);
 void				add_token_middle_list(t_token_list **token_list,
-					t_token_list *new);
+						t_token_list *new);
 t_token_list		*last_token(t_token_list *token_list);
 void				skip_until_char(char *line, int *i, char c);
 t_token_list		*get_initial_list(char *line);
