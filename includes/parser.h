@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 17:48:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:06:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ char				*get_node_content(t_token_list *token_node);
 char				*get_subshell_content(t_token_list *token_node);
 char				*get_simple_command_content(t_token_list *token_node);
 int					check_for_subshell(t_token_list *token_list);
-int					check_for_node(t_token_list *token_list, t_ast_token_type type);
+int					check_for_node(t_token_list *token_list,
+						t_ast_token_type type);
 void				trim_parentesis_nodes(t_token_list **token_list);
 t_ast				*new_ast_node(t_token_list *token_node);
 void				free_token_list_node(t_token_list **node);

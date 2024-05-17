@@ -6,25 +6,25 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:59:16 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 20:04:26 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:07:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-t_ast_token_type set_ast_node_type(t_token_list *token_node)
+t_ast_token_type	set_ast_node_type(t_token_list *token_node)
 {
 	if (!token_node)
 		return (NO_NODE);
 	else if (token_node->token_type == AND
-			|| token_node->token_type == OR)
+		|| token_node->token_type == OR)
 		return (AND_OR_SEQUENCE);
 	else if (token_node->token_type == PIPE)
 		return (PIPE_SEQUENCE);
 	else if (token_node->token_type == LESSER
-			|| token_node->token_type == D_LESSER
-			|| token_node->token_type == GREATER
-			|| token_node->token_type == D_GREATER)
+		|| token_node->token_type == D_LESSER
+		|| token_node->token_type == GREATER
+		|| token_node->token_type == D_GREATER)
 		return (REDIRECTION);
 	else if (token_node->token_type == L_PARENTESIS)
 		return (SUBSHELL);
