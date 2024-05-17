@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:41:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 12:43:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 20:26:37 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,11 @@ void	trim_parentesis_nodes(t_token_list **token_list)
 {
 	t_token_list	*tmp;
 
+	tmp = (*token_list)->next;
 	free_token_list_node(token_list);
-	tmp = *token_list;
+	*token_list = tmp;
+	if (!tmp->next)
+		return (free_token_list_node(&tmp));
 	while (tmp->next->next)
 		tmp = tmp->next;
 	free_token_list_node(&tmp->next);

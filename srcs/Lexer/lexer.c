@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/16 14:19:22 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:56:27 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	print_list(t_token_list *token_list)
 		else if (token_list->token_type == WORD)
 			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_WORD, token_list->content);
 		else
-			printf("TOKEN TYPE = %s 		TOKEN DATA = %s\n", PRINT_BAD_TOKEN, token_list->content);
+			printf("TOKEN TYPE = %s 		TOKEN DATA = \n", PRINT_BAD_TOKEN);
 		token_list = token_list->next;
 	}
 }

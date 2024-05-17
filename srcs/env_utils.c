@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:30:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 12:53:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:13:59 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ char	**increment_shlvl(char **array)
 			free(lvl);
 			if (!tmp_str)
 				return (ft_putstr_fd(NO_SPACE, 2), NULL);
+			break ;
 		}
 	}
 	free(array[i]);

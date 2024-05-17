@@ -6,36 +6,32 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:59:16 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 12:42:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 20:04:26 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-char	*set_ast_node_type(t_token_list *token_node)
+t_ast_token_type set_ast_node_type(t_token_list *token_node)
 {
 	if (!token_node)
-		return (NULL);
-	else if (token_node->token_type == AND)
-		return (PRINT_AND);
-	else if (token_node->token_type == OR)
-		return (PRINT_OR);
+		return (NO_NODE);
+	else if (token_node->token_type == AND
+			|| token_node->token_type == OR)
+		return (AND_OR_SEQUENCE);
 	else if (token_node->token_type == PIPE)
-		return (PRINT_PIPE);
-	else if (token_node->token_type == LESSER)
-		return (PRINT_LESSER);
-	else if (token_node->token_type == D_LESSER)
-		return (PRINT_D_LESSER);
-	else if (token_node->token_type == GREATER)
-		return (PRINT_GREATER);
-	else if (token_node->token_type == D_GREATER)
-		return (PRINT_D_GREATER);
+		return (PIPE_SEQUENCE);
+	else if (token_node->token_type == LESSER
+			|| token_node->token_type == D_LESSER
+			|| token_node->token_type == GREATER
+			|| token_node->token_type == D_GREATER)
+		return (REDIRECTION);
 	else if (token_node->token_type == L_PARENTESIS)
-		return (PRINT_SUBSHELL);
+		return (SUBSHELL);
 	else if (token_node->token_type == WORD)
-		return (PRINT_WORD);
+		return (SIMPLE_COMMAND);
 	else
-		return (NULL);
+		return (BAD_TYPE);
 }
 
 char	*get_node_content(t_token_list *token_node)
@@ -47,12 +43,9 @@ char	*get_node_content(t_token_list *token_node)
 
 static char	*add_more_content(char *content, t_token_list *node, int par)
 {
-	char			*tmp_content;
+	char	*tmp_content;
 
-	if (par == 1)
-		tmp_content = ft_strjoin(content, " ");
-	else
-		tmp_content = ft_strdup(content);
+	tmp_content = ft_strdup(content);
 	free(content);
 	if (!tmp_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
@@ -60,6 +53,17 @@ static char	*add_more_content(char *content, t_token_list *node, int par)
 	free(tmp_content);
 	if (!content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	if (par)
+	{
+		tmp_content = ft_strdup(content);
+		free(content);
+		if (!tmp_content)
+			return (ft_putstr_fd(NO_SPACE, 2), NULL);
+		content = ft_strjoin(tmp_content, " ");
+		free(tmp_content);
+		if (!content)
+			return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	}
 	return (content);
 }
 
