@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/16 15:58:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 12:54:19 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,16 @@ void			free_token_list_node(t_token_list **node);
 void			print_list(t_token_list *token_list);
 void			free_token_list(t_token_list *list);
 t_ast			*add_ast_node(t_token_list **token_list);
-t_ast			*new_regular_node(t_token_list **token_list, t_ast_token_type type);
+t_ast			*new_regular_node(t_token_list **token_list,
+					t_ast_token_type type);
 t_ast			*new_subshell_node(t_token_list **token_list);
 t_ast			*new_simple_command_node(t_token_list **token_list);
 void			skip_subshell(t_token_list **token_list);
 void			free_ast(t_ast *root);
+t_token_list	*search_list_for_token(t_token_list *token_list,
+					t_ast_token_type type);
+void			separate_list(t_token_list **token_list,
+					t_token_list **left_list, t_token_list **right_list,
+					t_token_list_type type);
 
 #endif
