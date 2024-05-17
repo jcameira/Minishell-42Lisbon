@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:40:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 19:58:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:07:19 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ t_ast	*add_ast_node(t_token_list **token_list)
 	if (!token_list || !*token_list)
 		return (NULL);
 	node = NULL;
-	// printf("\n");
-	// print_list(*token_list);
 	if (check_for_node(*token_list, AND_OR_SEQUENCE))
 		node = new_regular_node(token_list, AND_OR_SEQUENCE);
 	else if (check_for_node(*token_list, PIPE_SEQUENCE))

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 19:08:35 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:08:34 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void	print_message(int curr_lvl, t_ast_token_type type, char *content)
 		write_type = PRINT_SUBSHELL;
 	else if (type == SIMPLE_COMMAND)
 		write_type = PRINT_SIMPLE_COMMAND;
-	printf ("LEVEL: %d	TYPE: %s		CONTENT: %s\n",
-			curr_lvl, write_type, content);
+	printf ("LEVEL: %d	TYPE: %s		CONTENT: %s\n", curr_lvl, write_type,
+		content);
 }
 
 void	print_level(t_ast *root, int level, int curr_lvl)
