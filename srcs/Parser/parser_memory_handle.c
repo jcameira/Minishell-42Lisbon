@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:12:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/16 15:57:55 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:42:37 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,8 @@
 
 void	free_token_list_node(t_token_list **node)
 {
-	t_token_list	*tmp;
-
-	tmp = (*node)->next;
-	(*node)->next = NULL;
 	free((*node)->content);
-	free((*node));
-	(*node) = tmp;
+	free(*node);
 }
 
 void	free_ast(t_ast *root)

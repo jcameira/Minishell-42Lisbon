@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/11 17:16:34 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:02:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_odd_number_tokens(char *line)
 	d_quotes = 0;
 	o_par = 0;
 	c_par = 0;
-	while (line[++i])
+	while (line[++i] && c_par <= o_par)
 	{
 		if (line[i] == '\'')
 			s_quotes++;

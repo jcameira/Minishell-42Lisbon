@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 12:22:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:08:35 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,35 @@ int	height(t_ast *node)
 	}
 }
 
+void	print_message(int curr_lvl, t_ast_token_type type, char *content)
+{
+	char	*write_type;
+
+	write_type = NULL;
+	if (type == NO_NODE)
+		write_type = PRINT_NO_NODE;
+	else if (type == BAD_TYPE)
+		write_type = PRINT_BAD_TYPE;
+	else if (type == AND_OR_SEQUENCE)
+		write_type = PRINT_AND_OR_SEQUENCE;
+	else if (type == PIPE_SEQUENCE)
+		write_type = PRINT_PIPE_SEQUENCE;
+	else if (type == REDIRECTION)
+		write_type = PRINT_REDIRECTION;
+	else if (type == SUBSHELL)
+		write_type = PRINT_SUBSHELL;
+	else if (type == SIMPLE_COMMAND)
+		write_type = PRINT_SIMPLE_COMMAND;
+	printf ("LEVEL: %d	TYPE: %s		CONTENT: %s\n",
+			curr_lvl, write_type, content);
+}
+
 void	print_level(t_ast *root, int level, int curr_lvl)
 {
 	if (root == NULL)
 		return ;
 	if (level == 1)
-		printf("LEVEL: %d	TYPE: %s		CONTENT: %s\n",
-			curr_lvl, root->type, root->content);
+		print_message(curr_lvl, root->type, root->content);
 	else if (level > 1)
 	{
 		print_level(root->left, level - 1, curr_lvl + 1);
