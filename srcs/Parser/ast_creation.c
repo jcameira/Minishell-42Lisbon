@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:40:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 21:07:19 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:22:07 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ t_ast	*add_ast_node(t_token_list **token_list)
 	else if (check_for_node(*token_list, REDIRECTION))
 		node = new_regular_node(token_list, REDIRECTION);
 	else if (check_for_node(*token_list, SIMPLE_COMMAND))
-		node = new_simple_command_node(token_list);
+		// node = new_simple_command_node(token_list);
+		node = new_regular_node(token_list, SIMPLE_COMMAND);
 	return (node);
 }
 
