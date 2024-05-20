@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 12:44:31 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:45:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <errno.h>
 # include <libft.h>
 
-# define WHITESPACE "\t\n\v\f\r "
+# define NODE_SPLIT "\t\n\v\f\r \'\""
 
 # define UNCLOSED_S_QUOTES "minishell: syntax error unclosed single quotes\n"
 # define UNCLOSED_D_QUOTES "minishell: syntax error unclosed double quotes\n"

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 19:56:27 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:54:33 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	lexer(char *line)
 	token_list = get_initial_list(line);
 	if (!token_list)
 		return ;
+	print_list(token_list);
 	token_list = refine_list(token_list);
 	if (!token_list)
 		return ;

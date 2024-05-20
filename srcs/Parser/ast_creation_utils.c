@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:33:02 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 19:13:56 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:24:13 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ t_ast	*new_ast_node(t_token_list *token_node)
 	new->type = set_ast_node_type(token_node);
 	if (new->type == SUBSHELL)
 		new->content = get_subshell_content(token_node);
-	else if (new->type == SIMPLE_COMMAND)
-		new->content = get_simple_command_content(token_node);
+	// else if (new->type == SIMPLE_COMMAND)
+	// 	new->content = get_simple_command_content(token_node);
 	else
 		new->content = get_node_content(token_node);
 	if (!new->content)
@@ -70,7 +70,7 @@ t_token_list	*search_list_for_token(t_token_list *token_list,
 				|| tmp->token_type == D_LESSER || tmp->token_type == GREATER
 				|| tmp->token_type == D_GREATER))
 			target = tmp;
-		else if (type == WORD && tmp->token_type == WORD)
+		else if (type == SIMPLE_COMMAND && tmp->token_type == WORD)
 			target = tmp;
 		if (target)
 			break ;
@@ -82,20 +82,23 @@ t_token_list	*search_list_for_token(t_token_list *token_list,
 void	separate_list(t_token_list **token_list, t_token_list **left_list,
 			t_token_list **right_list, t_token_list_type type)
 {
-	t_token_list	*tmp;
+	t_token_list	*previous;
 
 	*left_list = *token_list;
-	while ((*token_list)->next->token_type != type)
+	previous = NULL;
+	while ((*token_list))
 	{
-		if ((*token_list)->token_type == L_PARENTESIS)
+		if ((*token_list)->token_type == type)
 		{
-			skip_subshell(token_list);
-			continue ;
+			if (previous)
+				previous->next = NULL;
+			else
+				*left_list = NULL;
+			*right_list = (*token_list)->next;
+			free_token_list_node(token_list);
+			return ;
 		}
+		previous = *token_list;
 		*token_list = (*token_list)->next;
 	}
-	tmp = (*token_list)->next;
-	(*token_list)->next = NULL;
-	*right_list = tmp->next;
-	free_token_list_node(&tmp);
 }
