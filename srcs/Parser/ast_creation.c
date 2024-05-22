@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:40:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/20 18:22:07 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/22 21:16:47 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_ast	*add_ast_node(t_token_list **token_list)
 	else if (check_for_node(*token_list, REDIRECTION))
 		node = new_regular_node(token_list, REDIRECTION);
 	else if (check_for_node(*token_list, SIMPLE_COMMAND))
-		// node = new_simple_command_node(token_list);
 		node = new_regular_node(token_list, SIMPLE_COMMAND);
 	return (node);
 }
@@ -53,13 +52,21 @@ t_ast	*new_regular_node(t_token_list **token_list, t_ast_token_type type)
 
 t_ast	*new_subshell_node(t_token_list **token_list)
 {
-	t_ast	*node;
+	t_token_list	*tmp;
+	t_token_list	*tmp2;
+	t_ast			*node;
 
+	tmp = *token_list;
+	skip_subshell(&tmp);
+	tmp2 = tmp;
+	tmp = tmp->next;
+	tmp2->next = NULL;
 	node = new_ast_node(*token_list);
 	if (!node)
 		return (NULL);
 	trim_parentesis_nodes(token_list);
 	node->subshell_ast = add_ast_node(token_list);
+	node->right = add_ast_node(&tmp);
 	return (node);
 }
 
