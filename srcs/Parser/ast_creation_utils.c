@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:33:02 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/20 18:24:13 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:34:33 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ t_ast	*new_ast_node(t_token_list *token_node)
 	new->type = set_ast_node_type(token_node);
 	if (new->type == SUBSHELL)
 		new->content = get_subshell_content(token_node);
-	// else if (new->type == SIMPLE_COMMAND)
-	// 	new->content = get_simple_command_content(token_node);
 	else
 		new->content = get_node_content(token_node);
 	if (!new->content)

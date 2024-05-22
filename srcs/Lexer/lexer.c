@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/22 12:46:59 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/22 21:13:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,7 @@ void	lexer(char *line)
 		return ;
 	token_list = set_token_list_types(token_list);
 	print_list(token_list);
+	if (check_syntax_errors(token_list))
+		return (free_token_list(token_list));
 	parser(token_list);
 }

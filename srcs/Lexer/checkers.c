@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 19:02:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/22 21:19:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,27 @@ int	is_operator_token(char	*c)
 {
 	return (!ft_strncmp(c, "&&", 2) || *c == '|' || *c == '<'
 		|| *c == '>' || *c == '(' || *c == ')');
+}
+
+int	check_syntax_errors(t_token_list *token_list)
+{
+	t_token_list	*previous;
+
+	if (!token_list)
+		return (0);
+	previous = NULL;
+	while (token_list)
+	{
+		if (check_and_or_syntax_errors(token_list, previous))
+			return (printf("Syntax error\n"), 1);
+		else if (check_pipe_syntax_errors(token_list, previous))
+			return (printf("Syntax error\n"), 1);
+		else if (check_subshell_syntax_errors(token_list))
+			return (printf("Syntax error\n"), 1);
+		else if (check_redirection_syntax_errors(token_list))
+			return (printf("Syntax error\n"), 1);
+		previous = token_list;
+		token_list = token_list->next;
+	}
+	return (0);
 }
