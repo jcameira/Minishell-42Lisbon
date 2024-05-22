@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/20 20:36:10 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/22 12:45:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,15 @@ static char	*get_initial_token_data(char *line, int *i)
 	int		data_start;
 
 	data_start = *i;
-	while (line[*i] && !ft_strchr(NODE_SPLIT, line[(*i)]))
+	while (line[*i] && !ft_strchr(WHITESPACE, line[(*i)]))
 	{
 		if (line[*i] == '\'')
-		{
 			skip_until_char(line, i, '\'');
-			(*i)++;
-			break ;
-		}
 		if (line[*i] == '"')
-		{
 			skip_until_char(line, i, '"');
-			(*i)++;
-			break ;
-		}
 		(*i)++;
 	}
 	data = ft_substr(line, data_start, (*i) - data_start);
-	printf("%s\n", data);
 	if (!data || !(*data))
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	return (data);
@@ -84,7 +75,7 @@ t_token_list	*get_initial_list(char *line)
 	i = 0;
 	while (line[i])
 	{
-		while (line[i] && ft_strchr(NODE_SPLIT, line[i]))
+		while (line[i] && ft_strchr(WHITESPACE, line[i]))
 			i++;
 		tmp = get_initial_token_data(line, &i);
 		if (!tmp)
