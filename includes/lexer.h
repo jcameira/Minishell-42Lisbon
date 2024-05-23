@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/22 21:22:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:12:35 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,16 @@
 # define PRINT_WORD	"WORD"
 # define PRINT_BAD_TOKEN	"BAD_TOKEN"
 # define PRINT_END	"END"
+
+# define AND_PARSE_ERROR "minishell: parse error near '&&'\n"
+# define OR_PARSE_ERROR "minishell: parse error near '||'\n"
+# define PIPE_PARSE_ERROR "minishell: parse error near '|'\n"
+# define OPEN_PARENTESIS_PARSE_ERROR "minishell: parse error near '('\n"
+# define CLOSE_PARENTESIS_PARSE_ERROR "minishell: parse error near ')'\n"
+# define INFILE_PARSE_ERROR "minishell: parse error near '<'\n"
+# define OUTFILE_PARSE_ERROR "minishell: parse error near '>'\n"
+# define APPEND_PARSE_ERROR "minishell: parse error near '>>'\n"
+# define HERE_DOC_PARSE_ERROR "minishell: parse error near '<<'\n"
 
 typedef enum s_token_list_type
 {
