@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/22 21:19:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:09:01 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ int	check_syntax_errors(t_token_list *token_list)
 	while (token_list)
 	{
 		if (check_and_or_syntax_errors(token_list, previous))
-			return (printf("Syntax error\n"), 1);
+			return (1);
 		else if (check_pipe_syntax_errors(token_list, previous))
-			return (printf("Syntax error\n"), 1);
+			return (1);
 		else if (check_subshell_syntax_errors(token_list))
-			return (printf("Syntax error\n"), 1);
+			return (1);
 		else if (check_redirection_syntax_errors(token_list))
-			return (printf("Syntax error\n"), 1);
+			return (1);
 		previous = token_list;
 		token_list = token_list->next;
 	}
