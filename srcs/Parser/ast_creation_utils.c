@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:33:02 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/22 13:34:33 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/30 02:47:22 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-t_ast	*new_ast_node(t_token_list *token_node)
+t_ast	*new_ast_node(t_token_list *token_node, int subshell_lvl)
 {
 	t_ast	*new;
 
@@ -26,6 +26,7 @@ t_ast	*new_ast_node(t_token_list *token_node)
 		new->content = get_node_content(token_node);
 	if (!new->content)
 		return (NULL);
+	new->subshell_level = subshell_lvl;
 	new->subshell_ast = NULL;
 	new->left = NULL;
 	new->right = NULL;
@@ -86,6 +87,8 @@ void	separate_list(t_token_list **token_list, t_token_list **left_list,
 	previous = NULL;
 	while ((*token_list))
 	{
+		if ((*token_list)->token_type == L_PARENTESIS)
+			skip_subshell(token_list);
 		if ((*token_list)->token_type == type)
 		{
 			if (previous)
