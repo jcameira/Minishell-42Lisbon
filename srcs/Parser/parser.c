@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 02:52:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/30 18:34:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,17 +101,28 @@ void	print_ast(t_ast *root)
 	}
 }
 
+void	print_cmd_table(t_command_table *command_table)
+{
+	while (command_table)
+	{
+		printf("TYPE:	%d	SUBSHELL_LVL:	%d\n", command_table->type, command_table->subshell_level);
+		command_table = command_table->next;
+	}
+}
+
 void	parser(t_token_list *token_list)
 {
 	t_ast			*root;
-	//t_command_table	*command_table;
+	t_command_table	*command_table;
 
 	root = add_ast_node(&token_list, 0);
 	if (!root)
 		return ;
 	print_ast(root);
-	// command_table = create_command_table(root);
+	command_table = NULL;
+	create_command_table(root, &command_table);
 	// if (!command_table)
 	// 	return(free_ast(root));
+	print_cmd_table(command_table);
 	free_ast(root);
 }
