@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 02:54:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/30 22:55:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 typedef enum s_redir_type
 {
 	INFILE = 0,
-	OUFILE,
+	OUTFILE,
 	APPEND,
 	HERE_DOC
 }				t_redir_type;
@@ -151,5 +151,5 @@ t_token_list		*search_list_for_token(t_token_list *token_list,
 void				separate_list(t_token_list **token_list,
 						t_token_list **left_list, t_token_list **right_list,
 						t_token_list_type type);
-t_command_table		*create_command_table(t_ast *root);
+void				create_command_table(t_ast *root, t_command_table **command_table);
 #endif
