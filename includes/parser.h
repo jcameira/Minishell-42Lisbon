@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/23 14:02:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/30 02:54:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <stdbool.h>
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
@@ -44,6 +45,23 @@
 # define PRINT_REDIRECTION "REDIRECTION"
 # define PRINT_SIMPLE_COMMAND "SIMPLE_COMMAND"
 
+typedef enum s_redir_type
+{
+	INFILE = 0,
+	OUFILE,
+	APPEND,
+	HERE_DOC
+}				t_redir_type;
+
+typedef enum s_table_node_type
+{
+	TABLE_NO_TYPE = -1,
+	TABLE_AND,
+	TABLE_OR,
+	TABLE_PIPE,
+	TABLE_SUBSHELL
+}				t_table_node_type;
+
 typedef enum s_ast_node_type
 {
 	NO_NODE = -2,
@@ -71,6 +89,28 @@ typedef enum s_token_list_type
 	BAD_TOKEN
 }				t_token_list_type;
 
+typedef struct s_simplecmd
+{
+	int		arg_nbr;
+	char	**arg_arr;
+}				t_simplecmd;
+
+typedef struct s_redir_list
+{
+	t_redir_type		type;
+	char				*file;
+	char				*here_doc_limiter;
+	struct s_redir_list	*next;
+}				t_redir_list;
+
+typedef struct s_command_table
+{
+	t_table_node_type		type;
+	int						subshell_level;
+	t_simplecmd				*simplecmd;
+	t_redir_list			*redirs;
+	struct s_command_table	*next;
+}				t_command_table;
 typedef struct s_token_list
 {
 	t_token_list_type	token_type;
@@ -82,6 +122,7 @@ typedef struct s_ast
 {
 	t_ast_token_type	type;
 	char				*content;
+	int					subshell_level;
 	struct s_ast		*subshell_ast;
 	struct s_ast		*left;
 	struct s_ast		*right;
@@ -95,15 +136,14 @@ int					check_for_subshell(t_token_list *token_list);
 int					check_for_node(t_token_list *token_list,
 						t_ast_token_type type);
 void				trim_parentesis_nodes(t_token_list **token_list);
-t_ast				*new_ast_node(t_token_list *token_node);
+t_ast				*new_ast_node(t_token_list *token_node, int subshell_lvl);
 void				free_token_list_node(t_token_list **node);
 void				print_list(t_token_list *token_list);
 void				free_token_list(t_token_list *list);
-t_ast				*add_ast_node(t_token_list **token_list);
+t_ast				*add_ast_node(t_token_list **token_list, int subshell_lvl);
 t_ast				*new_regular_node(t_token_list **token_list,
-						t_ast_token_type type);
-t_ast				*new_subshell_node(t_token_list **token_list);
-t_ast				*new_simple_command_node(t_token_list **token_list);
+						t_ast_token_type type, int subshell_lvl);
+t_ast				*new_subshell_node(t_token_list **token_list, int subshell_lvl);
 void				skip_subshell(t_token_list **token_list);
 void				free_ast(t_ast *root);
 t_token_list		*search_list_for_token(t_token_list *token_list,
@@ -111,4 +151,5 @@ t_token_list		*search_list_for_token(t_token_list *token_list,
 void				separate_list(t_token_list **token_list,
 						t_token_list **left_list, t_token_list **right_list,
 						t_token_list_type type);
+t_command_table		*create_command_table(t_ast *root);
 #endif

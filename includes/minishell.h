@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 17:28:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/30 02:24:35 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,6 @@ typedef struct s_simplecmd
 	int		arg_nbr;
 	char	**arg_arr;
 }				t_simplecmd;
-
-typedef struct s_command
-{
-	t_simplecmd	**simplecmd_arr;
-	int			simplecmd_nbr;
-	char		*infile;
-	int			fd_in;
-	char		*outfile;
-	int			fd_out;
-	bool		here_doc;
-	bool		builtin;
-}				t_command;
 
 typedef struct s_minishell
 {

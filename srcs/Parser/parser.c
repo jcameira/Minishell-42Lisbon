@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/22 21:17:03 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/30 02:52:06 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	height(t_ast *node)
 	}
 }
 
-void	print_message(int curr_lvl, t_ast_token_type type, char *content)
+void	print_message(int curr_lvl, int subshell_lvl, t_ast_token_type type,
+		char *content)
 {
 	char	*write_type;
 
@@ -68,8 +69,8 @@ void	print_message(int curr_lvl, t_ast_token_type type, char *content)
 		write_type = PRINT_SUBSHELL;
 	else if (type == SIMPLE_COMMAND)
 		write_type = PRINT_SIMPLE_COMMAND;
-	printf ("LEVEL: %d	TYPE: %s		CONTENT: %s\n", curr_lvl, write_type,
-		content);
+	printf ("LEVEL: %d	SUBSHELL_LEVEL: %d	TYPE: %s		CONTENT: %s\n",
+		curr_lvl, subshell_lvl, write_type, content);
 }
 
 void	print_level(t_ast *root, int level, int curr_lvl)
@@ -77,7 +78,7 @@ void	print_level(t_ast *root, int level, int curr_lvl)
 	if (root == NULL)
 		return ;
 	if (level == 1)
-		print_message(curr_lvl, root->type, root->content);
+		print_message(curr_lvl, root->subshell_level, root->type, root->content);
 	else if (level > 1)
 	{
 		print_level(root->left, level - 1, curr_lvl + 1);
@@ -102,11 +103,15 @@ void	print_ast(t_ast *root)
 
 void	parser(t_token_list *token_list)
 {
-	t_ast	*root;
+	t_ast			*root;
+	//t_command_table	*command_table;
 
-	root = add_ast_node(&token_list);
+	root = add_ast_node(&token_list, 0);
 	if (!root)
 		return ;
 	print_ast(root);
+	// command_table = create_command_table(root);
+	// if (!command_table)
+	// 	return(free_ast(root));
 	free_ast(root);
 }
