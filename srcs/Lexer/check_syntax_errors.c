@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:52:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/23 14:11:42 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/31 21:49:02 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ int	check_and_or_syntax_errors(t_token_list *token_list, t_token_list *previous)
 	if ((token_list->token_type == AND || token_list->token_type == OR)
 		&& (!previous || !token_list->next
 			|| (token_list->next->token_type != WORD
-				&& token_list->next->token_type != L_PARENTESIS)))
+				&& token_list->next->token_type != L_PARENTESIS
+				&& token_list->next->token_type != GREATER
+				&& token_list->next->token_type != LESSER
+				&& token_list->next->token_type != D_GREATER
+				&& token_list->next->token_type != D_LESSER)))
 	{
 		if (token_list->token_type == AND)
 			return (ft_putstr_fd(AND_PARSE_ERROR, 2), 1);
@@ -53,7 +57,11 @@ int	check_pipe_syntax_errors(t_token_list *token_list, t_token_list *previous)
 {
 	if (token_list->token_type == PIPE && (!previous
 			|| !token_list->next || (token_list->next->token_type != WORD
-				&& token_list->next->token_type != L_PARENTESIS)))
+				&& token_list->next->token_type != L_PARENTESIS
+				&& token_list->next->token_type != GREATER
+				&& token_list->next->token_type != LESSER
+				&& token_list->next->token_type != D_GREATER
+				&& token_list->next->token_type != D_LESSER)))
 		return (ft_putstr_fd(PIPE_PARSE_ERROR, 2), 1);
 	return (0);
 }

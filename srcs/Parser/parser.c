@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 18:34:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:52:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,33 @@ void	print_ast(t_ast *root)
 
 void	print_cmd_table(t_command_table *command_table)
 {
+	int	i;
+
 	while (command_table)
 	{
-		printf("TYPE:	%d	SUBSHELL_LVL:	%d\n", command_table->type, command_table->subshell_level);
+		printf("\nTYPE:	%d	SUBSHELL_LVL:	%d\n", command_table->type, command_table->subshell_level);
+		i = -1;
+		printf("\nCommand\n");
+		if (command_table->simplecmd->arg_arr)
+		{
+			while (command_table->simplecmd->arg_arr[++i])
+				printf("%s->", command_table->simplecmd->arg_arr[i]);
+			printf("\n");
+		}
+		printf("\nRedirections\n");
+		while (command_table->redirs)
+		{
+			if (command_table->redirs->type == HERE_DOC)
+				printf("'<<'\n%s\n", command_table->redirs->here_doc_limiter);
+			else if (command_table->redirs->type == INFILE)
+				printf("'<'\n%s\n", command_table->redirs->file);
+			else if (command_table->redirs->type == APPEND)
+				printf("'>>'\n%s\n", command_table->redirs->file);
+			else if (command_table->redirs->type == OUTFILE)
+				printf("'>'\n%s\n", command_table->redirs->file);
+			command_table->redirs = command_table->redirs->next;
+		}
+		printf("\n");
 		command_table = command_table->next;
 	}
 }

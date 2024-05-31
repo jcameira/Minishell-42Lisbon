@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 23:14:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/31 21:32:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,34 @@ t_redir_list	*new_command_table_redir(t_ast **root)
 		return (redirs);
 	}
 	redirs->type = set_redir_type((*root)->content);
-	*root = (*root)->right;
 	if (redirs->type == HERE_DOC)
 	{
-		redirs->here_doc_limiter = ft_strdup((*root)->content);
+		if ((*root)->right->type == REDIRECTION)
+		{
+			redirs->here_doc_limiter = ft_strdup((*root)->right->left->content);
+			(*root)->right->left->visited = 1;
+		}
+		else
+		{
+			redirs->here_doc_limiter = ft_strdup((*root)->right->content);
+			(*root)->right->visited = 1;
+		}
 		if (!redirs->here_doc_limiter)
 			return (ft_putstr_fd(NO_SPACE, 2), NULL);
 		redirs->file = NULL;
 	}
 	else
 	{
-		redirs->file = ft_strdup((*root)->content);
+		if ((*root)->right->type == REDIRECTION)
+		{
+			redirs->file = ft_strdup((*root)->right->left->content);
+			(*root)->right->left->visited = 1;
+		}
+		else
+		{
+			redirs->file = ft_strdup((*root)->right->content);
+			(*root)->right->visited = 1;
+		}
 		if (!redirs->file)
 			return (ft_putstr_fd(NO_SPACE, 2), NULL);
 		redirs->here_doc_limiter = NULL;
@@ -141,27 +158,80 @@ void	add_new_table_node(t_command_table **command_table, t_command_table *new)
 	last->next = new;
 }
 
+void	add_simple_command_argument(t_ast *root, t_command_table **node)
+{
+	char	**new_array;
+	int		size;
+
+	size = array_size((*node)->simplecmd->arg_arr);
+	new_array = malloc(sizeof(char *) * (size + 2));
+	if (!new_array)
+		return (ft_putstr_fd(NO_SPACE, 2));
+	if ((*node)->simplecmd->arg_arr)
+	{
+		new_array = arrcpy(new_array, (*node)->simplecmd->arg_arr);
+		if (!new_array)
+			return ;
+	}
+	new_array[size] = ft_strdup(root->content);
+	if (!new_array[size])
+		return (ft_putstr_fd(NO_SPACE, 2));
+	new_array[size + 1] = NULL;
+	(*node)->simplecmd->arg_nbr++;
+	(*node)->simplecmd->arg_arr = new_array;
+}
+
+t_redir_list	*last_redir_node(t_redir_list *redir_list)
+{
+	t_redir_list	*tmp;
+
+	if (!redir_list)
+		return (NULL);
+	tmp = redir_list;
+	while (tmp->next)
+		tmp = tmp->next;
+	return (tmp);
+}
+
+void	add_more_content_to_table_node(t_ast **root, t_command_table **command_table)
+{
+	t_command_table	*last_node;
+	t_redir_list	*last_redir;
+
+	last_node = last_table_node(*command_table);
+	last_redir = last_redir_node((*command_table)->redirs);
+	if ((*root)->type == REDIRECTION)
+		last_redir->next = new_command_table_redir(root);
+	else if ((*root)->type == SIMPLE_COMMAND)
+		add_simple_command_argument(*root, &last_node);
+}
+
 void	create_command_table(t_ast *root, t_command_table **command_table)
 {
 	t_command_table	*new_table_node;
+	t_command_table	*last_node;
 
 	if (!root)
 		return ;
 	create_command_table(root->left, command_table);
 	if (root->subshell_ast)
 		create_command_table(root->subshell_ast, command_table);
-	else
+	else if (!root->visited)
 	{
-		// if ((root->type == REDIRECTION || root->type == SIMPLE_COMMAND) && last_table_node(command_table)->type == TABLE_NO_TYPE)
-		// 	add_more_content_to_table_node(root, command_table);
-		// else
-		// {
+		last_node = last_table_node(*command_table);
+		if ((root->type == REDIRECTION || root->type == SIMPLE_COMMAND) && *command_table && last_node->type == TABLE_NO_TYPE)
+			add_more_content_to_table_node(&root, &last_node);
+		else
+		{
 			new_table_node = add_command_table_node(root);
 			if (!new_table_node)
 				return ;
 			add_new_table_node(command_table, new_table_node);
-		// }
+		}
+		root->visited = 1;
 	}
+	if (!root)
+		return ;
 	create_command_table(root->right, command_table);
 	return ;
 }

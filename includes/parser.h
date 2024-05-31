@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 22:55:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/31 21:07:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_ast
 	t_ast_token_type	type;
 	char				*content;
 	int					subshell_level;
+	int					visited;
 	struct s_ast		*subshell_ast;
 	struct s_ast		*left;
 	struct s_ast		*right;
@@ -152,4 +153,7 @@ void				separate_list(t_token_list **token_list,
 						t_token_list **left_list, t_token_list **right_list,
 						t_token_list_type type);
 void				create_command_table(t_ast *root, t_command_table **command_table);
+int					array_size(char **array);
+char				**arrcpy(char **dest, char **src);
+void				free_arr(char **array);
 #endif
