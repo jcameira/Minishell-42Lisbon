@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:30:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/17 17:13:59 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/31 18:35:17 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static char	**arrcpy(char **dest, char **src)
+char	**arrcpy(char **dest, char **src)
 {
 	int	i;
 

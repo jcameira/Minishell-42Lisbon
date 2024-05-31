@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:40:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 02:53:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/31 21:08:11 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 t_ast	*add_ast_node(t_token_list **token_list, int subshell_lvl)
 {
 	t_ast		*node;
-	//static int	subshell_lvl;
 
 	if (!token_list || !*token_list)
 		return (NULL);
@@ -30,8 +29,6 @@ t_ast	*add_ast_node(t_token_list **token_list, int subshell_lvl)
 		node = new_regular_node(token_list, REDIRECTION, subshell_lvl);
 	else if (check_for_node(*token_list, SIMPLE_COMMAND))
 		node = new_regular_node(token_list, SIMPLE_COMMAND, subshell_lvl);
-	// if (subshell_lvl > 0)
-	// 	subshell_lvl--;
 	return (node);
 }
 

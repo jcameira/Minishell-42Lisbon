@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:33:02 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 02:47:22 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/05/31 21:08:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_ast	*new_ast_node(t_token_list *token_node, int subshell_lvl)
 		new->content = get_node_content(token_node);
 	if (!new->content)
 		return (NULL);
+	new->visited = 0;
 	new->subshell_level = subshell_lvl;
 	new->subshell_ast = NULL;
 	new->left = NULL;
