@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/31 19:52:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:44:59 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	print_level(t_ast *root, int level, int curr_lvl)
 	if (root == NULL)
 		return ;
 	if (level == 1)
-		print_message(curr_lvl, root->subshell_level, root->type, root->content);
+		print_message(curr_lvl, root->subshell_level, root->type,
+			root->content);
 	else if (level > 1)
 	{
 		print_level(root->left, level - 1, curr_lvl + 1);
@@ -103,11 +104,13 @@ void	print_ast(t_ast *root)
 
 void	print_cmd_table(t_command_table *command_table)
 {
-	int	i;
+	t_redir_list	*tmp_redir;
+	int				i;
 
 	while (command_table)
 	{
-		printf("\nTYPE:	%d	SUBSHELL_LVL:	%d\n", command_table->type, command_table->subshell_level);
+		printf("\nTYPE:	%d	SUBSHELL_LVL:	%d\n", command_table->type,
+			command_table->subshell_level);
 		i = -1;
 		printf("\nCommand\n");
 		if (command_table->simplecmd->arg_arr)
@@ -117,17 +120,18 @@ void	print_cmd_table(t_command_table *command_table)
 			printf("\n");
 		}
 		printf("\nRedirections\n");
-		while (command_table->redirs)
+		tmp_redir = command_table->redirs;
+		while (tmp_redir)
 		{
-			if (command_table->redirs->type == HERE_DOC)
-				printf("'<<'\n%s\n", command_table->redirs->here_doc_limiter);
-			else if (command_table->redirs->type == INFILE)
-				printf("'<'\n%s\n", command_table->redirs->file);
-			else if (command_table->redirs->type == APPEND)
-				printf("'>>'\n%s\n", command_table->redirs->file);
-			else if (command_table->redirs->type == OUTFILE)
-				printf("'>'\n%s\n", command_table->redirs->file);
-			command_table->redirs = command_table->redirs->next;
+			if (tmp_redir->type == HERE_DOC)
+				printf("'<<'\n%s\n", tmp_redir->here_doc_limiter);
+			else if (tmp_redir->type == INFILE)
+				printf("'<'\n%s\n", tmp_redir->file);
+			else if (tmp_redir->type == APPEND)
+				printf("'>>'\n%s\n", tmp_redir->file);
+			else if (tmp_redir->type == OUTFILE)
+				printf("'>'\n%s\n", tmp_redir->file);
+			tmp_redir = tmp_redir->next;
 		}
 		printf("\n");
 		command_table = command_table->next;
@@ -145,8 +149,10 @@ void	parser(t_token_list *token_list)
 	print_ast(root);
 	command_table = NULL;
 	create_command_table(root, &command_table);
-	// if (!command_table)
-	// 	return(free_ast(root));
+	if (!command_table)
+		return (free_ast(root));
 	print_cmd_table(command_table);
 	free_ast(root);
+	//free_command_table(command_table);
+	expander(command_table);
 }

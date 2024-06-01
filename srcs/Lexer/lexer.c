@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/22 21:13:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:38:53 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 //->read through the entire line looking for one of these tokens, then assign
 //it to a node and send everything to the left of the token to be veryfied on
 //the left node, and send everything to the right of the token to be verified on
-//the right node - IN PARSER DUMB FUCK
+//the right node - IN PARSER DUMB FUCK - DONE
 //->handle the presence of parentesis by opening a subshell and sending
 //everything inside the parentesis to the lexer of said subshell to start the
 //parsing process - IN EXECUTOR DUMB FUCK
@@ -36,7 +36,7 @@
 //quotes - HANDLED I THINK
 //->when there is no other recognizible tokens to be found, assign the remaining
 //words to a node and send the ast to the parser to finish parsing - IN PARSER
-//DUMB FUCK
+//DUMB FUCK - DONE
 
 #include <lexer.h>
 
@@ -83,7 +83,7 @@ void	lexer(char *line)
 	if (!token_list)
 		return ;
 	token_list = set_token_list_types(token_list);
-	print_list(token_list);
+	//print_list(token_list);
 	if (check_syntax_errors(token_list))
 		return (free_token_list(token_list));
 	parser(token_list);
