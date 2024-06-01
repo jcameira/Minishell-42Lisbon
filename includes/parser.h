@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/31 21:07:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:44:34 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,8 @@ void				free_token_list(t_token_list *list);
 t_ast				*add_ast_node(t_token_list **token_list, int subshell_lvl);
 t_ast				*new_regular_node(t_token_list **token_list,
 						t_ast_token_type type, int subshell_lvl);
-t_ast				*new_subshell_node(t_token_list **token_list, int subshell_lvl);
+t_ast				*new_subshell_node(t_token_list **token_list,
+						int subshell_lvl);
 void				skip_subshell(t_token_list **token_list);
 void				free_ast(t_ast *root);
 t_token_list		*search_list_for_token(t_token_list *token_list,
@@ -152,8 +153,27 @@ t_token_list		*search_list_for_token(t_token_list *token_list,
 void				separate_list(t_token_list **token_list,
 						t_token_list **left_list, t_token_list **right_list,
 						t_token_list_type type);
-void				create_command_table(t_ast *root, t_command_table **command_table);
+void				create_command_table(t_ast *root,
+						t_command_table **command_table);
 int					array_size(char **array);
 char				**arrcpy(char **dest, char **src);
 void				free_arr(char **array);
+t_table_node_type	set_table_node_type(t_ast *root);
+t_redir_type		set_redir_type(char *content);
+char				*set_redir_str(char *dest, t_ast **root);
+t_command_table		*last_table_node(t_command_table *command_table);
+t_redir_list		*last_redir_node(t_redir_list *redir_list);
+void				add_new_table_node(t_command_table **command_table,
+						t_command_table *new);
+t_command_table		*new_command_table_node(t_ast *root);
+t_redir_list		*new_command_table_redir(t_ast **root);
+t_simplecmd			*new_command_table_simple_command(t_ast *root);
+void				add_simple_command_argument(t_ast *root,
+						t_command_table **node);
+void				add_more_content_to_table_node(t_ast **root,
+						t_command_table **command_table);
+void				create_command_table(t_ast *root,
+						t_command_table **command_table);
+void				free_command_table(t_command_table *command_table);
+void    			expander(t_command_table *command_table);
 #endif

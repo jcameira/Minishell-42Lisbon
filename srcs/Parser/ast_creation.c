@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 22:40:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/31 21:08:11 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/01 13:16:22 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ t_ast	*add_ast_node(t_token_list **token_list, int subshell_lvl)
 	return (node);
 }
 
-t_ast	*new_regular_node(t_token_list **token_list, t_ast_token_type type, int subshell_lvl)
+t_ast	*new_regular_node(t_token_list **token_list, t_ast_token_type type,
+		int subshell_lvl)
 {
 	t_ast			*node;
 	t_token_list	*target_list_node;
