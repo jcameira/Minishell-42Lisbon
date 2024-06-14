@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/01 16:43:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:51:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@
 
 #include <expander.h>
 
-void    expander(t_command_table *command_table)
+void	expander(t_command_table *command_table)
 {
-    
+	while ()
+	{
+		
+	}
 }
