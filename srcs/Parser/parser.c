@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/01 16:44:59 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:43:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	print_cmd_table(t_command_table *command_table)
 	}
 }
 
-void	parser(t_token_list *token_list)
+void	parser(t_minishell *msh, t_token_list *token_list)
 {
 	t_ast			*root;
 	t_command_table	*command_table;
@@ -153,6 +153,7 @@ void	parser(t_token_list *token_list)
 		return (free_ast(root));
 	print_cmd_table(command_table);
 	free_ast(root);
+	free_token_list(token_list);
 	//free_command_table(command_table);
-	expander(command_table);
+	expander(msh, command_table);
 }

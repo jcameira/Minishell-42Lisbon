@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/20 19:54:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:55:54 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	msh_loop(t_minishell *msh)
 			continue ;
 		}
 		add_history(line);
-		lexer(line);
+		lexer(msh, line);
 		free(line);
 	}
 }

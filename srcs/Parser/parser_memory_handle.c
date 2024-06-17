@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:12:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/01 14:53:59 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:36:27 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_ast(t_ast *root)
 
 void	free_command_table(t_command_table *command_table)
 {
-	t_command_table *tmp;
+	t_command_table	*tmp;
 	t_redir_list	*tmp_redir;
 
 	while (command_table)
