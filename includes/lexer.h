@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/23 14:12:35 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:55:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,18 @@ typedef struct s_token_list
 	struct s_token_list	*next;
 }				t_token_list;
 
+typedef struct s_minishell
+{
+	char				**envp;
+	char				*prompt;
+	int					original_stdin;
+	int					original_stdout;
+	int					original_stderr;
+}				t_minishell;
+
 void				free_token_list(t_token_list *list);
 void				free_arr(char **array);
-void				lexer(char *line);
+void				lexer(t_minishell *msh, char *line);
 int					check_odd_number_tokens(char *line);
 t_token_list		*set_token_list_types(t_token_list *token_list);
 t_token_list_type	set_token_type(char	*c);
@@ -93,7 +102,7 @@ t_token_list		*get_initial_list(char *line);
 t_token_list		*refine_list(t_token_list *initial_list);
 int					is_operator_token(char	*c);
 t_token_list		*split_operator_tokens(t_token_list *node);
-void				parser(t_token_list *token_list);
+void				parser(t_minishell *msh, t_token_list *token_list);
 int					check_syntax_errors(t_token_list *token_list);
 int					check_and_or_syntax_errors(t_token_list *token_list,
 						t_token_list *previous);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/01 16:44:34 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:43:31 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_redir_list
 	t_redir_type		type;
 	char				*file;
 	char				*here_doc_limiter;
+	int					expand_here_doc;
 	struct s_redir_list	*next;
 }				t_redir_list;
 
@@ -128,6 +129,15 @@ typedef struct s_ast
 	struct s_ast		*left;
 	struct s_ast		*right;
 }				t_ast;
+
+typedef struct s_minishell
+{
+	char				**envp;
+	char				*prompt;
+	int					original_stdin;
+	int					original_stdout;
+	int					original_stderr;
+}				t_minishell;
 
 t_ast_token_type	set_ast_node_type(t_token_list *token_node);
 char				*get_node_content(t_token_list *token_node);
@@ -175,5 +185,7 @@ void				add_more_content_to_table_node(t_ast **root,
 void				create_command_table(t_ast *root,
 						t_command_table **command_table);
 void				free_command_table(t_command_table *command_table);
-void    			expander(t_command_table *command_table);
+void				expander(t_minishell *msh, t_command_table *command_table);
+void				free_token_list(t_token_list *list);
+
 #endif
