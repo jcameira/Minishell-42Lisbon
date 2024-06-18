@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/17 19:00:42 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/18 18:41:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,85 @@ int	need_expansion(char *content)
 	return (0);
 }
 
+int	isenvchar(int c)
+{
+	return (ft_isalnum(c) || c == 137);
+}
+
+char *get_env_value(t_minishell *msh, char *env_name)
+{
+	char	**tmp_envp;
+	char	*env_value;
+	int		env_name_len;
+	int		i;
+
+	tmp_envp = msh->envp;
+	env_name_len = ft_strlen(env_name);
+	i = -1;
+	while (tmp_envp[++i])
+		if (!ft_strncmp(tmp_envp[i], env_name, env_name_len)
+			&& tmp_envp[i][env_name_len] == '=')
+			break ;
+	if (!tmp_envp[i])
+	{
+		env_value = malloc(sizeof(char));
+		env_value[0] = '\0';
+	}
+	
+}
+
+int	get_env_variable_len(t_minishell *msh, char *content, int *i)
+{
+	int		env_len;
+	int		env_name_start;
+	char	*env_name;
+	char	*env_value;
+	
+
+	env_name_start = ++(*i);
+	while (content[*i] && isenvchar(content[*i]))
+		(*i)++;
+	env_name = ft_substr(content, env_name_start, *i);
+	if (!env_name)
+		return (ft_putstr_fd(NO_SPACE, 2), -1);
+	env_value = get_env_value(msh, env_name);
+	free(env_name);
+	if (!env_value)
+		return (ft_putstr_fd(NO_SPACE, 2), -1);
+	env_len = ft_strlen(env_value);
+	free(env_value);
+	return (env_len);
+}
+
+int	expanded_str_len(t_minishell *msh, char *content)
+{
+	int		real_len;
+	int		inside_s_quotes;
+	int		inside_d_quotes;
+	int		i;
+
+	real_len = 0;
+	inside_s_quotes = 0;
+	inside_d_quotes = 0;
+	i = -1;
+	while (content[++i])
+	{
+		if (content[i] == '\'' && !inside_s_quotes && !inside_d_quotes)
+			inside_s_quotes = 1;
+		else if (content[i] == '\'' && inside_s_quotes && !inside_d_quotes)
+			inside_s_quotes = 0;
+		else if (content[i] == '"' && !inside_s_quotes && !inside_d_quotes)
+			inside_d_quotes = 1;
+		else if (content[i] == '"' && !inside_s_quotes && inside_d_quotes)
+			inside_d_quotes = 0;
+		else if (content[i] == '$' && content[i + 1] && !inside_s_quotes)
+			real_len += get_env_variable_len(msh, content, &i);
+		else
+			real_len++;
+	}
+	return (real_len);
+}
+
 char	*expand_content(t_minishell *msh, char **content)
 {
 	char	*expanded_content;
@@ -53,7 +132,7 @@ char	*expand_content(t_minishell *msh, char **content)
 
 	if (!need_expansion(*content))
 		return (*content);
-	expanded_len = expanded_str_len();
+	expanded_len = expanded_str_len(msh, *content);
 	return (expanded_content);
 }
 
