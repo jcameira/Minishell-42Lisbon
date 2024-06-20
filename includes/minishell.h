@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/30 02:24:35 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/20 19:14:18 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,6 @@ void	signals_init(void);
 void	interactive_handler(int sig);
 void	exit_shell(t_minishell *msh);
 void	bubble_sort(char **matrix);
+void	lexer(t_minishell *msh, char *line);
+
 #endif
