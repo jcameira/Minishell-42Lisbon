@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/19 16:05:37 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/20 20:48:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,8 @@ typedef struct s_minishell
 
 void	free_command_table(t_command_table *command_table);
 
+
+
+void	print_cmd_table(t_command_table *command_table);
+void	free_command_table(t_command_table *command_table);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/19 18:58:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/20 20:49:07 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ char *get_env_value(t_minishell *msh, char *env_name)
 		env_value[0] = '\0';
 		return (env_value);
 	}
-	env_value = ft_substr(tmp_envp[i], env_name_len,
+	env_value = ft_substr(tmp_envp[i], env_name_len + 1,
 		ft_strlen(&tmp_envp[i][env_name_len]));
 	if (!env_value)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	return (env_value);
 }
 
-char	*get_env_name(t_minishell *msh, char *content, int *i)
+char	*get_env_name(char *content, int *i)
 {
 	int		env_name_start;
 	char	*env_name;
@@ -89,7 +89,7 @@ char	*get_env_name(t_minishell *msh, char *content, int *i)
 		(*i)++;
 	env_name = ft_substr(content, env_name_start, *i);
 	if (!env_name)
-		return (ft_putstr_fd(NO_SPACE, 2), -1);
+		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	return(env_name);
 }
 
@@ -100,10 +100,11 @@ int	get_env_variable_len(t_minishell *msh, char *content, int *i)
 	char	*env_value;
 	
 
-	env_name = get_env_name(msh, content, i);
+	env_name = get_env_name(content, i);
 	if (!env_name)
 		return (-1);
 	env_value = get_env_value(msh, env_name);
+	printf("Env_value %s\n", env_value);
 	free(env_name);
 	if (!env_value)
 		return (-1);
@@ -129,28 +130,41 @@ int	expanded_str_len(t_minishell *msh, char *content)
 			inside_s_quotes = !inside_s_quotes;
 		else if (content[i] == '"' && !inside_s_quotes)
 			inside_d_quotes = !inside_d_quotes;
-		else if (content[i] == '$' && content[i + 1] && !inside_s_quotes)
+		else if (content[i] == '$' && content[i + 1]
+			&& isenvchar(content[i + 1]) && !inside_s_quotes)
 			real_len += get_env_variable_len(msh, content, &i);
 		else
 			real_len++;
+		printf("Present size %d\nPresent position %d\n", real_len, i);
 	}
 	return (real_len);
 }
 
-char	*add_expanded_var(t_minishell *msh, char *content, int *i, int *j)
+char	*add_expanded_var(char *env_value, char *expanded_content, int *j)
 {
+	int		i;
 
+	i = -1;
+	printf("Env_value %s\n", env_value);
+	while (env_value[++i])
+	{
+		expanded_content[++(*j)] = env_value[i];
+		printf("Character %c\n", expanded_content[*j]);
+	}
+	return (expanded_content);
 }
 
 char	*set_expanded_content(t_minishell *msh, char *content, int expanded_len)
 {
 	char	*expanded_content;
+	char	*env_name;
+	char	*env_value;
 	int		inside_s_quotes;
 	int		inside_d_quotes;
 	int		i;
 	int		j;
 
-	expanded_content = malloc(sizeof(char) * expanded_len);
+	expanded_content = malloc(sizeof(char) * (expanded_len + 1));
 	if (!expanded_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	inside_s_quotes = 0;
@@ -163,25 +177,42 @@ char	*set_expanded_content(t_minishell *msh, char *content, int expanded_len)
 			inside_s_quotes = !inside_s_quotes;
 		else if (content[i] == '"' && !inside_s_quotes)
 			inside_d_quotes = !inside_d_quotes;
-		else if (content[i] == '$' && content[i + 1] && !inside_s_quotes)
-			expanded_content = add_expanded_var(msh, content, &i, &j);
+		else if (content[i] == '$' && content[i + 1]
+			&& isenvchar(content[i + 1]) && !inside_s_quotes)
+		{
+			env_name = get_env_name(content, &i);
+			if (!env_name)
+				return (free(expanded_content), NULL);
+			env_value = get_env_value(msh, env_name);
+			printf("Env_name %s: Env_value %s\n", env_name, env_value);
+			free(env_name);
+			if (!env_value)
+				return (free(expanded_content), NULL);
+			expanded_content = add_expanded_var(env_value, expanded_content, &j);
+			free(env_value);
+			printf("J value %d\n", j);
+		}
 		else
 			expanded_content[++j] = content[i];
 	}
 	expanded_content[++j] = '\0';
+	ft_putstr_fd(expanded_content, 2);
 	return (expanded_content);
 }
 
 char	*expand_content(t_minishell *msh, char *content)
 {
 	char	*expanded_content;
-	int		inside_single_quotes;
+	//int		inside_single_quotes;
 	int		expanded_len;
 
+	printf("Content -> %s\n", content);
 	if (!need_expansion(content))
 		return (content);
 	expanded_len = expanded_str_len(msh, content);
-	expanded_content = set_expanded_content(msh, content, expanded_content);
+	printf("Real size -> %d\n", expanded_len);
+	expanded_content = set_expanded_content(msh, content, expanded_len);
+	printf("Real content -> %s\n", expanded_content);
 	if (!expanded_content)
 		return (NULL);
 	free(content);
@@ -230,7 +261,10 @@ void	expander(t_minishell *msh, t_command_table *command_table)
 			if (!tmp_table->simplecmd->arg_arr[i])
 				return (free_command_table(command_table));
 		}
-		tmp_table->redirs = expand_redirs(msh, tmp_table);
+		//tmp_table->redirs = expand_redirs(msh, tmp_table);
+		tmp_table = tmp_table->next;
 	}
 	//executor(msh, command_table);
+	print_cmd_table(command_table);
+	free_command_table(command_table);
 }

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/17 14:55:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/20 19:13:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@
 //- MOSTLY DONE
 
 #include <minishell.h>
-#include <lexer.h>
 
 void	msh_loop(t_minishell *msh)
 {
