@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/20 20:17:55 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:21:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ void	print_cmd_table(t_command_table *command_table)
 				printf("'>>'\n%s\n", tmp_redir->file);
 			else if (tmp_redir->type == OUTFILE)
 				printf("'>'\n%s\n", tmp_redir->file);
+			else
+				printf("Empty redir node\n");
 			tmp_redir = tmp_redir->next;
 		}
 		printf("\n");
@@ -143,6 +145,7 @@ void	parser(t_minishell *msh, t_token_list *token_list)
 	t_ast			*root;
 	t_command_table	*command_table;
 
+	(void)msh;
 	root = add_ast_node(&token_list, 0);
 	if (!root)
 		return ;

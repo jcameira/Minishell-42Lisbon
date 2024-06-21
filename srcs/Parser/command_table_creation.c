@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/17 14:52:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:20:50 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,8 @@ t_redir_list	*new_command_table_redir(t_ast **root)
 	redirs->expand_here_doc = 0;
 	if ((*root)->type == REDIRECTION)
 	{
-		redirs->type = set_redir_type((*root)->content);
-		if (redirs->type == HERE_DOC)
-			redirs->here_doc_limiter = set_redir_str(redirs->here_doc_limiter,
-					root);
-		else
-			redirs->file = set_redir_str(redirs->file, root);
-		if (!redirs->here_doc_limiter && !redirs->file)
+		redirs = set_redir_values(root, redirs);
+		if (!redirs)
 			return (NULL);
 	}
 	return (redirs);
@@ -92,8 +87,12 @@ void	add_more_content_to_table_node(t_ast **root,
 
 	last_node = last_table_node(*command_table);
 	last_redir = last_redir_node((*command_table)->redirs);
-	if ((*root)->type == REDIRECTION)
+	if ((*root)->type == REDIRECTION
+		&& (last_redir->file || last_redir->here_doc_limiter))
 		last_redir->next = new_command_table_redir(root);
+	else if ((*root)->type == REDIRECTION
+		&& !last_redir->file && !last_redir->here_doc_limiter)
+		last_redir = set_redir_values(root, last_redir);
 	else if ((*root)->type == SIMPLE_COMMAND)
 		add_simple_command_argument(*root, &last_node);
 }

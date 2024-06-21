@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/17 17:43:31 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:21:15 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,5 +187,6 @@ void				create_command_table(t_ast *root,
 void				free_command_table(t_command_table *command_table);
 void				expander(t_minishell *msh, t_command_table *command_table);
 void				free_token_list(t_token_list *list);
+t_redir_list		*set_redir_values(t_ast **root, t_redir_list *redirs);
 
 #endif

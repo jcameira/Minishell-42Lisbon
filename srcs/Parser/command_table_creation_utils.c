@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:24:54 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/01 14:31:57 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:21:01 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,17 @@ char	*set_redir_str(char *dest, t_ast **root)
 	if (!dest)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	return (dest);
+}
+
+t_redir_list	*set_redir_values(t_ast **root, t_redir_list *redirs)
+{
+	redirs->type = set_redir_type((*root)->content);
+	if (redirs->type == HERE_DOC)
+		redirs->here_doc_limiter = set_redir_str(redirs->here_doc_limiter,
+				root);
+	else
+		redirs->file = set_redir_str(redirs->file, root);
+	if (!redirs->here_doc_limiter && !redirs->file)
+		return (NULL);
+	return (redirs);
 }
