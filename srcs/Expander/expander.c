@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/21 19:07:59 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/22 18:36:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,29 @@ char	*remove_quotes(char *content)
 	return (quotes_removed);
 }
 
+// int	expansion_inside_d_quotes(char *content)
+// {
+// 	int		inside_s_quotes;
+// 	int		inside_d_quotes;
+// 	int		i;
+
+// 	inside_s_quotes = 0;
+// 	inside_d_quotes = 0;
+// 	i = -1;
+// 	while (content[++i])
+// 	{
+// 		if (content[i] == '\'' && !inside_d_quotes)
+// 			inside_s_quotes = !inside_s_quotes;
+// 		else if (content[i] == '"' && !inside_s_quotes)
+// 			inside_d_quotes = !inside_d_quotes;
+// 		else if ((content[i] == '$' && content[i + 1]
+// 			&& isenvchar(content[i + 1]) && inside_d_quotes)
+// 			|| (content[i] == '*' && !inside_d_quotes && !inside_s_quotes))
+// 			return (1);
+// 	}
+// 	return (0);
+// }
+
 t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 {
 	t_redir_list	*tmp_redir;
@@ -306,6 +329,8 @@ t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 		}
 		else
 		{
+			// if (need_expansion(tmp_redir->file) && expansion_inside_d_quotes(tmp_redir->file))
+			// 	tmp_redir->ambiguous_redirect = 1;
 			tmp_redir->file = expand_content(msh, tmp_redir->file);
 			if (!tmp_redir->file)
 				return (free_command_table(command_table), NULL);

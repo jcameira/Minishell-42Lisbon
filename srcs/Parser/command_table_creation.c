@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/21 17:20:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/22 14:34:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_redir_list	*new_command_table_redir(t_ast **root)
 	redirs->file = NULL;
 	redirs->here_doc_limiter = NULL;
 	redirs->expand_here_doc = 0;
+	redirs->ambiguous_redirect = 0;
 	if ((*root)->type == REDIRECTION)
 	{
 		redirs = set_redir_values(root, redirs);
