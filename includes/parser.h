@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/21 17:21:15 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/22 14:33:53 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct s_redir_list
 	char				*file;
 	char				*here_doc_limiter;
 	int					expand_here_doc;
+	int					ambiguous_redirect;
 	struct s_redir_list	*next;
 }				t_redir_list;
 
