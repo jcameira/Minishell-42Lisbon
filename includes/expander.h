@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/22 14:34:04 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/26 18:14:25 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # include <libft.h>
 
 # define NO_SPACE "No more space left in device\n"
+
+typedef enum s_quote_flag
+{
+	QUOTES = 0,
+	PARAMETERS,
+	WILDCARDS
+}				t_quote_flag;
 
 typedef enum s_redir_type
 {
