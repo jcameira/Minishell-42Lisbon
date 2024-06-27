@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/26 19:39:01 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/27 20:19:03 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,15 @@ int	get_env_variable_len(t_minishell *msh, char *content, int *i)
 	return (env_len);
 }
 
-// char	*add_expanded_var(char *env_value, char *expanded_content, int *j)
-// {
-// 	int		i;
+char	*add_expanded_var(char *env_value, char *expanded_content, int *j)
+{
+	int		i;
 
-// 	i = -1;
-// 	while (env_value[++i])
-// 		expanded_content[++(*j)] = env_value[i];
-// 	return (expanded_content);
-// }
+	i = -1;
+	while (env_value[++i])
+		expanded_content[++(*j)] = env_value[i];
+	return (expanded_content);
+}
 
 int	needs_quote_removal(char *content)
 {
@@ -172,7 +172,7 @@ int	expansion_inside_quotes(char *content, int i, char c, t_quote_flag flag)
 	else if (flag == PARAMETERS)
 	{
 		while (content[++i])
-			if (c == '"' && content[i] == '*')
+			if ((c == '"' || c == '\'') && content[i] == '*')
 				return (1);
 	}
 	return (0);
@@ -267,41 +267,18 @@ char	*remove_quotes_expansion(char *content, int len)
 	return (new_content);
 }
 
-// int	expanded_str_len(t_minishell *msh, char *content)
-// {
-// 	int		real_len;
-// 	int		inside_s_quotes;
-// 	int		inside_d_quotes;
-// 	int		i;
-
-// 	real_len = 0;
-// 	inside_s_quotes = 0;
-// 	inside_d_quotes = 0;
-// 	i = -1;
-// 	while (content[++i])
-// 	{
-// 		if (content[i] == '\'' && !inside_d_quotes)
-// 			inside_s_quotes = !inside_s_quotes;
-// 		else if (content[i] == '"' && !inside_s_quotes)
-// 			inside_d_quotes = !inside_d_quotes;
-// 		else if (content[i] == '$' && content[i + 1]
-// 			&& isenvchar(content[i + 1]) && !inside_s_quotes)
-// 			real_len += get_env_variable_len(msh, content, &i);
-// 		else
-// 			real_len++;
-// 	}
-// 	return (real_len);
-// }
 int	parameter_expansion_str_len(t_minishell *msh, char *content)
 {
 	int	real_len;
 	int	inside_s_quotes;
 	int	inside_d_quotes;
+	int	had_expansion_in_quotes;
 	int	i;
 
 	real_len = 0;
 	inside_s_quotes = 0;
 	inside_d_quotes = 0;
+	had_expansion_in_quotes = 0;
 	i = -1;
 	while (content[++i])
 	{
@@ -315,8 +292,15 @@ int	parameter_expansion_str_len(t_minishell *msh, char *content)
 		{
 			inside_d_quotes = !inside_d_quotes;
 			if(inside_d_quotes && expansion_inside_quotes(content, i, '"', PARAMETERS))
-				//real_len += len_inside_quotes(content, &i, '"');
+			{
+				had_expansion_in_quotes = !had_expansion_in_quotes;
 				real_len++;
+			}
+			if (!inside_d_quotes && had_expansion_in_quotes)
+			{
+				had_expansion_in_quotes = !had_expansion_in_quotes;
+				real_len++;
+			}
 		}
 		else if (content[i] == '$' && content[i + 1]
 			&& isenvchar(content[i + 1]) && !inside_s_quotes)
@@ -327,55 +311,6 @@ int	parameter_expansion_str_len(t_minishell *msh, char *content)
 	return (real_len);
 }
 
-// char	*set_expanded_content(t_minishell *msh, char *content, int expanded_len)
-// {
-// 	char	*expanded_content;
-// 	char	*env_name;
-// 	char	*env_value;
-// 	int		inside_s_quotes;
-// 	int		inside_d_quotes;
-// 	int		i;
-// 	int		j;
-
-// 	expanded_content = malloc(sizeof(char) * (expanded_len + 1));
-// 	if (!expanded_content)
-// 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-// 	inside_s_quotes = 0;
-// 	inside_d_quotes = 0;
-// 	i = -1;
-// 	j = -1;
-// 	while (content[++i])
-// 	{
-// 		if (content[i] == '\'' && !inside_d_quotes)
-// 			inside_s_quotes = !inside_s_quotes;
-// 		else if (content[i] == '"' && !inside_s_quotes)
-// 			inside_d_quotes = !inside_d_quotes;
-// 		else if (content[i] == '$' && content[i + 1] && !inside_s_quotes)
-// 		{
-// 			env_name = get_env_name(content, &i);
-// 			if (!env_name)
-// 				return (free(expanded_content), NULL);
-// 			env_value = get_env_value(msh, env_name);
-// 			if (!env_value)
-// 			{
-// 				free(env_name);
-// 				return (free(expanded_content), NULL);
-// 			}
-// 			if (!inside_d_quotes || (inside_d_quotes && env_name[0]))
-// 				expanded_content = add_expanded_var(env_value, expanded_content, &j);
-// 			else
-// 				expanded_content[++j] = content[i];
-// 			free(env_name);
-// 			free(env_value);
-// 		}
-// 		else
-// 			expanded_content[++j] = content[i];
-// 	}
-// 	expanded_content[++j] = '\0';
-// 	ft_putstr_fd(expanded_content, 2);
-// 	return (expanded_content);
-// }
-
 char	*expand_parameter(t_minishell *msh, char *content, int len)
 {
 	char	*new_content;
@@ -383,22 +318,48 @@ char	*expand_parameter(t_minishell *msh, char *content, int len)
 	char	*env_value;
 	int		inside_s_quotes;
 	int		inside_d_quotes;
+	int		had_expansion_in_quotes;
 	int		i;
 	int		j;
- 
+
 	new_content = malloc(sizeof(char) * (len + 1));
 	if (!new_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	inside_s_quotes = 0;
 	inside_d_quotes = 0;
+	had_expansion_in_quotes = 0;
 	i = -1;
 	j = -1;
 	while (content[++i])
 	{
 		if (content[i] == '\'' && !inside_d_quotes)
+		{
 			inside_s_quotes = !inside_s_quotes;
+			if(inside_s_quotes && expansion_inside_quotes(content, i, '\'', PARAMETERS))
+			{
+				had_expansion_in_quotes = !had_expansion_in_quotes;
+				new_content[++j] = content[i];
+			}
+			if (!inside_s_quotes && had_expansion_in_quotes)
+			{
+				had_expansion_in_quotes = !had_expansion_in_quotes;
+				new_content[++j] = content[i];
+			}
+		}
 		else if (content[i] == '"' && !inside_s_quotes)
+		{
 			inside_d_quotes = !inside_d_quotes;
+			if(inside_d_quotes && expansion_inside_quotes(content, i, '"', PARAMETERS))
+			{
+				had_expansion_in_quotes = !had_expansion_in_quotes;
+				new_content[++j] = content[i];
+			}
+			if (!inside_d_quotes && had_expansion_in_quotes)
+			{
+				had_expansion_in_quotes = !had_expansion_in_quotes;
+				new_content[++j] = content[i];
+			}
+		}
 		else if (content[i] == '$' && content[i + 1] && !inside_s_quotes)
 		{
 			env_name = get_env_name(content, &i);
@@ -428,6 +389,52 @@ char	*expand_parameter(t_minishell *msh, char *content, int len)
 	free(content);
 	return (new_content);
 }
+
+int	find_wildcard_start(char *content, int i)
+{
+	while (i > 0 && (content[i] != ' '
+		|| content[i] != '\'' || content[i] != '"'))
+		i--;
+	return (i);
+}
+
+int	get_wildcards_len(char *content, int *i)
+{
+	int 	real_len;
+	char	*text_before_wildcard;
+	char	*text_after_wildcard;
+
+	*i = find_wildcard_start(content, *i);
+	real_len = 0;
+	return (real_len);
+}
+
+int	wildcards_str_len(char *content)
+{
+	int	real_len;
+	int	inside_s_quotes;
+	int	inside_d_quotes;
+	int	i;
+
+	real_len = 0;
+	inside_d_quotes = 0;
+	inside_s_quotes = 0;
+	i = -1;
+	while (content[++i])
+	{
+		if (content[i] == '\'' && !inside_d_quotes)
+			inside_s_quotes = !inside_s_quotes;
+		else if (content[i] == '"' && !inside_s_quotes)
+			inside_d_quotes = !inside_d_quotes;
+		else if (content[i] == '*' && !inside_s_quotes && !inside_d_quotes)
+		{
+			real_len += get_wildcards_len(content, &i);
+			return (real_len);
+		}
+		else
+			real_len++;
+	}
+	return (real_len);
 }
 
 char	*expand_content(t_minishell *msh, char *content)
@@ -435,33 +442,34 @@ char	*expand_content(t_minishell *msh, char *content)
 	char	*expanded_content;
 	int		expanded_len;
 
-	// if (!need_expansion(content))
-	// 	return (content);
-	// expanded_len = expanded_str_len(msh, content);
-	// expanded_content = set_expanded_content(msh, content, expanded_len);
-	// if (!expanded_content)
-	// 	return (NULL);
-	// free(content);
 	expanded_content = ft_strdup(content);
 	if (!expanded_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	free(content);
 	// QUOTE REMOVAL
-	if (needs_quote_removal(expanded_content))
-	{
+	// if (needs_quote_removal(expanded_content))
+	// {
 		expanded_len = quote_removal_str_len(expanded_content);
 		expanded_content = remove_quotes_expansion(expanded_content, expanded_len);
 		if (!expanded_content)
 			return (free(expanded_content), NULL);
-	}
+	// }
 	printf("After quote removal -> %s\n", expanded_content);
 	// PARAMETER EXPANSION
-	if (needs_parameter_expansion(expanded_content))
-	{
+	// if (needs_parameter_expansion(expanded_content))
+	// {
 		expanded_len = parameter_expansion_str_len(msh, expanded_content);
 		expanded_content = expand_parameter(msh, expanded_content, expanded_len);
-	}
+		if (!expanded_content)
+			return (free(expanded_content), NULL);
+	// }
+	printf("After parameter expansion -> %s\n", expanded_content);
 	// WILDCARDS
+		expanded_len = wildcards_str_len(expanded_content);
+		//expanded_content = expand_wildcards(expanded_content, expanded_len);
+		if (!expanded_content)
+			return (free(expanded_content), NULL);
+	
 	return (expanded_content);
 }
 
@@ -530,29 +538,6 @@ char	*remove_quotes(char *content)
 	free(content);
 	return (quotes_removed);
 }
-
-// int	expansion_inside_d_quotes(char *content)
-// {
-// 	int		inside_s_quotes;
-// 	int		inside_d_quotes;
-// 	int		i;
-
-// 	inside_s_quotes = 0;
-// 	inside_d_quotes = 0;
-// 	i = -1;
-// 	while (content[++i])
-// 	{
-// 		if (content[i] == '\'' && !inside_d_quotes)
-// 			inside_s_quotes = !inside_s_quotes;
-// 		else if (content[i] == '"' && !inside_s_quotes)
-// 			inside_d_quotes = !inside_d_quotes;
-// 		else if ((content[i] == '$' && content[i + 1]
-// 			&& isenvchar(content[i + 1]) && inside_d_quotes)
-// 			|| (content[i] == '*' && !inside_d_quotes && !inside_s_quotes))
-// 			return (1);
-// 	}
-// 	return (0);
-// }
 
 t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 {
