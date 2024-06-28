@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/26 18:14:25 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/28 13:49:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
+# include <dirent.h>
 # include <libft.h>
 
 # define NO_SPACE "No more space left in device\n"
@@ -88,4 +89,5 @@ void	free_command_table(t_command_table *command_table);
 
 void	print_cmd_table(t_command_table *command_table);
 void	free_command_table(t_command_table *command_table);
+void	free_arr(char **array);
 #endif

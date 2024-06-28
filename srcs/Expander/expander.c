@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/27 20:19:03 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/06/28 15:40:37 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,22 +390,44 @@ char	*expand_parameter(t_minishell *msh, char *content, int len)
 	return (new_content);
 }
 
-int	find_wildcard_start(char *content, int i)
+int match(char *pattern, char *file)
 {
-	while (i > 0 && (content[i] != ' '
-		|| content[i] != '\'' || content[i] != '"'))
-		i--;
-	return (i);
+    if (!(*pattern) && !(*file))
+        return (1);
+    if (*pattern == '*')
+        return (match(pattern + 1, file) || (*file && match(pattern, file + 1)));
+    if (*pattern == *file)
+        return (match(pattern + 1, file + 1));
+    return (0);
 }
 
-int	get_wildcards_len(char *content, int *i)
+int	get_wildcards_len(char *content)
 {
-	int 	real_len;
-	char	*text_before_wildcard;
-	char	*text_after_wildcard;
+	int 			real_len;
+	DIR				*directory;
+	struct dirent	*file;
 
-	*i = find_wildcard_start(content, *i);
 	real_len = 0;
+	directory = opendir(getcwd(NULL, 0));
+	file = readdir(directory);
+	while (file)
+	{
+		printf("File name -> %s\n", file->d_name);
+		if (!ft_strcmp(content, "*") && file->d_name[0] == '.')
+		{
+			file = readdir(directory);
+			continue ;
+		}
+		else if (match(content, file->d_name))
+		{
+			printf("File name match 2 -> %s\n", file->d_name);
+			if (real_len > 0)
+				real_len++;
+			real_len += ft_strlen(file->d_name);
+		}
+		file = readdir(directory);
+	}
+	printf("Lenght of all file names -> %d\n", real_len);
 	return (real_len);
 }
 
@@ -428,13 +450,117 @@ int	wildcards_str_len(char *content)
 			inside_d_quotes = !inside_d_quotes;
 		else if (content[i] == '*' && !inside_s_quotes && !inside_d_quotes)
 		{
-			real_len += get_wildcards_len(content, &i);
+			real_len += get_wildcards_len(content);
 			return (real_len);
 		}
 		else
 			real_len++;
 	}
 	return (real_len);
+}
+
+char	*add_wildcard_content(char *content)
+{
+	char			*new_content;
+	char			*tmp;
+	DIR				*directory;
+	struct dirent	*file;
+
+	new_content = malloc(sizeof(char));
+	if (!new_content)
+		return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	new_content[0] = '\0';
+	directory = opendir(getcwd(NULL, 0));
+	file = readdir(directory);
+	while (file)
+	{
+		if (!ft_strcmp(content, "*") && file->d_name[0] == '.')
+		{
+			file = readdir(directory);
+			continue ;
+		}
+		else if (match(content, file->d_name))
+		{
+			if (new_content[0])
+			{
+				tmp = ft_strdup(new_content);
+				if (!tmp)
+					return (ft_putstr_fd(NO_SPACE, 2), NULL);
+				free(new_content);
+				new_content = ft_strjoin(tmp, " ");
+				if (!new_content)
+					return (ft_putstr_fd(NO_SPACE, 2), NULL);
+				free(tmp);
+			}
+			tmp = ft_strdup(new_content);
+			if (!tmp)
+				return (ft_putstr_fd(NO_SPACE, 2), NULL);
+			free(new_content);
+			new_content = ft_strjoin(tmp, file->d_name);
+			if (!new_content)
+				return (ft_putstr_fd(NO_SPACE, 2), NULL);
+			free(tmp);
+		}
+		file = readdir(directory);
+	}
+	return (new_content);
+}
+
+// char	*expand_wildcards(char *content, int len)
+char	*expand_wildcards(char *content, int len, int needs_expansion)
+{
+	char	*new_content;
+	int		inside_d_quotes;
+	int		inside_s_quotes;
+	int		i;
+	int		j;
+
+	if (!needs_expansion)
+	{
+		new_content = malloc(sizeof(char) * (len + 1));
+		if (!new_content)
+			return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	}
+	inside_d_quotes = 0;
+	inside_s_quotes = 0;
+	i = -1;
+	j = -1;
+	while (content[++i])
+	{
+		if (content[i] == '\'' && !inside_d_quotes)
+			inside_s_quotes = !inside_s_quotes;
+		else if (content[i] == '"' && !inside_s_quotes)
+			inside_d_quotes = !inside_d_quotes;
+		else if (content[i] == '*' && !inside_s_quotes && !inside_d_quotes)
+		{
+			new_content = add_wildcard_content(content);
+			return (new_content);
+		}
+		else if (!needs_expansion)
+			new_content[++j] = content[i];
+	}
+	return (new_content);
+}
+
+int	needs_wildcard_expansion(char *content)
+{
+	int	inside_s_quotes;
+	int	inside_d_quotes;
+	int	i;
+
+	inside_d_quotes = 0;
+	inside_s_quotes = 0;
+	i = -1;
+	while (content[++i])
+	{
+		if (content[i] == '\'' && !inside_d_quotes)
+			inside_s_quotes = !inside_s_quotes;
+		else if (content[i] == '"' && !inside_s_quotes)
+			inside_d_quotes = !inside_d_quotes;
+		else if (content[i] == '*' && !inside_s_quotes && !inside_d_quotes)
+			return (1);
+	}
+	return (0);
 }
 
 char	*expand_content(t_minishell *msh, char *content)
@@ -466,10 +592,11 @@ char	*expand_content(t_minishell *msh, char *content)
 	printf("After parameter expansion -> %s\n", expanded_content);
 	// WILDCARDS
 		expanded_len = wildcards_str_len(expanded_content);
-		//expanded_content = expand_wildcards(expanded_content, expanded_len);
+		printf("Wildcard length -> %d\n", expanded_len);
+		expanded_content = expand_wildcards(expanded_content, expanded_len, needs_wildcard_expansion(content));
 		if (!expanded_content)
 			return (free(expanded_content), NULL);
-	
+	printf("After parameter expansion -> %s\n", expanded_content);
 	return (expanded_content);
 }
 
