@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:29:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/21 17:14:55 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:10:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	add_new_table_node(t_command_table **command_table,
 	last->next = new;
 }
 
-t_command_table	*new_command_table_node(t_ast *root)
+t_command_table	*new_command_table_node(t_minishell *msh, t_ast *root)
 {
 	t_command_table	*command_table;
 
@@ -64,7 +64,7 @@ t_command_table	*new_command_table_node(t_ast *root)
 	command_table->simplecmd = new_command_table_simple_command(root);
 	if (!command_table->simplecmd)
 		return (NULL);
-	command_table->redirs = new_command_table_redir(&root);
+	command_table->redirs = new_command_table_redir(msh, &root);
 	if (!command_table->redirs)
 		return (NULL);
 	command_table->next = NULL;

@@ -41,6 +41,8 @@ ALL_OBJECTS			=	$(OBJ_DIR)*.o
 
 LIBFT_PATH			=	libft
 LIBFT				=	$(LIBFT_PATH)/libft.a
+GNL_PATH			=	get_next_line
+GNL					=	$(GNL_PATH)/get_next_line.a
 
 TOTAL_SRCS			=	$(words $(SRCS))
 TOTAL_OBJS			=	$(words $(wildcard $(OBJ_DIR)*))
@@ -55,7 +57,7 @@ $(OBJ_DIR)%.o: 		%.c
 
 all:				$(NAME)
 
-$(NAME):			$(OBJ_DIR) $(LIBFT) $(OBJS) 
+$(NAME):			$(OBJ_DIR) $(LIBFT) $(GNL) $(OBJS) 
 					@$(CC) $(CFLAGS) $(IFLAGS) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $@
 					@echo "\033[2F\033[0K$(CYAN)$@$(DEFAULT) successfully created\033[E"
 					@if norminette | grep -q -v "OK!"; then \
@@ -64,15 +66,18 @@ $(NAME):			$(OBJ_DIR) $(LIBFT) $(OBJS)
 						echo "Norminette$(GRN) OK!!$(DEFAULT)"; \
 					fi
 
-sanitize:			$(OBJ_DIR) $(LIBFT) $(OBJS)
+sanitize:			$(OBJ_DIR) $(LIBFT) $(GNL) $(OBJS)
 					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
-random_m:			$(OBJ_DIR) $(LIBFT) $(OBJS)
+random_m:			$(OBJ_DIR) $(LIBFT) $(GNL) $(OBJS)
 					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(RANDOM_MALLOC) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
 bonus:				$(NAME)
+
+$(GNL):
+					@make -s -C $(GNL_PATH) all
 
 $(LIBFT):
 					@make -s -C $(LIBFT_PATH) all
@@ -100,6 +105,10 @@ fclean:				clean
 					@if [ -e "$(LIBFT)" ]; then \
 						$(RM) $(LIBFT); \
 						echo "$(PURPLE)$(LIBFT)$(DEFAULT) deleted"; \
+					fi
+					@if [ -e "$(GNL)" ]; then \
+						$(RM) $(GNL); \
+						echo "$(PURPLE)$(GNL)$(DEFAULT) deleted"; \
 					fi
 
 re:					fclean all
