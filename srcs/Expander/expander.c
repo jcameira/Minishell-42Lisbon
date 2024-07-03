@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/28 15:40:37 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/03 21:56:33 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,25 +390,27 @@ char	*expand_parameter(t_minishell *msh, char *content, int len)
 	return (new_content);
 }
 
-int match(char *pattern, char *file)
+int match_wildcard_pattern(char *pattern, char *file)
 {
     if (!(*pattern) && !(*file))
         return (1);
     if (*pattern == '*')
-        return (match(pattern + 1, file) || (*file && match(pattern, file + 1)));
+        return (match_wildcard_pattern(pattern + 1, file) || (*file && match_wildcard_pattern(pattern, file + 1)));
     if (*pattern == *file)
-        return (match(pattern + 1, file + 1));
+        return (match_wildcard_pattern(pattern + 1, file + 1));
     return (0);
 }
 
 int	get_wildcards_len(char *content)
 {
 	int 			real_len;
+	char			*cwd;
 	DIR				*directory;
 	struct dirent	*file;
 
 	real_len = 0;
-	directory = opendir(getcwd(NULL, 0));
+	cwd = getcwd(NULL, 0);
+	directory = opendir(cwd);
 	file = readdir(directory);
 	while (file)
 	{
@@ -418,7 +420,7 @@ int	get_wildcards_len(char *content)
 			file = readdir(directory);
 			continue ;
 		}
-		else if (match(content, file->d_name))
+		else if (match_wildcard_pattern(content, file->d_name))
 		{
 			printf("File name match 2 -> %s\n", file->d_name);
 			if (real_len > 0)
@@ -428,6 +430,8 @@ int	get_wildcards_len(char *content)
 		file = readdir(directory);
 	}
 	printf("Lenght of all file names -> %d\n", real_len);
+	free(cwd);
+	closedir(directory);
 	return (real_len);
 }
 
@@ -463,6 +467,7 @@ char	*add_wildcard_content(char *content)
 {
 	char			*new_content;
 	char			*tmp;
+	char			*cwd;
 	DIR				*directory;
 	struct dirent	*file;
 
@@ -470,7 +475,8 @@ char	*add_wildcard_content(char *content)
 	if (!new_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	new_content[0] = '\0';
-	directory = opendir(getcwd(NULL, 0));
+	cwd = getcwd(NULL, 0);
+	directory = opendir(cwd);
 	file = readdir(directory);
 	while (file)
 	{
@@ -479,7 +485,7 @@ char	*add_wildcard_content(char *content)
 			file = readdir(directory);
 			continue ;
 		}
-		else if (match(content, file->d_name))
+		else if (match_wildcard_pattern(content, file->d_name))
 		{
 			if (new_content[0])
 			{
@@ -503,6 +509,8 @@ char	*add_wildcard_content(char *content)
 		}
 		file = readdir(directory);
 	}
+	free(cwd);
+	closedir(directory);
 	return (new_content);
 }
 
@@ -520,6 +528,7 @@ char	*expand_wildcards(char *content, int len, int needs_expansion)
 		new_content = malloc(sizeof(char) * (len + 1));
 		if (!new_content)
 			return (ft_putstr_fd(NO_SPACE, 2), NULL);
+		new_content[len] = '\0';
 	}
 	inside_d_quotes = 0;
 	inside_s_quotes = 0;
@@ -539,6 +548,7 @@ char	*expand_wildcards(char *content, int len, int needs_expansion)
 		else if (!needs_expansion)
 			new_content[++j] = content[i];
 	}
+	free(content);
 	return (new_content);
 }
 
@@ -593,10 +603,10 @@ char	*expand_content(t_minishell *msh, char *content)
 	// WILDCARDS
 		expanded_len = wildcards_str_len(expanded_content);
 		printf("Wildcard length -> %d\n", expanded_len);
-		expanded_content = expand_wildcards(expanded_content, expanded_len, needs_wildcard_expansion(content));
+		expanded_content = expand_wildcards(expanded_content, expanded_len, needs_wildcard_expansion(expanded_content));
 		if (!expanded_content)
 			return (free(expanded_content), NULL);
-	printf("After parameter expansion -> %s\n", expanded_content);
+	printf("After wildcard expansion -> %s\n", expanded_content);
 	return (expanded_content);
 }
 
@@ -673,21 +683,24 @@ t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 	tmp_redir = command_table->redirs;
 	while (tmp_redir)
 	{
-		if (tmp_redir->type == HERE_DOC)
-		{
-			set_here_doc_expansion(&tmp_redir);
-			tmp_redir->here_doc_limiter = remove_quotes(tmp_redir->here_doc_limiter);
-			if (!tmp_redir->here_doc_limiter)
-				return (free_command_table(command_table), NULL);
-		}
-		else
-		{
+		//if (tmp_redir->type == HERE_DOC)
+		//{
+		//	set_here_doc_expansion(&tmp_redir);
+		//	tmp_redir->here_doc_limiter = remove_quotes(tmp_redir->here_doc_limiter);
+		//	if (!tmp_redir->here_doc_limiter)
+		//		return (free_command_table(command_table), NULL);
+		//}
+		//else
+		//{
 			// if (need_expansion(tmp_redir->file) && expansion_inside_d_quotes(tmp_redir->file))
 			// 	tmp_redir->ambiguous_redirect = 1;
+		if (tmp_redir->type != HERE_DOC)
+		{
 			tmp_redir->file = expand_content(msh, tmp_redir->file);
 			if (!tmp_redir->file)
 				return (free_command_table(command_table), NULL);
 		}
+		//}
 		tmp_redir = tmp_redir->next;
 	}
 	return (command_table->redirs);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/22 14:33:53 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:20:17 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,13 @@
 # include <string.h>
 # include <errno.h>
 # include <libft.h>
+# include <get_next_line_bonus.h>
+
+# define HERE_DOC_INDICATOR "> "
+# define INPUT 0
 
 # define NO_SPACE "No more space left in device\n"
+# define NO_HERE_DOC_LINE "\nminishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')"
 
 # define PRINT_NO_TYPE	"NO_TYPE"
 # define PRINT_AND	"AND"
@@ -100,6 +105,7 @@ typedef struct s_redir_list
 	t_redir_type		type;
 	char				*file;
 	char				*here_doc_limiter;
+	char				*here_doc_buffer;
 	int					expand_here_doc;
 	int					ambiguous_redirect;
 	struct s_redir_list	*next;
@@ -164,8 +170,6 @@ t_token_list		*search_list_for_token(t_token_list *token_list,
 void				separate_list(t_token_list **token_list,
 						t_token_list **left_list, t_token_list **right_list,
 						t_token_list_type type);
-void				create_command_table(t_ast *root,
-						t_command_table **command_table);
 int					array_size(char **array);
 char				**arrcpy(char **dest, char **src);
 void				free_arr(char **array);
@@ -176,18 +180,27 @@ t_command_table		*last_table_node(t_command_table *command_table);
 t_redir_list		*last_redir_node(t_redir_list *redir_list);
 void				add_new_table_node(t_command_table **command_table,
 						t_command_table *new);
-t_command_table		*new_command_table_node(t_ast *root);
-t_redir_list		*new_command_table_redir(t_ast **root);
+t_command_table		*new_command_table_node(t_minishell *msh, t_ast *root);
+t_redir_list		*new_command_table_redir(t_minishell *msh, t_ast **root);
 t_simplecmd			*new_command_table_simple_command(t_ast *root);
 void				add_simple_command_argument(t_ast *root,
 						t_command_table **node);
-void				add_more_content_to_table_node(t_ast **root,
+void				add_more_content_to_table_node(t_minishell *msh, t_ast **root,
 						t_command_table **command_table);
-void				create_command_table(t_ast *root,
+void				create_command_table(t_minishell *msh, t_ast *root,
 						t_command_table **command_table);
 void				free_command_table(t_command_table *command_table);
 void				expander(t_minishell *msh, t_command_table *command_table);
 void				free_token_list(t_token_list *list);
-t_redir_list		*set_redir_values(t_ast **root, t_redir_list *redirs);
+t_redir_list		*set_redir_values(t_minishell *msh, t_ast **root, t_redir_list *redirs);
+void				set_here_doc_expansion(t_redir_list **redir);
+int					str_len_no_quotes(char *content);
+char				*set_no_quotes_content(char	*content, int real_len);
+char				*remove_quotes(char *content);
+char 				*get_env_value(t_minishell *msh, char *env_name);
+char				*get_env_name(char *content, int *i);
+int					get_env_variable_len(t_minishell *msh, char *content, int *i);
+char				*add_expanded_var(char *env_value, char *expanded_content, int *j);
+int					isenvchar(int c);
 
 #endif

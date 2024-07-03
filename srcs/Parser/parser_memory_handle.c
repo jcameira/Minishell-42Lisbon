@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:12:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/17 17:36:27 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/03 21:33:54 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	free_command_table(t_command_table *command_table)
 
 	while (command_table)
 	{
-		tmp = (command_table)->next;
+		tmp = command_table->next;
 		free_arr(command_table->simplecmd->arg_arr);
 		free(command_table->simplecmd);
 		while (command_table->redirs)
@@ -46,6 +46,8 @@ void	free_command_table(t_command_table *command_table)
 				free(command_table->redirs->file);
 			if (command_table->redirs->here_doc_limiter)
 				free(command_table->redirs->here_doc_limiter);
+			if (command_table->redirs->here_doc_buffer)
+				free(command_table->redirs->here_doc_buffer);
 			free(command_table->redirs);
 			command_table->redirs = tmp_redir;
 		}

@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/22 14:34:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:11:53 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-t_redir_list	*new_command_table_redir(t_ast **root)
+t_redir_list	*new_command_table_redir(t_minishell *msh, t_ast **root)
 {
 	t_redir_list	*redirs;
 
@@ -22,11 +22,12 @@ t_redir_list	*new_command_table_redir(t_ast **root)
 	redirs->next = NULL;
 	redirs->file = NULL;
 	redirs->here_doc_limiter = NULL;
+	redirs->here_doc_buffer = NULL;
 	redirs->expand_here_doc = 0;
 	redirs->ambiguous_redirect = 0;
 	if ((*root)->type == REDIRECTION)
 	{
-		redirs = set_redir_values(root, redirs);
+		redirs = set_redir_values(msh, root, redirs);
 		if (!redirs)
 			return (NULL);
 	}
@@ -80,7 +81,7 @@ void	add_simple_command_argument(t_ast *root, t_command_table **node)
 	(*node)->simplecmd->arg_arr = new_array;
 }
 
-void	add_more_content_to_table_node(t_ast **root,
+void	add_more_content_to_table_node(t_minishell *msh, t_ast **root,
 		t_command_table **command_table)
 {
 	t_command_table	*last_node;
@@ -90,33 +91,33 @@ void	add_more_content_to_table_node(t_ast **root,
 	last_redir = last_redir_node((*command_table)->redirs);
 	if ((*root)->type == REDIRECTION
 		&& (last_redir->file || last_redir->here_doc_limiter))
-		last_redir->next = new_command_table_redir(root);
+		last_redir->next = new_command_table_redir(msh, root);
 	else if ((*root)->type == REDIRECTION
 		&& !last_redir->file && !last_redir->here_doc_limiter)
-		last_redir = set_redir_values(root, last_redir);
+		last_redir = set_redir_values(msh, root, last_redir);
 	else if ((*root)->type == SIMPLE_COMMAND)
 		add_simple_command_argument(*root, &last_node);
 }
 
-void	create_command_table(t_ast *root, t_command_table **command_table)
+void	create_command_table(t_minishell *msh, t_ast *root, t_command_table **command_table)
 {
 	t_command_table	*new_table_node;
 	t_command_table	*last_node;
 
 	if (!root)
 		return ;
-	create_command_table(root->left, command_table);
+	create_command_table(msh, root->left, command_table);
 	if (root->subshell_ast)
-		create_command_table(root->subshell_ast, command_table);
+		create_command_table(msh, root->subshell_ast, command_table);
 	else if (!root->visited)
 	{
 		last_node = last_table_node(*command_table);
 		if ((root->type == REDIRECTION || root->type == SIMPLE_COMMAND)
 			&& *command_table && last_node->type == TABLE_NO_TYPE)
-			add_more_content_to_table_node(&root, &last_node);
+			add_more_content_to_table_node(msh, &root, &last_node);
 		else
 		{
-			new_table_node = new_command_table_node(root);
+			new_table_node = new_command_table_node(msh, root);
 			if (!new_table_node)
 				return ;
 			add_new_table_node(command_table, new_table_node);
@@ -124,5 +125,5 @@ void	create_command_table(t_ast *root, t_command_table **command_table)
 		root->visited = 1;
 	}
 	if (root)
-		create_command_table(root->right, command_table);
+		create_command_table(msh, root->right, command_table);
 }
