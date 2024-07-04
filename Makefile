@@ -16,7 +16,7 @@ LEXER_FILES			=	check_syntax_errors.c checkers.c lexer_memory_handle.c lexer.c t
 LEXER_PATH			=	srcs/Lexer/
 LEXER				=	$(addprefix $(LEXER_PATH), $(LEXER_FILES))
 
-PARSER_FILES		=	ast_creation_utils.c ast_creation.c command_table_creation_utils.c command_table_creation.c new_ast_node_utils.c new_command_table_node_utils.c parser_memory_handle.c parser_utils.c parser.c
+PARSER_FILES		=	ast_creation_utils.c ast_creation.c command_table_creation_utils.c command_table_creation.c handling_here_docs.c new_ast_node_utils.c new_command_table_node_utils.c parser_memory_handle.c parser_utils.c parser.c
 PARSER_PATH			=	srcs/Parser/
 PARSER				=	$(addprefix $(PARSER_PATH), $(PARSER_FILES))
 

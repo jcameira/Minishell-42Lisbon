@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/02 17:16:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/04 03:25:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # include <libft.h>
 
 # define NO_SPACE "No more space left in device\n"
+
+# define S 0
+# define D 1
 
 typedef enum s_quote_flag
 {
@@ -85,9 +88,6 @@ typedef struct s_minishell
 }				t_minishell;
 
 void	free_command_table(t_command_table *command_table);
-
-
-
 void	print_cmd_table(t_command_table *command_table);
 void	free_command_table(t_command_table *command_table);
 void	free_arr(char **array);
