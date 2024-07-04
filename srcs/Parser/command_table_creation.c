@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/03 22:11:53 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/04 01:58:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ void	add_more_content_to_table_node(t_minishell *msh, t_ast **root,
 		add_simple_command_argument(*root, &last_node);
 }
 
-void	create_command_table(t_minishell *msh, t_ast *root, t_command_table **command_table)
+void	create_command_table(t_minishell *msh, t_ast *root,
+	t_command_table **command_table)
 {
 	t_command_table	*new_table_node;
 	t_command_table	*last_node;

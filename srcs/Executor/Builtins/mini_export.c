@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_export.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/14 15:02:30 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/07/04 01:51:33 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ void	aux_export(char **msh_envp, char *cmd_argarr, char **tmp_cmd)
 	while (msh_envp[++i])
 	{
 		tmp_env = ft_split(msh_envp[i], '=');
-		if (!tmp_cmd[1] 
+		if (!tmp_cmd[1]
 			&& !ft_strncmp(tmp_cmd[0], tmp_env[0], ft_strlen(tmp_cmd[0])))
 			break ;
-		if (!msh_envp[i + 1] || (tmp_cmd[1] && !ft_strncmp(tmp_cmd[0], 
+		if (!msh_envp[i + 1] || (tmp_cmd[1] && !ft_strncmp(tmp_cmd[0],
 					tmp_env[0], ft_strlen(tmp_cmd[0]))))
 		{
 			free(msh_envp[i]);
