@@ -3,6 +3,7 @@
         "array": "c",
         "minishell.h": "c",
         "types.h": "c",
-        "builtins.h": "c"
+        "builtins.h": "c",
+        "expander.h": "c"
     }
 }
