@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/20 19:14:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/10 00:16:08 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,6 @@
 # define WRONG_ARG_N "Minishell needs to be executed with no additional \
 arguments.\n"
 # define NO_SPACE "No more space left in device\n"
-
-typedef struct s_simplecmd
-{
-	int		arg_nbr;
-	char	**arg_arr;
-}				t_simplecmd;
 
 typedef struct s_minishell
 {

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:59:47 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/10 00:42:23 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <libft.h>
 
 # define NO_SPACE "No more space left in device\n"
+
+# define AMBIGUOUS_REDIRECT "minishell: %s: ambiguous redirect\n"
 
 # define S 0
 # define D 1
@@ -52,6 +54,14 @@ typedef enum s_table_node_type
 	TABLE_SUBSHELL
 }				t_table_node_type;
 
+typedef enum s_next_symbol
+{
+	NO_SYMBOL = -1,
+	PIPE,
+	AND,
+	OR
+}				t_next_symbol;
+
 typedef struct s_simplecmd
 {
 	int		arg_nbr;
@@ -78,6 +88,21 @@ typedef struct s_command_table
 	struct s_command_table	*next;
 }				t_command_table;
 
+typedef struct s_final_command_table
+{
+	int								subshell_level;
+	t_simplecmd						*simplecmd;
+	//t_final_redirs					redirs;
+	t_redir_type					in_type;
+	char							*infile;
+	char							*here_doc_buffer;
+	t_redir_type					out_type;
+	char							*outfile;
+	int								ambiguous_redirect;
+	t_next_symbol					next_symbol;
+	struct s_final_command_table	*next;
+}				t_final_command_table;
+
 typedef struct s_minishell
 {
 	char				**envp;
@@ -87,32 +112,47 @@ typedef struct s_minishell
 	int					original_stderr;
 }				t_minishell;
 
-void	free_command_table(t_command_table *command_table);
-void	print_cmd_table(t_command_table *command_table);
-void	free_command_table(t_command_table *command_table);
-void	free_arr(char **array);
-int		quote_removal_str_len(char *content);
-char	*remove_quotes_expansion(char *content, int len);
-int		parameter_expansion_str_len(t_minishell *msh, char *content);
-char	*expand_parameter(t_minishell *msh, char *content, int len);
-int		needs_wildcard_expansion(char *content);
-int		wildcards_str_len(char *content);
-char	*expand_wildcards(char *content, int len, int needs_expansion);
-int		str_len_no_quotes(char *content);
-char	*set_no_quotes_content(char	*content, int real_len);
-int		isenvchar(int c);
-char	*get_env_value(t_minishell *msh, char *env_name);
-char	*get_env_name(char *content, int *i);
-int		get_env_variable_len(t_minishell *msh, char *content, int *i);
-char	*add_expanded_parameter(t_minishell *msh, char *content,
-			char *new_content, int *indexes);
-int		expansion_inside_quotes(char *content, int i, char c,
-			t_quote_flag flag);
-int		len_inside_quotes(char *content, int *i, char c);
-void	add_content_inside_quotes(char *content, char *new_content, int *i,
-			int *j);
-int		match_wildcard_pattern(char *pattern, char *file);
-DIR		*get_directory_info(DIR *directory, char **new_content,
-			struct dirent **file, int flag);
-char	*append_more_wildcard_content(char *new_content, struct dirent *file);
+void					free_command_table(t_command_table *command_table);
+void					print_cmd_table(t_command_table *command_table);
+void					free_command_table(t_command_table *command_table);
+void					free_arr(char **array);
+int						quote_removal_str_len(char *content);
+char					*remove_quotes_expansion(char *content, int len);
+int						parameter_expansion_str_len(t_minishell *msh, char
+							*content);
+char					*expand_parameter(t_minishell *msh, char *content,
+							int len);
+int						needs_wildcard_expansion(char *content);
+int						wildcards_str_len(char *content);
+char					*expand_wildcards(char *content, int len,
+							int needs_expansion);
+int						str_len_no_quotes(char *content);
+char					*set_no_quotes_content(char	*content, int real_len);
+int						isenvchar(int c);
+char					*get_env_value(t_minishell *msh, char *env_name);
+char					*get_env_name(char *content, int *i);
+int						get_env_variable_len(t_minishell *msh, char *content,
+							int *i);
+char					*add_expanded_parameter(t_minishell *msh, char *content,
+							char *new_content, int *indexes);
+int						expansion_inside_quotes(char *content, int i, char c,
+							t_quote_flag flag);
+int						len_inside_quotes(char *content, int *i, char c);
+void					add_content_inside_quotes(char *content,
+							char *new_content, int *i, int *j);
+int						match_wildcard_pattern(char *pattern, char *file);
+DIR						*get_directory_info(DIR *directory, char **new_content,
+							struct dirent **file, int flag);
+char					*append_more_wildcard_content(char *new_content,
+							struct dirent *file);
+t_final_command_table	*set_final_redirs(t_final_command_table	*new_table_node,
+							t_redir_list *redirs);
+void					free_redir_list(t_redir_list *redirs);
+void					free_f_command_table(t_final_command_table *cmd_table);
+t_simplecmd				*simplecmdcpy(t_simplecmd *simplecmd);
+t_next_symbol			check_next_symbol(t_command_table *next_node);
+char					**arrdup(char **array);
+void					executor(t_minishell *msh,
+							t_final_command_table *final_command_table);
+t_final_command_table	*create_final_cmd_table(t_command_table *command_table);
 #endif
