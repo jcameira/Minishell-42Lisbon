@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:38:34 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/10 00:09:25 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,38 +16,6 @@
 //->send the full command table with all expansions completed to the executor
 
 #include <expander.h>
-
-//int	need_expansion(char *content)
-//{
-//	int	i;
-//
-//	i = -1;
-//	while (content[++i])
-//		if (content[i] == '\'' || content[i] == '"' || content[i] == '$'
-//			|| content[i] == '*')
-//			return (1);
-//	return (0);
-//}
-
-//int	needs_parameter_expansion(char *content)
-//{
-//	int	quotes[2];
-//	int	i;
-//
-//	quotes[D] = 0;
-//	quotes[S] = 0;
-//	i = -1;
-//	while (content[++i])
-//	{
-//		if (content[i] == '"' && !quotes[S])
-//			quotes[S] = !quotes[D];
-//		if (content[i] == '\'' && !quotes[D])
-//			quotes[S] = !quotes[S];
-//		if (content[i] == '$' && !quotes[S])
-//			return (1);
-//	}
-//	return (0);
-//}
 
 char	*expand_content(t_minishell *msh, char *content)
 {
@@ -94,8 +62,9 @@ t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 
 void	expander(t_minishell *msh, t_command_table *command_table)
 {
-	t_command_table	*tmp_table;
-	int				i;
+	t_command_table			*tmp_table;
+	t_final_command_table	*final_command_table;
+	int						i;
 
 	tmp_table = command_table;
 	while (tmp_table)
@@ -116,5 +85,6 @@ void	expander(t_minishell *msh, t_command_table *command_table)
 		tmp_table = tmp_table->next;
 	}
 	print_cmd_table(command_table);
-	free_command_table(command_table);
+	final_command_table = create_final_cmd_table(command_table);
+	executor(msh, final_command_table);
 }
