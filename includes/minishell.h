@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/10 00:16:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/10 21:06:48 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ char	**set_shlvl(char **array);
 char	**set_pwd(char **array);
 int		full_white_space(char *line);
 void	free_arr(char **array);
-void	signals_init(void);
+void	interactive_signals_init(void);
 void	interactive_handler(int sig);
+void	cmd_handler(int sig);
 void	exit_shell(t_minishell *msh);
 void	bubble_sort(char **matrix);
 void	lexer(t_minishell *msh, char *line);

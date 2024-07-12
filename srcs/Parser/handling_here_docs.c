@@ -6,11 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 01:55:14 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/11 19:23:23 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
+
+extern int	g_signal;
 
 char	*add_line_to_buffer(char *new_line, char *previous_buffer)
 {

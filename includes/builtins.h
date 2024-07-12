@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/13 17:27:37 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/10 18:57:28 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # define PWD "PWD="
 # define OLDPWD "OLDPWD="
 # define HOME "HOME="
+
+typedef struct s_simplecmd
+{
+	int		arg_nbr;
+	char	**arg_arr;
+}				t_simplecmd;
 
 void	mini_cd(t_minishell *msh, t_simplecmd *cmd);
 void	mini_echo(t_minishell *msh, t_simplecmd *cmd);

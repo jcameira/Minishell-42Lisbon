@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 19:05:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/10 21:07:55 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,16 @@
 
 #include <minishell.h>
 
+int	g_signal;
+
 void	msh_loop(t_minishell *msh)
 {
 	char	*line;
 
 	while (1)
 	{
-		signals_init();
+		interactive_signals_init();
+		g_signal = 0;
 		line = readline(msh->prompt);
 		if (!line)
 			exit_shell(msh);
