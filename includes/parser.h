@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 01:57:34 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:04:04 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ typedef struct s_redir_list
 	t_redir_type		type;
 	char				*file;
 	char				*here_doc_limiter;
-	char				*here_doc_buffer;
 	int					expand_here_doc;
 	int					ambiguous_redirect;
 	struct s_redir_list	*next;
@@ -209,5 +208,6 @@ int					isenvchar(int c);
 void				handle_here_doc(t_minishell *msh, t_redir_list **redirs);
 char				*expansion_inside_here_doc(t_minishell *msh, char *content,
 						int flag);
+void				cmd_signals_init(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/07/10 00:26:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:04:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_final_command_table
 	//t_final_redirs					redirs;
 	t_redir_type					in_type;
 	char							*infile;
-	char							*here_doc_buffer;
 	t_redir_type					out_type;
 	char							*outfile;
 	int								ambiguous_redirect;

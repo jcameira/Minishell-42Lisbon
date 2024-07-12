@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/10 00:42:23 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:04:17 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ typedef struct s_redir_list
 	t_redir_type		type;
 	char				*file;
 	char				*here_doc_limiter;
-	char				*here_doc_buffer;
 	int					expand_here_doc;
 	int					ambiguous_redirect;
 	struct s_redir_list	*next;
@@ -95,7 +94,6 @@ typedef struct s_final_command_table
 	//t_final_redirs					redirs;
 	t_redir_type					in_type;
 	char							*infile;
-	char							*here_doc_buffer;
 	t_redir_type					out_type;
 	char							*outfile;
 	int								ambiguous_redirect;
