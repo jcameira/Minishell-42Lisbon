@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 18:57:32 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/10 00:38:29 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:42:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,15 @@ t_final_command_table	*create_final_cmd_table(t_command_table *command_table)
 		tmp = command_table->next;
 		free(command_table);
 		command_table = tmp;
+		if (new_table_node->next_symbol > -1)
+		{
+			tmp = command_table->next;
+			free_redir_list(command_table->redirs);
+			free_arr(command_table->simplecmd->arg_arr);
+			free(command_table->simplecmd);
+			free(command_table);
+			command_table = tmp;
+		}
 		add_f_cmd_table_node(new_table_node,
 			&final_command_table);
 	}

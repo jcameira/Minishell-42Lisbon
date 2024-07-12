@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/11 20:04:04 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:50:10 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,13 @@
 
 # define HERE_DOC_INDICATOR "> "
 # define INPUT 0
+# define READ_END 0
+# define WRITE_END 1
 
 # define NO_SPACE "No more space left in device\n"
 # define NO_HERE_DOC_LINE "\nminishell: warning: here-document at line %d \
 delimited by end-of-file (wanted `%s')"
+# define PIPE_ERROR "Couldn't open pipe\n"
 
 # define PRINT_NO_TYPE	"NO_TYPE"
 # define PRINT_AND	"AND"
@@ -106,6 +109,7 @@ typedef struct s_redir_list
 	t_redir_type		type;
 	char				*file;
 	char				*here_doc_limiter;
+	int					here_doc_fd;
 	int					expand_here_doc;
 	int					ambiguous_redirect;
 	struct s_redir_list	*next;
@@ -205,7 +209,7 @@ int					get_env_variable_len(t_minishell *msh, char *content,
 char				*add_expanded_var(char *env_value, char *expanded_content,
 						int *j);
 int					isenvchar(int c);
-void				handle_here_doc(t_minishell *msh, t_redir_list **redirs);
+int					handle_here_doc(t_minishell *msh, t_redir_list **redirs);
 char				*expansion_inside_here_doc(t_minishell *msh, char *content,
 						int flag);
 void				cmd_signals_init(void);
