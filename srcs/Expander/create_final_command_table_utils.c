@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 00:37:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/10 00:39:15 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:39:17 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 t_final_command_table	*set_redir_info(t_final_command_table	*new_table_node,
 	t_redir_list *redirs)
 {
-	if (redirs->type == HERE_DOC)
-	{
-		new_table_node->in_type = redirs->type;
-		if (new_table_node->here_doc_buffer)
-			free(new_table_node->here_doc_buffer);
-		new_table_node->here_doc_buffer = ft_strdup(redirs->here_doc_buffer);
-		if (!new_table_node->here_doc_buffer)
-			return (ft_putstr_fd(NO_SPACE, 2), NULL);
-	}
-	else if (redirs->type == INFILE)
+	//if (redirs->type == HERE_DOC)
+	//{
+		//new_table_node->in_type = redirs->type;
+		//if (new_table_node->here_doc_buffer)
+		//	free(new_table_node->here_doc_buffer);
+		//new_table_node->here_doc_buffer = ft_strdup(redirs->here_doc_buffer);
+		//if (!new_table_node->here_doc_buffer)
+		//	return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	//}
+	if (redirs->type == INFILE)
 	{
 		new_table_node->in_type = redirs->type;
 		new_table_node->infile = ft_strdup(redirs->file);
@@ -73,7 +73,7 @@ t_final_command_table	*set_final_redirs(t_final_command_table	*new_table_node,
 	while (tmp)
 	{
 		new_table_node->ambiguous_redirect = tmp->ambiguous_redirect;
-		new_table_node->here_doc_buffer = NULL;
+		//new_table_node->here_doc_buffer = NULL;
 		new_table_node->infile = NULL;
 		new_table_node->outfile = NULL;
 		new_table_node = set_redir_info(new_table_node, tmp);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 01:58:57 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:36:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_redir_list	*new_command_table_redir(t_minishell *msh, t_ast **root)
 	redirs->next = NULL;
 	redirs->file = NULL;
 	redirs->here_doc_limiter = NULL;
-	redirs->here_doc_buffer = NULL;
+	//redirs->here_doc_buffer = NULL;
 	redirs->expand_here_doc = 0;
 	redirs->ambiguous_redirect = 0;
 	if ((*root)->type == REDIRECTION)
@@ -38,7 +38,7 @@ t_simplecmd	*new_command_table_simple_command(t_ast *root)
 {
 	t_simplecmd	*simplecmd;
 
-	simplecmd = malloc(sizeof(t_redir_list));
+	simplecmd = malloc(sizeof(t_simplecmd));
 	if (!simplecmd)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	if (root->type != SIMPLE_COMMAND)

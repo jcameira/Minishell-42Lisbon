@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 01:58:26 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:38:36 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,9 @@ void	print_cmd_table(t_command_table *command_table)
 		tmp_redir = command_table->redirs;
 		while (tmp_redir)
 		{
-			if (tmp_redir->type == HERE_DOC)
-				printf("'<<'\n%s\nContent\n%s\n", tmp_redir->here_doc_limiter, tmp_redir->here_doc_buffer);
-			else if (tmp_redir->type == INFILE)
+			//if (tmp_redir->type == HERE_DOC)
+			//	printf("'<<'\n%s\nContent\n%s\n", tmp_redir->here_doc_limiter, tmp_redir->here_doc_buffer);
+			if (tmp_redir->type == INFILE)
 				printf("'<'\n%s\n", tmp_redir->file);
 			else if (tmp_redir->type == APPEND)
 				printf("'>>'\n%s\n", tmp_redir->file);
