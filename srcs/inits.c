@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/10 20:40:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:21:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	interactive_signals_init(void)
 	sigaction(SIGQUIT, &sa_quit, 0);
 }
 
-void	cmd_signals_init(void)
+void	child_signals_init(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
@@ -41,7 +41,7 @@ void	cmd_signals_init(void)
 	sigaction(SIGINT, &sa_int, 0);
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = SA_RESTART;
-	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_handler = SIG_DFL;
 	sigaddset(&sa_quit.sa_mask, SIGQUIT);
 	sigaction(SIGQUIT, &sa_quit, 0);
 }
