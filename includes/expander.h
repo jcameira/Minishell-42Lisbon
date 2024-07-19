@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/12 15:49:35 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:54:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ typedef enum s_quote_flag
 {
 	QUOTES = 0,
 	PARAMETERS,
-	WILDCARDS
+	WILDCARDS,
+	AMBIGUOUS
 }				t_quote_flag;
 
 typedef enum s_redir_type
@@ -155,4 +156,5 @@ char					**arrdup(char **array);
 void					executor(t_minishell *msh,
 							t_final_command_table *final_command_table);
 t_final_command_table	*create_final_cmd_table(t_command_table *command_table);
+void					skip_until_char(char *line, int *i, char c);
 #endif
