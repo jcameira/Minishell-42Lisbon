@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/10 00:09:25 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:56:23 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,30 @@
 //->send the full command table with all expansions completed to the executor
 
 #include <expander.h>
+
+int	set_ambiguous_redirect(char *content)
+{
+	char	*tmp;
+	int		i;
+
+	tmp = ft_strdup(content);
+	if (!tmp)
+		return (ft_putstr_fd(NO_SPACE, 2), -1);
+	i = -1;
+	while (tmp[++i])
+	{
+		if (tmp[i] == '"')
+		{
+			if (expansion_inside_quotes(tmp, i, '"', AMBIGUOUS))
+				return (1);
+			else
+				skip_until_char(tmp, &i, '"');
+		}
+		else if (tmp[i] == '\'')
+			skip_until_char(tmp, &i, '\'');
+	}
+	return (0);
+}
 
 char	*expand_content(t_minishell *msh, char *content)
 {
@@ -51,6 +75,9 @@ t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 	{
 		if (tmp_redir->type != HERE_DOC)
 		{
+			tmp_redir->ambiguous_redirect = set_ambiguous_redirect(tmp_redir->file);
+			if (tmp_redir->ambiguous_redirect == -1)
+				return (free_command_table(command_table), NULL);
 			tmp_redir->file = expand_content(msh, tmp_redir->file);
 			if (!tmp_redir->file)
 				return (free_command_table(command_table), NULL);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:38:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:40:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:57:14 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 int	expansion_inside_quotes(char *content, int i, char c, t_quote_flag flag)
 {
-	if (flag == QUOTES)
+	while (content[++i])
 	{
-		while (content[++i])
+		if (content[i] == c)
+			break ;
+		if (flag == QUOTES)
 		{
-			if (content[i] == c)
-				break ;
 			if (c == '\'' && (content[i] == '$' || content[i] == '*'))
 				return (1);
 			else if (c == '"' && content[i] == '*')
 				return (1);
 		}
-	}
-	else if (flag == PARAMETERS)
-	{
-		while (content[++i])
+		if (flag == PARAMETERS)
 			if ((c == '"' || c == '\'') && content[i] == '*')
+				return (1);
+		if (flag == AMBIGUOUS)
+			if (c == '"' && content[i] == '$')
 				return (1);
 	}
 	return (0);
