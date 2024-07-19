@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/12 15:50:10 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:14:02 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <string.h>
 # include <errno.h>
 # include <libft.h>
+# include <sys/wait.h>
 # include <get_next_line_bonus.h>
 
 # define HERE_DOC_INDICATOR "> "
@@ -32,6 +33,7 @@
 # define NO_HERE_DOC_LINE "\nminishell: warning: here-document at line %d \
 delimited by end-of-file (wanted `%s')"
 # define PIPE_ERROR "Couldn't open pipe\n"
+# define FORK_ERROR "Couldn't fork\n"
 
 # define PRINT_NO_TYPE	"NO_TYPE"
 # define PRINT_AND	"AND"
@@ -209,9 +211,9 @@ int					get_env_variable_len(t_minishell *msh, char *content,
 char				*add_expanded_var(char *env_value, char *expanded_content,
 						int *j);
 int					isenvchar(int c);
-int					handle_here_doc(t_minishell *msh, t_redir_list **redirs);
+int					fork_here_doc(t_minishell *msh, t_redir_list **redirs);
 char				*expansion_inside_here_doc(t_minishell *msh, char *content,
 						int flag);
-void				cmd_signals_init(void);
+void				child_signals_init(void);
 
 #endif

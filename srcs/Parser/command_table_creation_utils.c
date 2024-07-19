@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:24:54 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/12 15:43:55 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:01:30 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,11 @@ t_redir_list	*set_redir_values(t_minishell *msh, t_ast **root,
 				root);
 		set_here_doc_expansion(&redirs);
 		redirs->here_doc_limiter = remove_quotes(redirs->here_doc_limiter);
-		redirs->here_doc_fd = handle_here_doc(msh, &redirs);
+		if (!redirs->here_doc_limiter)
+			return (NULL);
+		redirs->here_doc_fd = fork_here_doc(msh, &redirs);
+		if (redirs->here_doc_fd == -1)
+			return (NULL);
 	}
 	else
 		redirs->file = set_redir_str(redirs->file, root);
