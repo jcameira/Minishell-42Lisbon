@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/19 16:56:23 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:19:07 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,22 @@
 
 int	set_ambiguous_redirect(char *content)
 {
-	char	*tmp;
 	int		i;
 
-	tmp = ft_strdup(content);
-	if (!tmp)
-		return (ft_putstr_fd(NO_SPACE, 2), -1);
 	i = -1;
-	while (tmp[++i])
+	while (content[++i])
 	{
-		if (tmp[i] == '"')
+		if (content[i] == '*')
+			return (1);
+		else if (content[i] == '"')
 		{
-			if (expansion_inside_quotes(tmp, i, '"', AMBIGUOUS))
+			if (expansion_inside_quotes(content, i, '"', AMBIGUOUS))
 				return (1);
 			else
-				skip_until_char(tmp, &i, '"');
+				skip_until_char(content, &i, '"');
 		}
-		else if (tmp[i] == '\'')
-			skip_until_char(tmp, &i, '\'');
+		else if (content[i] == '\'')
+			skip_until_char(content, &i, '\'');
 	}
 	return (0);
 }
@@ -66,6 +64,17 @@ char	*expand_content(t_minishell *msh, char *content)
 	return (expanded_content);
 }
 
+int	has_space(char *content)
+{
+	int		i;
+
+	i = -1;
+	while (content[++i])
+		if (content[i] == ' ')
+			return (1);
+	return (0);
+}
+
 t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 {
 	t_redir_list	*tmp_redir;
@@ -75,12 +84,16 @@ t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 	{
 		if (tmp_redir->type != HERE_DOC)
 		{
-			tmp_redir->ambiguous_redirect = set_ambiguous_redirect(tmp_redir->file);
-			if (tmp_redir->ambiguous_redirect == -1)
-				return (free_command_table(command_table), NULL);
+			tmp_redir->ambiguous_redirect = set_ambiguous_redirect(
+					tmp_redir->file);
 			tmp_redir->file = expand_content(msh, tmp_redir->file);
 			if (!tmp_redir->file)
 				return (free_command_table(command_table), NULL);
+			if (has_space(tmp_redir->file) && tmp_redir->ambiguous_redirect)
+			{
+				free_command_table(command_table);
+				return (ft_putstr_fd(AMBIGUOUS_REDIRECT, 2), NULL);
+			}
 		}
 		tmp_redir = tmp_redir->next;
 	}
