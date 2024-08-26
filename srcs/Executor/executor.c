@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 19:53:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/08/26 21:07:14 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	executor(t_minishell *msh, t_final_command_table *final_command_table)
 	{
 		if (!set_in(final_command_table) || !set_out(final_command_table))
 		{
-			final_command_table = final_command_table->next;
-			continue ;
+			//escrever error no fd 2
+			break ;
 		}
 		//executor_simplecommand(msh, final_command_table);
 		//if((final_command_table->next_symbol != AND && excev() != 1) || (final_command_table->next_symbol != OR && excev() == 1))
@@ -60,19 +60,30 @@ void	executor(t_minishell *msh, t_final_command_table *final_command_table)
 
 int	set_in(t_final_command_table *final_command_table)
 {
-	t_final_command_table	*tmp;
-
-	tmp = final_command_table;
-	while (final_command_table)
-	{
-		if (final_command_table->here_doc_fd > -1)
-			here_doc_init(argv[2], info);
-		else
-			info->infile_fd = open(argv[1], O_RDONLY);
-	}
+	if (final_command_table->in_type == NO_TYPE)
+		final_command_table->infile_fd = -2;
+	else if (final_command_table->in_type == INFILE)
+		final_command_table->infile_fd = open(final_command_table->infile,
+			O_RDONLY);
+	if (final_command_table->infile == -1)
+		return (0);
+	return (1);
 }
 
 int	set_out(t_final_command_table *final_command_table)
+{
+	if (final_command_table->out_type == NO_TYPE)
+		final_command_table->outfile_fd = -2;
+	else if (final_command_table->out_type == OUTFILE)
+		final_command_table->outfile_fd = open(final_command_table->outfile,
+			O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	else if (final_command_table->out_type == APPEND)
+		final_command_table->outfile_fd = open(final_command_table->outfile,
+			O_CREAT | O_APPEND | O_WRONLY, 0644);
+	if (final_command_table->outfile == -1)
+		return (0);
+	return (1);
+}
 
 //void	executor_simplecommand(t_minishell *msh,
 //	t_final_command_table *final_command_table)
