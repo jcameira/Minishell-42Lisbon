@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/19 18:14:30 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/26 19:53:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,49 @@
 void	executor(t_minishell *msh, t_final_command_table *final_command_table)
 {
 	(void)msh;
-	while (t_final_command_table->simplecmd)
+	while (final_command_table->simplecmd)
 	{
-		executor_simplecommand(t_minishell *msh, t_final_command_table *final_command_table);
-		if((t_final_command_table->next_symbol != AND && excev()!=1) ||(t_final_command_table->next_symbol != OR && excev()==1))
-			//sair
-		t_final_command_table = t_final_command_table->next;
+		if (!set_in(final_command_table) || !set_out(final_command_table))
+		{
+			final_command_table = final_command_table->next;
+			continue ;
+		}
+		//executor_simplecommand(msh, final_command_table);
+		//if((final_command_table->next_symbol != AND && excev() != 1) || (final_command_table->next_symbol != OR && excev() == 1))
+		//	//sair
+		//final_command_table = final_command_table->next;
 	}
 	free_f_command_table(final_command_table);
 }
 
-void executor_simplecommand(t_minishell *msh, t_final_command_table *final_command_table)
+int	set_in(t_final_command_table *final_command_table)
 {
-	while (t_final_command_table->simplecmd)
+	t_final_command_table	*tmp;
+
+	tmp = final_command_table;
+	while (final_command_table)
 	{
-		//executar singlecomand pipex do joao bonus
-		if(t_final_command_table->next_symbol != PIPE)
-			break;
+		if (final_command_table->here_doc_fd > -1)
+			here_doc_init(argv[2], info);
+		else
+			info->infile_fd = open(argv[1], O_RDONLY);
 	}
 }
+
+int	set_out(t_final_command_table *final_command_table)
+
+//void	executor_simplecommand(t_minishell *msh,
+//	t_final_command_table *final_command_table)
+//{
+//	int	in_pipe[2];
+//	int	out_pipe[2];
+//
+//	
+//	//while (final_command_table->simplecmd)
+//	//{
+//	//	//executar singlecomand pipex do joao bonus
+//	//	if(final_command_table->next_symbol != PIPE)
+//	//		break;
+//	//}
+//		
+//}

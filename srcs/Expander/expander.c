@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/19 17:19:07 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:09:25 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,8 @@ void	expander(t_minishell *msh, t_command_table *command_table)
 	}
 	print_cmd_table(command_table);
 	final_command_table = create_final_cmd_table(command_table);
-	executor(msh, final_command_table);
+	printf("In_type -> %d\n", final_command_table->in_type);
+	printf("Here_doc_limiter -> %s\n", final_command_table->infile);
+	printf("Here_doc_fd -> %d\n", final_command_table->here_doc_fd);
+	//executor(msh, final_command_table);
 }
