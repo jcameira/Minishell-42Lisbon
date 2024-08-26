@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 21:07:14 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:00:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,23 @@
 
 void	executor(t_minishell *msh, t_final_command_table *final_command_table)
 {
-	(void)msh;
+	int	in_pipe[2];
+	int	out_pipe[2];
+	
+	if (pipe(in_pipe) == -1 || pipe(out_pipe) == -1 )
+	{
+		free_f_command_table(final_command_table);
+		return (ft_putstr(OPEN_PIPE_ERROR, 2));
+	}
 	while (final_command_table->simplecmd)
 	{
 		if (!set_in(final_command_table) || !set_out(final_command_table))
-		{
-			//escrever error no fd 2
 			break ;
-		}
-		//executor_simplecommand(msh, final_command_table);
+		if (final_command_table->infile_fd == -2 || (final_command_table->previous_symbol != PIPE))
+			final_command_table->infile_fd = in_pipe[READ];
+		if (final_command_table->outfile_fd == -2 || (final_command_table->next_symbol != PIPE))
+			final_command_table->outfile_fd = out_pipe[WRITE];	
+		executor_simplecommand(msh, final_command_table);
 		//if((final_command_table->next_symbol != AND && excev() != 1) || (final_command_table->next_symbol != OR && excev() == 1))
 		//	//sair
 		//final_command_table = final_command_table->next;
@@ -66,7 +74,7 @@ int	set_in(t_final_command_table *final_command_table)
 		final_command_table->infile_fd = open(final_command_table->infile,
 			O_RDONLY);
 	if (final_command_table->infile == -1)
-		return (0);
+		return (ft_putstr(OPEN_IN_ERROR, 2), 0);
 	return (1);
 }
 
@@ -81,15 +89,14 @@ int	set_out(t_final_command_table *final_command_table)
 		final_command_table->outfile_fd = open(final_command_table->outfile,
 			O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (final_command_table->outfile == -1)
-		return (0);
+		return (ft_putstr(OPEN_OUT_ERROR, 2), 0);
 	return (1);
 }
 
 //void	executor_simplecommand(t_minishell *msh,
 //	t_final_command_table *final_command_table)
 //{
-//	int	in_pipe[2];
-//	int	out_pipe[2];
+
 //
 //	
 //	//while (final_command_table->simplecmd)
