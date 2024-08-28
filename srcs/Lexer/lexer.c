@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/06/17 14:53:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:42:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	print_list(t_token_list *token_list)
 	}
 }
 
-void	lexer(t_minishell *msh, char *line)
+int	lexer(t_minishell *msh, char *line)
 {
 	t_token_list	*token_list;
 
@@ -86,5 +86,5 @@ void	lexer(t_minishell *msh, char *line)
 	//print_list(token_list);
 	if (check_syntax_errors(token_list))
 		return (free_token_list(token_list));
-	parser(msh, token_list);
+	return(parser(msh, token_list));
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/08/26 21:38:54 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/26 22:45:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 
 # define READ 0
 # define WRITE 1
+
+# define EXIT_SUCCESS 0
+# define EXIT_FAILURE 1
 
 typedef enum s_redir_type
 {

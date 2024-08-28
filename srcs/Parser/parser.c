@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/12 15:38:36 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:43:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	print_cmd_table(t_command_table *command_table)
 	}
 }
 
-void	parser(t_minishell *msh, t_token_list *token_list)
+int	parser(t_minishell *msh, t_token_list *token_list)
 {
 	t_ast			*root;
 	t_command_table	*command_table;
@@ -156,5 +156,5 @@ void	parser(t_minishell *msh, t_token_list *token_list)
 		return (free_ast(root));
 	print_cmd_table(command_table);
 	free_ast(root);
-	expander(msh, command_table);
+	return(expander(msh, command_table));
 }

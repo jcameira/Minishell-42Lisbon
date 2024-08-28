@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/10 21:06:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:44:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ void	interactive_handler(int sig);
 void	cmd_handler(int sig);
 void	exit_shell(t_minishell *msh);
 void	bubble_sort(char **matrix);
-void	lexer(t_minishell *msh, char *line);
+int		lexer(t_minishell *msh, char *line);
 
 #endif
