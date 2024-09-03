@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 22:44:10 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/03 18:57:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,13 @@ typedef enum s_table_node_type
 	TABLE_SUBSHELL
 }				t_table_node_type;
 
-typedef enum s_next_symbol
+typedef enum s_symbol
 {
 	NO_SYMBOL = -1,
 	PIPE,
 	AND,
 	OR
-}				t_next_symbol;
+}				t_symbol;
 
 typedef struct s_simplecmd
 {
@@ -100,7 +100,8 @@ typedef struct s_final_command_table
 	t_redir_type					out_type;
 	char							*outfile;
 	int								ambiguous_redirect;
-	t_next_symbol					next_symbol;
+	t_symbol						previous_symbol;
+	t_symbol						next_symbol;
 	struct s_final_command_table	*next;
 }				t_final_command_table;
 
@@ -151,12 +152,10 @@ t_final_command_table	*set_final_redirs(t_final_command_table	*new_table_node,
 void					free_redir_list(t_redir_list *redirs);
 void					free_f_command_table(t_final_command_table *cmd_table);
 t_simplecmd				*simplecmdcpy(t_simplecmd *simplecmd);
-t_next_symbol			check_next_symbol(t_command_table *next_node);
+t_symbol				check_next_symbol(t_command_table *next_node);
 char					**arrdup(char **array);
-void					executor(t_minishell *msh,
+int						executor(t_minishell *msh,
 							t_final_command_table *final_command_table);
 t_final_command_table	*create_final_cmd_table(t_command_table *command_table);
 void					skip_until_char(char *line, int *i, char c);
-int						executor(t_minishell *msh,
-							t_final_command_table *final_command_table);
 #endif

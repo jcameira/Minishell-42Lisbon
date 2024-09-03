@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 00:37:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 18:49:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/03 16:51:58 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ t_simplecmd	*simplecmdcpy(t_simplecmd *simplecmd)
 	return (new_simplecmd);
 }
 
-t_next_symbol	check_next_symbol(t_command_table *next_node)
+t_symbol	check_next_symbol(t_command_table *next_node)
 {
 	if (!next_node)
 		return (NO_SYMBOL);

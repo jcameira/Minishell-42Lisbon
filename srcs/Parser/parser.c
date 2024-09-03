@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 22:43:01 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/03 18:56:39 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,12 +148,12 @@ int	parser(t_minishell *msh, t_token_list *token_list)
 	(void)msh;
 	root = add_ast_node(&token_list, 0);
 	if (!root)
-		return ;
+		return (-1);
 	print_ast(root);
 	command_table = NULL;
 	create_command_table(msh, root, &command_table);
 	if (!command_table)
-		return (free_ast(root));
+		return (free_ast(root), -1);
 	print_cmd_table(command_table);
 	free_ast(root);
 	return(expander(msh, command_table));

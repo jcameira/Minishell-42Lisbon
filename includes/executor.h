@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/08/26 22:45:00 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/03 19:03:34 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@
 # include <errno.h>
 # include <libft.h>
 
+# define DEFAULT_CMD_PATH "/usr/bin/"
+
 # define OPEN_IN_ERROR "Error opening infile '\n"
 # define OPEN_OUT_ERROR "Error opening outfile '\n"
+# define OPEN_PIPE_ERROR "Error opening pipe '\n"
 
 # define READ 0
 # define WRITE 1
@@ -39,19 +42,28 @@ typedef enum s_redir_type
 	HERE_DOC
 }				t_redir_type;
 
-typedef enum s_next_symbol
+typedef enum s_symbol
 {
 	NO_SYMBOL = -1,
 	PIPE,
 	AND,
 	OR
-}				t_next_symbol;
+}				t_symbol;
 
 typedef struct s_simplecmd
 {
 	int		arg_nbr;
 	char	**arg_arr;
 }				t_simplecmd;
+
+typedef struct s_minishell
+{
+	char				**envp;
+	char				*prompt;
+	int					original_stdin;
+	int					original_stdout;
+	int					original_stderr;
+}				t_minishell;
 
 typedef struct s_final_command_table
 {
@@ -65,7 +77,8 @@ typedef struct s_final_command_table
 	char							*outfile;
 	int								outfile_fd;
 	int								ambiguous_redirect;
-	t_next_symbol					next_symbol;
+	t_symbol						previous_symbol;
+	t_symbol						next_symbol;
 	struct s_final_command_table	*next;
 }				t_final_command_table;
 
