@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 22:42:14 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/03 18:56:55 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	expander(t_minishell *msh, t_command_table *command_table)
 				tmp_table->simplecmd->arg_arr[i] = expand_content(msh,
 						tmp_table->simplecmd->arg_arr[i]);
 				if (!tmp_table->simplecmd->arg_arr[i])
-					return (free_command_table(command_table));
+					return (free_command_table(command_table), -1);
 			}
 		}
 		if (tmp_table->redirs->file || tmp_table->redirs->here_doc_limiter)

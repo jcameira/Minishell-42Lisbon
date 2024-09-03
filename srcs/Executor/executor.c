@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 23:14:52 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/03 19:05:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,59 +40,71 @@
 
 #include <executor.h>
 
-int	executor(t_minishell *msh, t_final_command_table *final_command_table)
+void	child(t_minishell *msh, t_final_command_table *final_command_table)
 {
-	int	pipeline_start;
-	int	pipeline_size;
-	pid_t *pid;
-	int	in_pipe[2];
-	int	out_pipe[2];
-	int i;
-	
-	if (pipe(in_pipe) == -1 || pipe(out_pipe) == -1)
-	{
-		free_f_command_table(final_command_table);
-		return (ft_putstr(OPEN_PIPE_ERROR, 2));
-	}
-	pipeline_start = 1;
-	while (final_command_table->simplecmd)
-	{
-		if (pipeline_start)
-		{
-			pipeline_size = get_pipeline_size(final_command_table);
-			pipeline_start = !pipeline_start;
-			pid = malloc(sizeof (pid_t) * pipeline_size);
-			if (!pid)
-				return(EXIT_FAILURE);
-			i = 0;
-		}
-		if (!set_in(final_command_table) || !set_out(final_command_table))
-			break ;
-		if (final_command_table->infile_fd == -2 || (final_command_table->previous_symbol != PIPE))
-			final_command_table->infile_fd = in_pipe[READ];
-		if (final_command_table->outfile_fd == -2 || (final_command_table->next_symbol != PIPE))
-			final_command_table->outfile_fd = out_pipe[WRITE];
-		executor_simplecommand(msh, final_command_table, pid, &i);
-		close(in_pipe[READ]);
-		close(in_pipe[WRITE]);
-		in_pipe = out_pipe;
-		if (pipe(out_pipe) == -1)
-		{
-			free_f_command_table(final_command_table);
-			return (ft_putstr(OPEN_PIPE_ERROR, 2));
-		}
-		i++;
-		final_command_table = final_command_table->next;
-	}
-	
-	free_f_command_table(final_command_table);
-	return ();
+	char	*path;
+
+	dup2(final_command_table->infile_fd, 0);
+	dup2(final_command_table->outfile_fd, 1);
+	if (!strncmp(final_command_table->simplecmd->arg_arr[0], "./", 2))
+		path = final_command_table->simplecmd->arg_arr[0];
+	else if (!msh->envp)
+		path = ft_strjoin(DEFAULT_CMD_PATH,
+				final_command_table->simplecmd->arg_arr[0]);
+	else
+		path = find_cmd_path(msh->envp,
+				final_command_table->simplecmd->arg_arr[0]);
+	execute_cmd_bonus(info, path, final_command_table->simplecmd->arg_arr, msh->envp);
 }
 
-int get_pipeline_size(t_final_command_table *final_command_table);
+void	executor_simplecommand(t_minishell *msh,
+	t_final_command_table *final_command_table, pid_t *pid, int *i)
 {
-	int	size;
-	t_final_command_table *tmp;
+			//if((final_command_table->next_symbol != AND && excev() != 1) || (final_command_table->next_symbol != OR && excev() == 1))
+		//	//sair
+
+		(pid)[*i] = fork();
+		if ((pid)[*i] == 0)
+			child(msh, final_command_table);
+
+//	//	//executar singlecomand pipex do joao bonus
+//	//	if(final_command_table->next_symbol != PIPE)
+//	//		break;
+//	//}
+//		
+}
+
+int	set_in(t_final_command_table *final_command_table)
+{
+	if (final_command_table->in_type == NO_TYPE)
+		final_command_table->infile_fd = -2;
+	else if (final_command_table->in_type == INFILE)
+		final_command_table->infile_fd = open(final_command_table->infile,
+				O_RDONLY);
+	if (final_command_table->infile_fd == -1)
+		return (ft_putstr_fd(OPEN_IN_ERROR, 2), 0);
+	return (1);
+}
+
+int	set_out(t_final_command_table *final_command_table)
+{
+	if (final_command_table->out_type == NO_TYPE)
+		final_command_table->outfile_fd = -2;
+	else if (final_command_table->out_type == OUTFILE)
+		final_command_table->outfile_fd = open(final_command_table->outfile,
+				O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	else if (final_command_table->out_type == APPEND)
+		final_command_table->outfile_fd = open(final_command_table->outfile,
+				O_CREAT | O_APPEND | O_WRONLY, 0644);
+	if (final_command_table->outfile_fd == -1)
+		return (ft_putstr_fd(OPEN_OUT_ERROR, 2), 0);
+	return (1);
+}
+
+int	get_pipeline_size(t_final_command_table *final_command_table)
+{
+	int						size;
+	t_final_command_table	*tmp;
 
 	size = 0;
 	tmp = final_command_table;
@@ -104,58 +116,53 @@ int get_pipeline_size(t_final_command_table *final_command_table);
 	return (size);
 }
 
-int	set_in(t_final_command_table *final_command_table)
+int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 {
-	if (final_command_table->in_type == NO_TYPE)
-		final_command_table->infile_fd = -2;
-	else if (final_command_table->in_type == INFILE)
-		final_command_table->infile_fd = open(final_command_table->infile,
-			O_RDONLY);
-	if (final_command_table->infile == -1)
-		return (ft_putstr(OPEN_IN_ERROR, 2), 0);
-	return (1);
-}
+	int	pipeline_start;
+	int	pipeline_size;
+	pid_t *pid;
+	int	in_pipe[2];
+	int	out_pipe[2];
+	int i;
 
-int	set_out(t_final_command_table *final_command_table)
-{
-	if (final_command_table->out_type == NO_TYPE)
-		final_command_table->outfile_fd = -2;
-	else if (final_command_table->out_type == OUTFILE)
-		final_command_table->outfile_fd = open(final_command_table->outfile,
-			O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	else if (final_command_table->out_type == APPEND)
-		final_command_table->outfile_fd = open(final_command_table->outfile,
-			O_CREAT | O_APPEND | O_WRONLY, 0644);
-	if (final_command_table->outfile == -1)
-		return (ft_putstr(OPEN_OUT_ERROR, 2), 0);
-	return (1);
-}
-
-void	executor_simplecommand(t_minishell *msh, t_final_command_table *final_command_table, pid_t *pid, int *i)
-{
-			//if((final_command_table->next_symbol != AND && excev() != 1) || (final_command_table->next_symbol != OR && excev() == 1))
-		//	//sair
-
-		(pid)[i] = fork();
-		if ((pid)[i] == 0)
-			child(msh, final_command_table);
-
-//	//	//executar singlecomand pipex do joao bonus
-//	//	if(final_command_table->next_symbol != PIPE)
-//	//		break;
-//	//}
-//		
-}
-void child(t_minishell *msh, t_final_command_table *final_command_table)
-{
-	dup2(final_command_table->infile_fd, 0);
-	dup2(final_command_table->outfile_fd, 1);
-
-	if (!strncmp(cmd_args[0], "./", 2))
-		path = cmd_args[0];
-	else if (!(*envp))
-		path = ft_strjoin(DEFAULT_CMD_PATH, cmd_args[0]);
-	else
-		path = find_cmd_path(envp, cmd_args[0]);
-	execute_cmd_bonus(info, path, cmd_args, envp);
+	if (pipe(in_pipe) == -1 || pipe(out_pipe) == -1)
+	{
+		free_f_command_table(final_command_table);
+		return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
+	}
+	pipeline_start = 1;
+	while (final_command_table->simplecmd)
+	{
+		if (pipeline_start)
+		{
+			pipeline_size = get_pipeline_size(final_command_table);
+			pipeline_start = !pipeline_start;
+			pid = malloc(sizeof (pid_t) * pipeline_size);
+			if (!pid)
+				return (EXIT_FAILURE);
+			i = 0;
+		}
+		if (!set_in(final_command_table) || !set_out(final_command_table))
+			break ;
+		if (final_command_table->infile_fd == -2
+			|| (final_command_table->previous_symbol != PIPE))
+			final_command_table->infile_fd = in_pipe[READ];
+		if (final_command_table->outfile_fd == -2
+			|| (final_command_table->next_symbol != PIPE))
+			final_command_table->outfile_fd = out_pipe[WRITE];
+		executor_simplecommand(msh, final_command_table, pid, &i);
+		close(in_pipe[READ]);
+		close(in_pipe[WRITE]);
+		in_pipe[WRITE] = out_pipe[WRITE];
+		in_pipe[READ] = out_pipe[READ];
+		if (pipe(out_pipe) == -1)
+		{
+			free_f_command_table(final_command_table);
+			return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
+		}
+		i++;
+		final_command_table = final_command_table->next;
+	}
+	free_f_command_table(final_command_table);
+	return ();
 }

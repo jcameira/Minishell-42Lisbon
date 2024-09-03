@@ -6,13 +6,14 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 18:57:32 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/12 15:42:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:58:31 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expander.h>
 
-t_final_command_table	*new_f_cmd_table_node(t_command_table *command_table)
+t_final_command_table	*new_f_cmd_table_node(t_command_table *command_table,
+	t_symbol previous_symbol)
 {
 	t_final_command_table	*new_table_node;
 
@@ -27,6 +28,7 @@ t_final_command_table	*new_f_cmd_table_node(t_command_table *command_table)
 	if (!new_table_node)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	free_redir_list(command_table->redirs);
+	new_table_node->previous_symbol = previous_symbol;
 	new_table_node->next_symbol = check_next_symbol(command_table->next);
 	new_table_node->next = NULL;
 	return (new_table_node);
@@ -62,17 +64,20 @@ t_final_command_table	*create_final_cmd_table(t_command_table *command_table)
 {
 	t_final_command_table	*final_command_table;
 	t_final_command_table	*new_table_node;
+	t_symbol				previous_symbol;
 	t_command_table			*tmp;
 
 	final_command_table = NULL;
+	previous_symbol = NO_SYMBOL;
 	while (command_table)
 	{
-		new_table_node = new_f_cmd_table_node(command_table);
+		new_table_node = new_f_cmd_table_node(command_table, previous_symbol);
 		if (!new_table_node)
 		{
 			free_f_command_table(final_command_table);
 			return (free_command_table(command_table), NULL);
 		}
+		previous_symbol = new_table_node->next_symbol;
 		tmp = command_table->next;
 		free(command_table);
 		command_table = tmp;
