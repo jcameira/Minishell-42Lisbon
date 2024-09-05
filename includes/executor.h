@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/03 19:03:34 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/05 02:25:48 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_final_command_table
 {
 	int								subshell_level;
 	t_simplecmd						*simplecmd;
+	int								(*builtin)(t_minishell *, t_simplecmd *);
 	t_redir_type					in_type;
 	char							*infile;
 	int								infile_fd;

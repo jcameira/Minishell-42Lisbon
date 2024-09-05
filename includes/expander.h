@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/03 18:57:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/05 02:29:58 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,20 @@ typedef struct s_command_table
 	struct s_command_table	*next;
 }				t_command_table;
 
+typedef struct s_minishell
+{
+	char				**envp;
+	char				*prompt;
+	int					original_stdin;
+	int					original_stdout;
+	int					original_stderr;
+}				t_minishell;
+
 typedef struct s_final_command_table
 {
 	int								subshell_level;
 	t_simplecmd						*simplecmd;
+	int								(*builtin)(t_minishell *, t_simplecmd *);
 	t_redir_type					in_type;
 	char							*infile;
 	int								here_doc_fd;
@@ -104,15 +114,6 @@ typedef struct s_final_command_table
 	t_symbol						next_symbol;
 	struct s_final_command_table	*next;
 }				t_final_command_table;
-
-typedef struct s_minishell
-{
-	char				**envp;
-	char				*prompt;
-	int					original_stdin;
-	int					original_stdout;
-	int					original_stderr;
-}				t_minishell;
 
 void					free_command_table(t_command_table *command_table);
 void					print_cmd_table(t_command_table *command_table);
@@ -158,4 +159,7 @@ int						executor(t_minishell *msh,
 							t_final_command_table *final_command_table);
 t_final_command_table	*create_final_cmd_table(t_command_table *command_table);
 void					skip_until_char(char *line, int *i, char c);
+int						(*builtin_arr(char *command))(t_minishell *msh,
+							t_simplecmd *cmd);
+
 #endif
