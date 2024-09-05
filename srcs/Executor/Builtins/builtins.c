@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:46:55 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/13 15:52:35 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/09/05 02:30:03 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <builtins.h>
 
-int	(*buitin_arr(char *command))(t_minishell *msh, t_simplecmd *cmd)
+int	(*builtin_arr(char *command))(t_minishell *msh, t_simplecmd *cmd)
 {
 	static void	*builtin[7][2] = {
 	{"cd", mini_cd},
