@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/19 14:14:23 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/09 21:08:50 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	fork_here_doc(t_minishell *msh, t_redir_list **redirs)
 	int		fd[2];
 
 	if (pipe(fd) < 0)
-		return (ft_putstr_fd(PIPE_ERROR, 2), -1);
+		return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
 	fork_here_doc = fork();
 	if (fork_here_doc < 0)
 		return (ft_putstr_fd(FORK_ERROR, 2), -1);
