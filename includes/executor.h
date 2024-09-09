@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/05 02:25:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/09 21:07:17 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 
 # define DEFAULT_CMD_PATH "/usr/bin/"
 
-# define OPEN_IN_ERROR "Error opening infile '\n"
-# define OPEN_OUT_ERROR "Error opening outfile '\n"
-# define OPEN_PIPE_ERROR "Error opening pipe '\n"
+# define OPEN_IN_ERROR "Error opening infile\n"
+# define OPEN_OUT_ERROR "Error opening outfile\n"
+# define OPEN_PIPE_ERROR "Error opening pipe\n"
 
 # define READ 0
 # define WRITE 1

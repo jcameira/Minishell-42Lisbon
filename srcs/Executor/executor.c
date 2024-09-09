@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/03 19:05:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/09 21:59:31 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,28 @@
 
 #include <executor.h>
 
+void	execute_cmd_bonus(t_pipe_bonus_info *info, char *path, char **cmd_args,
+			char **envp)
+{
+	if (!path || access(path, 0))
+	{
+		close_everything_bonus(info);
+		write_command_error_bonus(info, cmd_args);
+	}
+	if (execve(path, cmd_args, envp) < 0)
+	{
+		execute_error_bonus(info, cmd_args);
+		exit(errno);
+	}
+}
+
 void	child(t_minishell *msh, t_final_command_table *final_command_table)
 {
 	char	*path;
 
 	dup2(final_command_table->infile_fd, 0);
 	dup2(final_command_table->outfile_fd, 1);
-	if (!strncmp(final_command_table->simplecmd->arg_arr[0], "./", 2))
+	if (access(final_command_table->simplecmd->arg_arr[0], X_OK))
 		path = final_command_table->simplecmd->arg_arr[0];
 	else if (!msh->envp)
 		path = ft_strjoin(DEFAULT_CMD_PATH,
@@ -63,6 +78,8 @@ void	executor_simplecommand(t_minishell *msh,
 			//if((final_command_table->next_symbol != AND && excev() != 1) || (final_command_table->next_symbol != OR && excev() == 1))
 		//	//sair
 
+		if (final_command_table->builtin)
+			return (final_command_table->builtin(msh, final_command_table->simplecmd));
 		(pid)[*i] = fork();
 		if ((pid)[*i] == 0)
 			child(msh, final_command_table);
@@ -163,6 +180,11 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 		i++;
 		final_command_table = final_command_table->next;
 	}
+	i = -1;
+	while (++i < info.cmd_num - 1)
+		waitpid((info.pid)[i], NULL, 0);
+	waitpid((info.pid)[info.cmd_num - 1], &status, 0);
 	free_f_command_table(final_command_table);
-	return ();
+	free_everything_bonus(&info);
+	return (WEXITSTATUS(status));
 }

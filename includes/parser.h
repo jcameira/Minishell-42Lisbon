@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/08/26 22:44:15 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/09 21:07:40 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@
 # define NO_SPACE "No more space left in device\n"
 # define NO_HERE_DOC_LINE "\nminishell: warning: here-document at line %d \
 delimited by end-of-file (wanted `%s')"
-# define PIPE_ERROR "Couldn't open pipe\n"
-# define FORK_ERROR "Couldn't fork\n"
+# define OPEN_PIPE_ERROR "Error opening pipe\n"
+# define FORK_ERROR "Error creating fork\n"
 
 # define PRINT_NO_TYPE	"NO_TYPE"
 # define PRINT_AND	"AND"
