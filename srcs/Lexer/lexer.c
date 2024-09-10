@@ -6,37 +6,9 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/03 18:56:25 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:16:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//tokens to be searched for in order of priority
-//()
-//&&
-//||
-//|
-//<
-//<<
-//>
-//>>
-
-//->check for initial syntax errors in the line - DONE
-//->if there is anything in parentesis open a subshell and send it there to be
-//executed - DON'T DO HERE
-//->wait for the subshell to finish execution before continuing - DON'T DO HERE
-//->create a list of tokens DONE
-//->read through the entire line looking for one of these tokens, then assign
-//it to a node and send everything to the left of the token to be veryfied on
-//the left node, and send everything to the right of the token to be verified on
-//the right node - IN PARSER DUMB FUCK - DONE
-//->handle the presence of parentesis by opening a subshell and sending
-//everything inside the parentesis to the lexer of said subshell to start the
-//parsing process - IN EXECUTOR DUMB FUCK
-//->preferably handle quotes here, or at least any possible errors from unclosed
-//quotes - HANDLED I THINK
-//->when there is no other recognizible tokens to be found, assign the remaining
-//words to a node and send the ast to the parser to finish parsing - IN PARSER
-//DUMB FUCK - DONE
 
 #include <lexer.h>
 

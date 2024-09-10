@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/09 21:07:17 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:56:36 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,15 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <string.h>
+# include <sys/wait.h>
 # include <errno.h>
 # include <libft.h>
 
 # define DEFAULT_CMD_PATH "/usr/bin/"
+
+# define STDIN_FD 0
+# define STDOUT_FD 1
+# define STDERR_FD 2
 
 # define OPEN_IN_ERROR "Error opening infile\n"
 # define OPEN_OUT_ERROR "Error opening outfile\n"
@@ -35,7 +40,7 @@
 
 typedef enum s_redir_type
 {
-	NO_TYPE = -1,
+	NO_REDIR = -1,
 	INFILE,
 	OUTFILE,
 	APPEND,

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/09 22:01:13 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:05:50 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@
 # define SHLVL "SHLVL="
 # define SET_SHLVL "SHLVL=1"
 # define PWD "PWD="
+
+# define STDIN_FD 0
+# define STDOUT_FD 1
+# define STDERR_FD 2
 
 # define WRONG_ARG_N "Minishell needs to be executed with no additional \
 arguments.\n"

@@ -6,51 +6,66 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/09 21:59:31 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:33:18 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//->just execute the damn thing, need to think of a much more computation light
-//way to do it then what was done in pipex, we can't just open a million pipes
-//all at the same time for example
-
-
-
-//1. Recebe tabela final (que é uma lista). A tabela já tem os comandos pela ordem que devem ser executados (atenção &&, || e |)
-//2. Executar pipeline
-//2.1 Loop through commands
-//2.2 Check if next_symbol is pipe, if yes then pipe(), (only have 2 open pipes max)
-//2.3 Fork() to execute command
-//2.4 Check if there are in and/or out redirections
-//2.5 Open necessary files, check if they were successful
-//2.6 dup2() with those fd's (if no in or out fd's use appropriate pipe fd's (if first command read from input, if last command write to output))
-//2.7 se é built in ou não. Se se sim chamo buitin_arr se não execve.
-//2.8 If execve, first check if the command word is  viable command
-//2.9 Save last commands exit code
-
-//3. Executar && ou ||
-//3.1 if next_symbol is &&
-//3.1.1 if last command from last pipeline failed, stop here
-//3.1.2 if last command from last pipeline success, execute go back to point 2.
-//3.2 if next_symbol is ||
-//3.2.1 if last command from last pipeline success, stop here
-//3.2.2 if last command from last pipeline failed, execute go back to point 2.
-
-//4. clean up everything necessary (no need to cleanup anything that succeeds in execve, but everything else yes)
-
 #include <executor.h>
 
-void	execute_cmd_bonus(t_pipe_bonus_info *info, char *path, char **cmd_args,
-			char **envp)
+char	*write_command_path(char **cmd_paths, char *cmd)
+{
+	int		i;
+	char	*path;
+	char	*complete_path;
+
+	i = -1;
+	while (cmd_paths[++i])
+	{
+		path = ft_strjoin(cmd_paths[i], "/");
+		complete_path = ft_strjoin(path, cmd);
+		if (!access(complete_path, 0))
+		{
+			//free_cmds(cmd_paths);
+			return (complete_path);
+		}
+		free(path);
+		free(complete_path);
+	}
+	//free_cmds(cmd_paths);
+	if (!access(cmd, 0))
+		return (cmd);
+	return (NULL);
+}
+
+char	*find_cmd_path(char **envp, char *cmd)
+{
+	int		i;
+	char	*path;
+	char	**cmd_paths;
+
+	path = NULL;
+	i = -1;
+	while (envp[++i])
+		if (!ft_strncmp("PATH", envp[i], 4))
+			path = ft_strchr(envp[i], '/');
+	if (!path || !path[0])
+		return (NULL);
+	cmd_paths = ft_split(path, ':');
+	if (!cmd_paths)
+		exit(EXIT_FAILURE);
+	return (write_command_path(cmd_paths, cmd));
+}
+
+void	execute_cmd_bonus(char *path, char **cmd_args, char **envp)
 {
 	if (!path || access(path, 0))
 	{
-		close_everything_bonus(info);
-		write_command_error_bonus(info, cmd_args);
+		//close_everything_bonus(info);
+		//write_command_error_bonus(info, cmd_args);
 	}
 	if (execve(path, cmd_args, envp) < 0)
 	{
-		execute_error_bonus(info, cmd_args);
+		//execute_error_bonus(info, cmd_args);
 		exit(errno);
 	}
 }
@@ -59,9 +74,11 @@ void	child(t_minishell *msh, t_final_command_table *final_command_table)
 {
 	char	*path;
 
-	dup2(final_command_table->infile_fd, 0);
-	dup2(final_command_table->outfile_fd, 1);
-	if (access(final_command_table->simplecmd->arg_arr[0], X_OK))
+	if (final_command_table->infile_fd)
+		dup2(final_command_table->infile_fd, STDIN_FD);
+	if (final_command_table->outfile_fd)
+		dup2(final_command_table->outfile_fd, STDOUT_FD);
+	if (!access(final_command_table->simplecmd->arg_arr[0], X_OK))
 		path = final_command_table->simplecmd->arg_arr[0];
 	else if (!msh->envp)
 		path = ft_strjoin(DEFAULT_CMD_PATH,
@@ -69,26 +86,20 @@ void	child(t_minishell *msh, t_final_command_table *final_command_table)
 	else
 		path = find_cmd_path(msh->envp,
 				final_command_table->simplecmd->arg_arr[0]);
-	execute_cmd_bonus(info, path, final_command_table->simplecmd->arg_arr, msh->envp);
+	execute_cmd_bonus(path, final_command_table->simplecmd->arg_arr, msh->envp);
 }
 
 void	executor_simplecommand(t_minishell *msh,
 	t_final_command_table *final_command_table, pid_t *pid, int *i)
 {
-			//if((final_command_table->next_symbol != AND && excev() != 1) || (final_command_table->next_symbol != OR && excev() == 1))
-		//	//sair
-
-		if (final_command_table->builtin)
-			return (final_command_table->builtin(msh, final_command_table->simplecmd));
-		(pid)[*i] = fork();
-		if ((pid)[*i] == 0)
-			child(msh, final_command_table);
-
-//	//	//executar singlecomand pipex do joao bonus
-//	//	if(final_command_table->next_symbol != PIPE)
-//	//		break;
-//	//}
-//		
+	if (final_command_table->builtin)
+	{
+		final_command_table->builtin(msh, final_command_table->simplecmd);
+		return ;
+	}
+	(pid)[*i] = fork();
+	if ((pid)[*i] == 0)
+		child(msh, final_command_table);
 }
 
 int	set_in(t_final_command_table *final_command_table)
@@ -123,11 +134,11 @@ int	get_pipeline_size(t_final_command_table *final_command_table)
 	int						size;
 	t_final_command_table	*tmp;
 
-	size = 0;
+	size = 1;
 	tmp = final_command_table;
-	while (tmp->next_symbol == PIPE)
+	while (tmp->next_symbol && tmp->next_symbol == PIPE)
 	{
-		tmp = tmp->next_symbol;
+		tmp = tmp->next;
 		size++;
 	}
 	return (size);
@@ -135,56 +146,71 @@ int	get_pipeline_size(t_final_command_table *final_command_table)
 
 int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 {
-	int	pipeline_start;
-	int	pipeline_size;
-	pid_t *pid;
-	int	in_pipe[2];
-	int	out_pipe[2];
-	int i;
+	int						pipeline_start;
+	int						pipeline_size;
+	pid_t					*pid;
+	int						in_pipe[2];
+	int						out_pipe[2];
+	int 					i;
+	int 					status;
+	t_final_command_table	*tmp;
 
-	if (pipe(in_pipe) == -1 || pipe(out_pipe) == -1)
+	if (pipe(out_pipe) == -1)
 	{
 		free_f_command_table(final_command_table);
 		return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
 	}
 	pipeline_start = 1;
-	while (final_command_table->simplecmd)
+	tmp = final_command_table;
+	while (tmp)
 	{
 		if (pipeline_start)
 		{
-			pipeline_size = get_pipeline_size(final_command_table);
+			pipeline_size = get_pipeline_size(tmp);
 			pipeline_start = !pipeline_start;
 			pid = malloc(sizeof (pid_t) * pipeline_size);
 			if (!pid)
 				return (EXIT_FAILURE);
 			i = 0;
 		}
-		if (!set_in(final_command_table) || !set_out(final_command_table))
+		if (!set_in(tmp) || !set_out(tmp))
 			break ;
-		if (final_command_table->infile_fd == -2
-			|| (final_command_table->previous_symbol != PIPE))
-			final_command_table->infile_fd = in_pipe[READ];
-		if (final_command_table->outfile_fd == -2
-			|| (final_command_table->next_symbol != PIPE))
-			final_command_table->outfile_fd = out_pipe[WRITE];
-		executor_simplecommand(msh, final_command_table, pid, &i);
-		close(in_pipe[READ]);
-		close(in_pipe[WRITE]);
-		in_pipe[WRITE] = out_pipe[WRITE];
-		in_pipe[READ] = out_pipe[READ];
+		if (tmp->previous_symbol == PIPE
+			&& tmp->infile_fd == -2)
+			tmp->infile_fd = in_pipe[READ];
+		if (tmp->next_symbol == PIPE
+			&& tmp->outfile_fd == -2)
+			tmp->outfile_fd = out_pipe[WRITE];
+		executor_simplecommand(msh, tmp, pid, &i);
+		if (tmp->next_symbol != PIPE)
+		{
+			close(in_pipe[READ]);
+			close(in_pipe[WRITE]);
+			close(out_pipe[READ]);
+			close(out_pipe[WRITE]);
+			i = -1;
+			while (++i <= pipeline_size)
+				waitpid(pid[i], &status, 0);
+			pipeline_start = !pipeline_start;
+		}
+		else
+		{
+			close(in_pipe[READ]);
+			close(in_pipe[WRITE]);
+			in_pipe[WRITE] = out_pipe[WRITE];
+			in_pipe[READ] = out_pipe[READ];
+		}
 		if (pipe(out_pipe) == -1)
 		{
-			free_f_command_table(final_command_table);
+			free_f_command_table(tmp);
 			return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
 		}
 		i++;
-		final_command_table = final_command_table->next;
+		tmp = tmp->next;
 	}
-	i = -1;
-	while (++i < info.cmd_num - 1)
-		waitpid((info.pid)[i], NULL, 0);
-	waitpid((info.pid)[info.cmd_num - 1], &status, 0);
+	fprintf(stderr, "Here\n");
+	free(pid);
 	free_f_command_table(final_command_table);
-	free_everything_bonus(&info);
+	//free_everything_bonus(&info);
 	return (WEXITSTATUS(status));
 }

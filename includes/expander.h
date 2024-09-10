@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/05 02:29:58 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:56:29 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef enum s_quote_flag
 
 typedef enum s_redir_type
 {
-	NO_TYPE = -1,
+	NO_REDIR = -1,
 	INFILE,
 	OUTFILE,
 	APPEND,
@@ -106,9 +106,11 @@ typedef struct s_final_command_table
 	int								(*builtin)(t_minishell *, t_simplecmd *);
 	t_redir_type					in_type;
 	char							*infile;
+	int								infile_fd;
 	int								here_doc_fd;
 	t_redir_type					out_type;
 	char							*outfile;
+	int								outfile_fd;
 	int								ambiguous_redirect;
 	t_symbol						previous_symbol;
 	t_symbol						next_symbol;
