@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:28:03 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:44:11 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 12:19:34 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ char	*expand_wildcards(char *content, int len, int needs_expansion)
 {
 	char	*new_content;
 
+	new_content = NULL;
 	if (!needs_expansion)
 	{
 		new_content = malloc(sizeof(char) * (len + 1));

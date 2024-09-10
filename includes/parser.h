@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/09 21:07:40 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:55:55 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ delimited by end-of-file (wanted `%s')"
 
 typedef enum s_redir_type
 {
-	INFILE = 0,
+	NO_REDIR = -1,
+	INFILE,
 	OUTFILE,
 	APPEND,
 	HERE_DOC

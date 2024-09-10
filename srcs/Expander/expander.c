@@ -6,14 +6,9 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/03 18:56:55 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:17:35 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//->check all simple commands and redirections to see if there is anything
-//in need of expansion, in particular for the presence of '$' to expand
-//enviroment variables or '*' for wildcards
-//->send the full command table with all expansions completed to the executor
 
 #include <expander.h>
 
@@ -124,10 +119,7 @@ int	expander(t_minishell *msh, t_command_table *command_table)
 			tmp_table->redirs = expand_redirs(msh, tmp_table);
 		tmp_table = tmp_table->next;
 	}
-	print_cmd_table(command_table);
+	//print_cmd_table(command_table);
 	final_command_table = create_final_cmd_table(command_table);
-	printf("In_type -> %d\n", final_command_table->in_type);
-	printf("Here_doc_limiter -> %s\n", final_command_table->infile);
-	printf("Here_doc_fd -> %d\n", final_command_table->here_doc_fd);
 	return(executor(msh, final_command_table));
 }
