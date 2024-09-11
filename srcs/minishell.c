@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/10 17:44:01 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:27:17 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ void	msh_loop(t_minishell *msh)
 	interactive_signals_init();
 	while (1)
 	{
-		if (!isatty(0))
-			dup2(msh->original_stdin ,0);
-		if (!isatty(1))
-			dup2(msh->original_stdin ,1);
 		g_signal = 0;
 		line = readline(msh->prompt);
 		if (!line)
