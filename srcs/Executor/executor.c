@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/10 17:33:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:26:13 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,18 +97,20 @@ void	executor_simplecommand(t_minishell *msh,
 		final_command_table->builtin(msh, final_command_table->simplecmd);
 		return ;
 	}
-	(pid)[*i] = fork();
-	if ((pid)[*i] == 0)
+	pid[*i] = fork();
+	if (pid[*i] == 0)
 		child(msh, final_command_table);
 }
 
 int	set_in(t_final_command_table *final_command_table)
 {
-	if (final_command_table->in_type == NO_TYPE)
+	if (final_command_table->in_type == NO_REDIR)
 		final_command_table->infile_fd = -2;
 	else if (final_command_table->in_type == INFILE)
 		final_command_table->infile_fd = open(final_command_table->infile,
 				O_RDONLY);
+	else if (final_command_table->in_type == HERE_DOC)
+		final_command_table->infile_fd = final_command_table->here_doc_fd;
 	if (final_command_table->infile_fd == -1)
 		return (ft_putstr_fd(OPEN_IN_ERROR, 2), 0);
 	return (1);
@@ -116,7 +118,7 @@ int	set_in(t_final_command_table *final_command_table)
 
 int	set_out(t_final_command_table *final_command_table)
 {
-	if (final_command_table->out_type == NO_TYPE)
+	if (final_command_table->out_type == NO_REDIR)
 		final_command_table->outfile_fd = -2;
 	else if (final_command_table->out_type == OUTFILE)
 		final_command_table->outfile_fd = open(final_command_table->outfile,
@@ -136,7 +138,7 @@ int	get_pipeline_size(t_final_command_table *final_command_table)
 
 	size = 1;
 	tmp = final_command_table;
-	while (tmp->next_symbol && tmp->next_symbol == PIPE)
+	while (tmp->next_symbol == PIPE)
 	{
 		tmp = tmp->next;
 		size++;
@@ -155,7 +157,7 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 	int 					status;
 	t_final_command_table	*tmp;
 
-	if (pipe(out_pipe) == -1)
+	if (pipe(in_pipe) || pipe(out_pipe) == -1)
 	{
 		free_f_command_table(final_command_table);
 		return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
@@ -167,6 +169,7 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 		if (pipeline_start)
 		{
 			pipeline_size = get_pipeline_size(tmp);
+			printf("Pipeline size -> %d\n", pipeline_size);
 			pipeline_start = !pipeline_start;
 			pid = malloc(sizeof (pid_t) * pipeline_size);
 			if (!pid)
@@ -184,19 +187,27 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 		executor_simplecommand(msh, tmp, pid, &i);
 		if (tmp->next_symbol != PIPE)
 		{
-			close(in_pipe[READ]);
-			close(in_pipe[WRITE]);
-			close(out_pipe[READ]);
-			close(out_pipe[WRITE]);
+			if (in_pipe[READ])
+				close(in_pipe[READ]);
+			if (in_pipe[WRITE])
+				close(in_pipe[WRITE]);
+			if (out_pipe[READ])
+				close(out_pipe[READ]);
+			if (out_pipe[WRITE])
+				close(out_pipe[WRITE]);
 			i = -1;
-			while (++i <= pipeline_size)
+			while (++i < pipeline_size)
 				waitpid(pid[i], &status, 0);
 			pipeline_start = !pipeline_start;
+			tmp = tmp->next;
+			continue ;
 		}
 		else
 		{
-			close(in_pipe[READ]);
-			close(in_pipe[WRITE]);
+			if (in_pipe[READ])
+				close(in_pipe[READ]);
+			if (in_pipe[WRITE])
+				close(in_pipe[WRITE]);
 			in_pipe[WRITE] = out_pipe[WRITE];
 			in_pipe[READ] = out_pipe[READ];
 		}

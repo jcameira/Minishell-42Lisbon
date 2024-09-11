@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 00:36:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/12 15:39:32 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:02:33 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ void	free_f_command_table(t_final_command_table *cmd_table)
 			free(cmd_table->infile);
 		if (cmd_table->outfile)
 			free(cmd_table->outfile);
-		//if (cmd_table->here_doc_buffer)
-		//	free(cmd_table->here_doc_buffer);
+		if (cmd_table->infile_fd > -1)
+			close(cmd_table->infile_fd);
+		if (cmd_table->outfile_fd > -1)
+			close(cmd_table->outfile_fd);
+		if (cmd_table->here_doc_fd > -1)
+			close(cmd_table->here_doc_fd);
 		tmp = cmd_table->next;
 		free(cmd_table);
 		cmd_table = tmp;

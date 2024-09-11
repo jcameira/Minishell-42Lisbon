@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 00:37:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/10 14:39:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:25:24 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	check_io_files(t_final_command_table *new_table_node)
 	int	in_fd;
 	int	out_fd;
 
-	in_fd = 0;
-	out_fd = 0;
+	in_fd = -2;
+	out_fd = -2;
 	if (new_table_node->infile)
 		in_fd = open(new_table_node->infile, O_CREAT | O_TRUNC | O_RDONLY,
 				0644);
@@ -58,7 +58,17 @@ int	check_io_files(t_final_command_table *new_table_node)
 		out_fd = open(new_table_node->outfile, O_CREAT | O_APPEND | O_WRONLY,
 				0644);
 	if (in_fd == -1 || out_fd == -1)
+	{
+		if (in_fd > -1)
+			close(in_fd);
+		if (out_fd > -1)
+			close(out_fd);
 		return (0);
+	}
+	if (in_fd > -1)
+		close(in_fd);
+	if (out_fd > -1)
+		close(out_fd);
 	return (1);
 }
 
@@ -73,10 +83,10 @@ t_final_command_table	*set_final_redirs(t_final_command_table	*new_table_node,
 	while (tmp)
 	{
 		new_table_node->ambiguous_redirect = tmp->ambiguous_redirect;
-		new_table_node->in_type = NO_TYPE;
+		new_table_node->in_type = NO_REDIR;
 		new_table_node->infile = NULL;
 		new_table_node->here_doc_fd = -2;
-		new_table_node->out_type = NO_TYPE;
+		new_table_node->out_type = NO_REDIR;
 		new_table_node->outfile = NULL;
 		new_table_node = set_redir_info(new_table_node, tmp);
 		if (!new_table_node)
