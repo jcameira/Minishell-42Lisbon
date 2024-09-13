@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 00:37:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/11 15:25:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:41:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ t_final_command_table	*set_redir_info(t_final_command_table *new_table_node,
 	else if (redirs->type == OUTFILE || redirs->type == APPEND)
 	{
 		new_table_node->out_type = redirs->type;
+		if (new_table_node->outfile)
+			free(new_table_node->outfile);
 		new_table_node->outfile = ft_strdup(redirs->file);
 		if (!new_table_node->outfile)
 			return (ft_putstr_fd(NO_SPACE, 2), NULL);
@@ -49,8 +51,7 @@ int	check_io_files(t_final_command_table *new_table_node)
 	in_fd = -2;
 	out_fd = -2;
 	if (new_table_node->infile)
-		in_fd = open(new_table_node->infile, O_CREAT | O_TRUNC | O_RDONLY,
-				0644);
+		in_fd = open(new_table_node->infile, O_RDONLY);
 	if (new_table_node->outfile && new_table_node->out_type == OUTFILE)
 		out_fd = open(new_table_node->outfile, O_CREAT | O_TRUNC | O_WRONLY,
 				0644);
@@ -79,15 +80,17 @@ t_final_command_table	*set_final_redirs(t_final_command_table	*new_table_node,
 
 	if (!redirs)
 		return (new_table_node);
+	new_table_node->in_type = NO_REDIR;
+	new_table_node->infile = NULL;
+	new_table_node->infile_fd = -2;
+	new_table_node->here_doc_fd = -2;
+	new_table_node->out_type = NO_REDIR;
+	new_table_node->outfile = NULL;
+	new_table_node->outfile_fd = -2;
 	tmp = redirs;
 	while (tmp)
 	{
 		new_table_node->ambiguous_redirect = tmp->ambiguous_redirect;
-		new_table_node->in_type = NO_REDIR;
-		new_table_node->infile = NULL;
-		new_table_node->here_doc_fd = -2;
-		new_table_node->out_type = NO_REDIR;
-		new_table_node->outfile = NULL;
 		new_table_node = set_redir_info(new_table_node, tmp);
 		if (!new_table_node)
 			return (NULL);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 01:14:41 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/10 17:44:37 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:17:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@ void	free_arr(char **array)
 	free(array);
 }
 
-void	exit_shell(t_minishell *msh)
+void	exit_shell(t_minishell *msh, int exit_code)
 {
 	free_arr(msh->envp);
 	close(msh->original_stdin);
 	close(msh->original_stdout);
 	close(msh->original_stderr);
 	free(msh);
-	printf("exit\n");
-	exit(1);
+	exit(exit_code);
 }

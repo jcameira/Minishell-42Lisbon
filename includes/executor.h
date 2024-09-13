@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/10 17:56:36 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:23:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 # define STDIN_FD 0
 # define STDOUT_FD 1
 # define STDERR_FD 2
+
+# define SUCCESS 0
+# define FAILURE 1
 
 # define OPEN_IN_ERROR "Error opening infile\n"
 # define OPEN_OUT_ERROR "Error opening outfile\n"
@@ -65,6 +68,7 @@ typedef struct s_minishell
 {
 	char				**envp;
 	char				*prompt;
+	int					exit_code;
 	int					original_stdin;
 	int					original_stdout;
 	int					original_stderr;
@@ -89,5 +93,7 @@ typedef struct s_final_command_table
 }				t_final_command_table;
 
 void	free_f_command_table(t_final_command_table *command_table);
+void	free_arr(char **array);
+void	exit_shell(t_minishell *msh, int exit_code);
 
 #endif

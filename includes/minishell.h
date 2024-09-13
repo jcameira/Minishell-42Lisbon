@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/10 16:05:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:18:47 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@
 # define STDOUT_FD 1
 # define STDERR_FD 2
 
+# define SUCCESS 0
+# define FAILURE 1
+
 # define WRONG_ARG_N "Minishell needs to be executed with no additional \
 arguments.\n"
 # define NO_SPACE "No more space left in device\n"
@@ -64,7 +67,7 @@ void	free_arr(char **array);
 void	interactive_signals_init(void);
 void	interactive_handler(int sig);
 void	cmd_handler(int sig);
-void	exit_shell(t_minishell *msh);
+void	exit_shell(t_minishell *msh, int exit_code);
 void	bubble_sort(char **matrix);
 int		lexer(t_minishell *msh, char *line);
 
