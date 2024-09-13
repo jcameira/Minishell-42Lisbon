@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:24:54 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/19 14:01:30 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:12:02 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ char	*set_redir_str(char *dest, t_ast **root)
 	if ((*root)->right->type == REDIRECTION)
 	{
 		dest = ft_strdup((*root)->right->left->content);
-		(*root)->right->left->visited = 1;
+		(*root)->right->left->visited = !((*root)->right->left->visited);
 	}
 	else
 	{
 		dest = ft_strdup((*root)->right->content);
-		(*root)->right->visited = 1;
+		(*root)->right->visited = !((*root)->right->visited);
 	}
 	if (!dest)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
@@ -56,7 +56,7 @@ char	*set_redir_str(char *dest, t_ast **root)
 }
 
 t_redir_list	*set_redir_values(t_minishell *msh, t_ast **root,
-	t_redir_list *redirs)
+	t_command_table *command_table, t_redir_list *redirs)
 {
 	redirs->type = set_redir_type((*root)->content);
 	if (redirs->type == HERE_DOC)
@@ -67,7 +67,7 @@ t_redir_list	*set_redir_values(t_minishell *msh, t_ast **root,
 		redirs->here_doc_limiter = remove_quotes(redirs->here_doc_limiter);
 		if (!redirs->here_doc_limiter)
 			return (NULL);
-		redirs->here_doc_fd = fork_here_doc(msh, &redirs);
+		redirs->here_doc_fd = fork_here_doc(msh, *root, command_table, &redirs);
 		if (redirs->here_doc_fd == -1)
 			return (NULL);
 	}

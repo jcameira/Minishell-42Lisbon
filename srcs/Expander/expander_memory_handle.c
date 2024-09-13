@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 00:36:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/11 15:02:33 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:08:25 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void	free_redir_list(t_redir_list *redirs)
 			free(redirs->file);
 		if (redirs->here_doc_limiter)
 			free(redirs->here_doc_limiter);
-		//if (redirs->here_doc_buffer)
-		//	free(redirs->here_doc_buffer);
 		tmp = redirs->next;
 		free(redirs);
 		redirs = tmp;
@@ -36,6 +34,7 @@ void	free_f_command_table(t_final_command_table *cmd_table)
 
 	while (cmd_table)
 	{
+		printf("Here\n");
 		free_arr(cmd_table->simplecmd->arg_arr);
 		free(cmd_table->simplecmd);
 		if (cmd_table->infile)

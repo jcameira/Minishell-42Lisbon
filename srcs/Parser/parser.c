@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/11 15:26:34 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 20:30:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ void	print_cmd_table(t_command_table *command_table)
 		tmp_redir = command_table->redirs;
 		while (tmp_redir)
 		{
-			//if (tmp_redir->type == HERE_DOC)
-			//	printf("'<<'\n%s\nContent\n%s\n", tmp_redir->here_doc_limiter, tmp_redir->here_doc_buffer);
+			if (tmp_redir->type == HERE_DOC)
+				printf("'<<'\n%s\n", tmp_redir->here_doc_limiter);
 			if (tmp_redir->type == INFILE)
 				printf("'<'\n%s\n", tmp_redir->file);
 			else if (tmp_redir->type == APPEND)
@@ -126,6 +126,16 @@ void	print_cmd_table(t_command_table *command_table)
 	}
 }
 
+void	set_original_root(t_ast *original_root, t_ast *root)
+{
+	if (!root)
+		return ;
+	set_original_root(original_root, root->left);
+	set_original_root(original_root, root->subshell_ast);
+	set_original_root(original_root, root->right);
+	root->original_root = original_root;
+}
+
 int	parser(t_minishell *msh, t_token_list *token_list)
 {
 	t_ast			*root;
@@ -136,11 +146,12 @@ int	parser(t_minishell *msh, t_token_list *token_list)
 	if (!root)
 		return (-1);
 	//print_ast(root);
+	set_original_root(root, root);
 	command_table = NULL;
 	create_command_table(msh, root, &command_table);
 	if (!command_table)
 		return (free_ast(root), -1);
-	//print_cmd_table(command_table);
+	print_cmd_table(command_table);
 	free_ast(root);
 	return(expander(msh, command_table));
 }

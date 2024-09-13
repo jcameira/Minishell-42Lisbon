@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/10 15:50:17 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 20:51:03 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	handle_here_doc(t_minishell *msh, t_redir_list **redirs, int *fd)
 
 	line_nbr = 0;
 	child_signals_init();
+	close(fd[READ]);
 	while (true && ++line_nbr)
 	{
 		ft_putstr_fd(HERE_DOC_INDICATOR, 1);
@@ -50,13 +51,13 @@ void	handle_here_doc(t_minishell *msh, t_redir_list **redirs, int *fd)
 			break ;
 		}
 		line = expansion_inside_here_doc(msh, line, (*redirs)->expand_here_doc);
-		ft_putstr_fd(line, fd[WRITE_END]);
+		ft_putstr_fd(line, fd[WRITE]);
 		free(line);
 	}
-	exit(0);
+	close(fd[WRITE]);
 }
 
-int	fork_here_doc(t_minishell *msh, t_redir_list **redirs)
+int	fork_here_doc(t_minishell *msh, t_ast *root, t_command_table *command_table, t_redir_list **redirs)
 {
 	pid_t	fork_here_doc;
 	int		fd[2];
@@ -67,8 +68,18 @@ int	fork_here_doc(t_minishell *msh, t_redir_list **redirs)
 	if (fork_here_doc < 0)
 		return (ft_putstr_fd(FORK_ERROR, 2), -1);
 	if (fork_here_doc == 0)
+	{
 		handle_here_doc(msh, redirs, fd);
-	close(fd[WRITE_END]);
+		free_command_table(command_table);
+		if (*redirs)
+		{
+			free((*redirs)->here_doc_limiter);
+			free(*redirs);
+		}
+		free_ast(root->original_root);
+		exit_shell(msh, FAILURE);
+	}
+	close(fd[WRITE]);
 	waitpid(fork_here_doc, NULL, 0);
-	return (fd[READ_END]);
+	return (fd[READ]);
 }

@@ -6,11 +6,32 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/11 15:26:13 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:27:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <executor.h>
+
+void	free_f_command_table_node(t_final_command_table **cmd_table)
+{
+	t_final_command_table *tmp;
+
+	free_arr((*cmd_table)->simplecmd->arg_arr);
+	free((*cmd_table)->simplecmd);
+	if ((*cmd_table)->infile)
+		free((*cmd_table)->infile);
+	if ((*cmd_table)->outfile)
+		free((*cmd_table)->outfile);
+	if ((*cmd_table)->infile_fd > -1)
+		close((*cmd_table)->infile_fd);
+	if ((*cmd_table)->outfile_fd > -1)
+		close((*cmd_table)->outfile_fd);
+	if ((*cmd_table)->here_doc_fd > -1)
+		close((*cmd_table)->here_doc_fd);
+	tmp = (*cmd_table)->next;
+	free(*cmd_table);
+	*cmd_table = tmp;
+}
 
 char	*write_command_path(char **cmd_paths, char *cmd)
 {
@@ -74,10 +95,12 @@ void	child(t_minishell *msh, t_final_command_table *final_command_table)
 {
 	char	*path;
 
+	printf("%d %d\n", final_command_table->infile_fd, final_command_table->outfile_fd);
 	if (final_command_table->infile_fd)
 		dup2(final_command_table->infile_fd, STDIN_FD);
 	if (final_command_table->outfile_fd)
 		dup2(final_command_table->outfile_fd, STDOUT_FD);
+	fprintf(stderr, "%d %d\n", final_command_table->infile_fd, final_command_table->outfile_fd);
 	if (!access(final_command_table->simplecmd->arg_arr[0], X_OK))
 		path = final_command_table->simplecmd->arg_arr[0];
 	else if (!msh->envp)
@@ -89,26 +112,14 @@ void	child(t_minishell *msh, t_final_command_table *final_command_table)
 	execute_cmd_bonus(path, final_command_table->simplecmd->arg_arr, msh->envp);
 }
 
-void	executor_simplecommand(t_minishell *msh,
-	t_final_command_table *final_command_table, pid_t *pid, int *i)
-{
-	if (final_command_table->builtin)
-	{
-		final_command_table->builtin(msh, final_command_table->simplecmd);
-		return ;
-	}
-	pid[*i] = fork();
-	if (pid[*i] == 0)
-		child(msh, final_command_table);
-}
-
 int	set_in(t_final_command_table *final_command_table)
 {
-	if (final_command_table->in_type == NO_REDIR)
-		final_command_table->infile_fd = -2;
-	else if (final_command_table->in_type == INFILE)
+	printf("%d %d\n", INFILE, final_command_table->in_type);
+	if (final_command_table->in_type == INFILE)
+	{
 		final_command_table->infile_fd = open(final_command_table->infile,
 				O_RDONLY);
+	}
 	else if (final_command_table->in_type == HERE_DOC)
 		final_command_table->infile_fd = final_command_table->here_doc_fd;
 	if (final_command_table->infile_fd == -1)
@@ -118,9 +129,8 @@ int	set_in(t_final_command_table *final_command_table)
 
 int	set_out(t_final_command_table *final_command_table)
 {
-	if (final_command_table->out_type == NO_REDIR)
-		final_command_table->outfile_fd = -2;
-	else if (final_command_table->out_type == OUTFILE)
+	printf("%d %d\n", OUTFILE, final_command_table->out_type);
+	if (final_command_table->out_type == OUTFILE)
 		final_command_table->outfile_fd = open(final_command_table->outfile,
 				O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	else if (final_command_table->out_type == APPEND)
@@ -129,6 +139,30 @@ int	set_out(t_final_command_table *final_command_table)
 	if (final_command_table->outfile_fd == -1)
 		return (ft_putstr_fd(OPEN_OUT_ERROR, 2), 0);
 	return (1);
+}
+
+int	executor_simplecommand(t_minishell *msh,
+	t_final_command_table *final_command_table, pid_t *pid, int *i)
+{
+	if (final_command_table->builtin)
+	{
+		final_command_table->builtin(msh, final_command_table->simplecmd);
+		return (1);
+	}
+	pid[*i] = fork();
+	if (pid[*i] == 0)
+	{
+		
+		if (set_in(final_command_table) && set_out(final_command_table))
+			child(msh, final_command_table);
+		else
+		{
+			free_f_command_table(final_command_table);
+			free(pid);
+			return(0);
+		}
+	}
+	return(1);
 }
 
 int	get_pipeline_size(t_final_command_table *final_command_table)
@@ -157,71 +191,84 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 	int 					status;
 	t_final_command_table	*tmp;
 
-	if (pipe(in_pipe) || pipe(out_pipe) == -1)
-	{
-		free_f_command_table(final_command_table);
-		return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
-	}
+	// if (pipe(in_pipe) == -1 || pipe(out_pipe) == -1)
+	// {
+	// 	free_f_command_table(final_command_table);
+	// 	return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
+	// }
+	in_pipe[READ] = -1;
+	in_pipe[WRITE]= -1;
+	pid= NULL;
 	pipeline_start = 1;
 	tmp = final_command_table;
 	while (tmp)
 	{
+		if (pipe(out_pipe) == -1)
+		{
+			free_f_command_table(tmp);
+			return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
+		}
 		if (pipeline_start)
 		{
 			pipeline_size = get_pipeline_size(tmp);
 			printf("Pipeline size -> %d\n", pipeline_size);
 			pipeline_start = !pipeline_start;
+			if (pid)
+				free(pid);
 			pid = malloc(sizeof (pid_t) * pipeline_size);
 			if (!pid)
 				return (EXIT_FAILURE);
 			i = 0;
 		}
-		if (!set_in(tmp) || !set_out(tmp))
-			break ;
 		if (tmp->previous_symbol == PIPE
 			&& tmp->infile_fd == -2)
 			tmp->infile_fd = in_pipe[READ];
 		if (tmp->next_symbol == PIPE
 			&& tmp->outfile_fd == -2)
 			tmp->outfile_fd = out_pipe[WRITE];
-		executor_simplecommand(msh, tmp, pid, &i);
+		if (!executor_simplecommand(msh, tmp, pid, &i))
+		{
+			if (in_pipe[READ] > -1)
+				close(in_pipe[READ]);
+			if (in_pipe[WRITE] > -1)
+				close(in_pipe[WRITE]);
+			if (out_pipe[READ] > -1)
+				close(out_pipe[READ]);
+			if (out_pipe[WRITE] > -1)
+				close(out_pipe[WRITE]);
+			exit_shell(msh, FAILURE);
+		}
 		if (tmp->next_symbol != PIPE)
 		{
-			if (in_pipe[READ])
+			if (in_pipe[READ] > -1)
 				close(in_pipe[READ]);
-			if (in_pipe[WRITE])
+			if (in_pipe[WRITE] > -1)
 				close(in_pipe[WRITE]);
-			if (out_pipe[READ])
+			if (out_pipe[READ] > -1)
 				close(out_pipe[READ]);
-			if (out_pipe[WRITE])
+			if (out_pipe[WRITE] > -1)
 				close(out_pipe[WRITE]);
 			i = -1;
 			while (++i < pipeline_size)
 				waitpid(pid[i], &status, 0);
 			pipeline_start = !pipeline_start;
-			tmp = tmp->next;
-			continue ;
 		}
 		else
 		{
-			if (in_pipe[READ])
+			if (in_pipe[READ] > -1)
 				close(in_pipe[READ]);
-			if (in_pipe[WRITE])
+			if (in_pipe[WRITE] > -1)
 				close(in_pipe[WRITE]);
 			in_pipe[WRITE] = out_pipe[WRITE];
 			in_pipe[READ] = out_pipe[READ];
 		}
-		if (pipe(out_pipe) == -1)
-		{
-			free_f_command_table(tmp);
-			return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
-		}
 		i++;
-		tmp = tmp->next;
+		fprintf(stderr, "Here1\n");
+		free_f_command_table_node(&tmp);
 	}
-	fprintf(stderr, "Here\n");
+	fprintf(stderr, "Here2\n");
 	free(pid);
-	free_f_command_table(final_command_table);
+	//free_f_command_table(final_command_table);
 	//free_everything_bonus(&info);
 	return (WEXITSTATUS(status));
 }
