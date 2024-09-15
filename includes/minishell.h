@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 17:18:47 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/15 17:37:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,11 @@
 # define STDOUT_FD 1
 # define STDERR_FD 2
 
-# define SUCCESS 0
-# define FAILURE 1
+# define SUCCESS 1
+# define FAILURE 0
+
+# define EXIT_SUCCESS 0
+# define EXIT_FAILURE 1
 
 # define WRONG_ARG_N "Minishell needs to be executed with no additional \
 arguments.\n"

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 17:19:30 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/15 17:37:40 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 # define READ 0
 # define WRITE 1
 
-# define SUCCESS 0
-# define FAILURE 1
+# define SUCCESS 1
+# define FAILURE 0
 
 # define NO_SPACE "No more space left in device\n"
 # define NO_HERE_DOC_LINE "\nminishell: warning: here-document at line %d \

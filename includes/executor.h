@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/13 17:23:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/15 19:14:31 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,8 @@
 
 # define DEFAULT_CMD_PATH "/usr/bin/"
 
-# define STDIN_FD 0
-# define STDOUT_FD 1
-# define STDERR_FD 2
-
-# define SUCCESS 0
-# define FAILURE 1
+# define SUCCESS 1
+# define FAILURE 0
 
 # define OPEN_IN_ERROR "Error opening infile\n"
 # define OPEN_OUT_ERROR "Error opening outfile\n"
