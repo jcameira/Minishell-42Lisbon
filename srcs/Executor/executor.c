@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 19:27:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 19:26:08 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,10 @@ void	child(t_minishell *msh, t_final_command_table *final_command_table)
 {
 	char	*path;
 
-	printf("%d %d\n", final_command_table->infile_fd, final_command_table->outfile_fd);
 	if (final_command_table->infile_fd)
 		dup2(final_command_table->infile_fd, STDIN_FD);
 	if (final_command_table->outfile_fd)
 		dup2(final_command_table->outfile_fd, STDOUT_FD);
-	fprintf(stderr, "%d %d\n", final_command_table->infile_fd, final_command_table->outfile_fd);
 	if (!access(final_command_table->simplecmd->arg_arr[0], X_OK))
 		path = final_command_table->simplecmd->arg_arr[0];
 	else if (!msh->envp)
@@ -114,12 +112,9 @@ void	child(t_minishell *msh, t_final_command_table *final_command_table)
 
 int	set_in(t_final_command_table *final_command_table)
 {
-	printf("%d %d\n", INFILE, final_command_table->in_type);
 	if (final_command_table->in_type == INFILE)
-	{
 		final_command_table->infile_fd = open(final_command_table->infile,
 				O_RDONLY);
-	}
 	else if (final_command_table->in_type == HERE_DOC)
 		final_command_table->infile_fd = final_command_table->here_doc_fd;
 	if (final_command_table->infile_fd == -1)
@@ -129,7 +124,6 @@ int	set_in(t_final_command_table *final_command_table)
 
 int	set_out(t_final_command_table *final_command_table)
 {
-	printf("%d %d\n", OUTFILE, final_command_table->out_type);
 	if (final_command_table->out_type == OUTFILE)
 		final_command_table->outfile_fd = open(final_command_table->outfile,
 				O_CREAT | O_TRUNC | O_WRONLY, 0644);
@@ -144,15 +138,14 @@ int	set_out(t_final_command_table *final_command_table)
 int	executor_simplecommand(t_minishell *msh,
 	t_final_command_table *final_command_table, pid_t *pid, int *i)
 {
-	if (final_command_table->builtin)
-	{
-		final_command_table->builtin(msh, final_command_table->simplecmd);
-		return (1);
-	}
 	pid[*i] = fork();
 	if (pid[*i] == 0)
 	{
-		
+		if (final_command_table->builtin)
+		{
+			final_command_table->builtin(msh, final_command_table->simplecmd);
+			return (1);
+		}
 		if (set_in(final_command_table) && set_out(final_command_table))
 			child(msh, final_command_table);
 		else
@@ -191,11 +184,6 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 	int 					status;
 	t_final_command_table	*tmp;
 
-	// if (pipe(in_pipe) == -1 || pipe(out_pipe) == -1)
-	// {
-	// 	free_f_command_table(final_command_table);
-	// 	return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
-	// }
 	in_pipe[READ] = -1;
 	in_pipe[WRITE]= -1;
 	pid= NULL;
@@ -263,10 +251,8 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 			in_pipe[READ] = out_pipe[READ];
 		}
 		i++;
-		fprintf(stderr, "Here1\n");
 		free_f_command_table_node(&tmp);
 	}
-	fprintf(stderr, "Here2\n");
 	free(pid);
 	//free_f_command_table(final_command_table);
 	//free_everything_bonus(&info);

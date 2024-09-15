@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 20:51:03 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 18:24:52 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	handle_here_doc(t_minishell *msh, t_redir_list **redirs, int *fd)
 
 	line_nbr = 0;
 	child_signals_init();
-	close(fd[READ]);
 	while (true && ++line_nbr)
 	{
 		ft_putstr_fd(HERE_DOC_INDICATOR, 1);
@@ -54,6 +53,7 @@ void	handle_here_doc(t_minishell *msh, t_redir_list **redirs, int *fd)
 		ft_putstr_fd(line, fd[WRITE]);
 		free(line);
 	}
+	close(fd[READ]);
 	close(fd[WRITE]);
 }
 
@@ -70,7 +70,7 @@ int	fork_here_doc(t_minishell *msh, t_ast *root, t_command_table *command_table,
 	if (fork_here_doc == 0)
 	{
 		handle_here_doc(msh, redirs, fd);
-		free_command_table(command_table);
+		free_command_table(command_table, 1);
 		if (*redirs)
 		{
 			free((*redirs)->here_doc_limiter);

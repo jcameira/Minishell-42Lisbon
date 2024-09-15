@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:12:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 20:46:26 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:25:09 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,16 @@ void	free_ast(t_ast *root)
 	free(root);
 }
 
-void	free_command_table(t_command_table *command_table)
+void	free_command_table(t_command_table *command_table, int close_all_fds)
 {
 	t_command_table	*tmp;
-	t_redir_list	*tmp_redir;
 
 	while (command_table)
 	{
 		tmp = command_table->next;
 		free_arr(command_table->simplecmd->arg_arr);
 		free(command_table->simplecmd);
-		while (command_table->redirs)
-		{
-			printf("%p\n", command_table->redirs->next);
-			tmp_redir = command_table->redirs->next;
-			if (command_table->redirs->file)
-			{
-				printf("AAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-				free(command_table->redirs->file);
-			}
-			if (command_table->redirs->here_doc_limiter)
-			{
-				printf("BBBBBBBBBBBBBBBBBBBBBBBBBB\n");
-				free(command_table->redirs->here_doc_limiter);
-			}
-			free(command_table->redirs);
-			command_table->redirs = tmp_redir;
-		}
+		free_redir_list(command_table->redirs, close_all_fds);
 		free(command_table);
 		command_table = tmp;
 	}
