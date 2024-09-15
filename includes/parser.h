@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 20:14:09 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:19:30 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void				add_more_content_to_table_node(t_minishell *msh,
 						t_ast **root, t_command_table **command_table);
 void				create_command_table(t_minishell *msh, t_ast *root,
 						t_command_table **command_table);
-void				free_command_table(t_command_table *command_table);
+void				free_command_table(t_command_table *command_table, int close_all_fds);
 int					expander(t_minishell *msh, t_command_table *command_table);
 void				free_token_list(t_token_list *list);
 t_redir_list		*set_redir_values(t_minishell *msh, t_ast **root,
@@ -224,5 +224,6 @@ char				*expansion_inside_here_doc(t_minishell *msh, char *content,
 						int flag);
 void				child_signals_init(void);
 void				exit_shell(t_minishell *msh, int exit_code);
+void				free_redir_list(t_redir_list *redirs, int close_all_fds);
 
 #endif

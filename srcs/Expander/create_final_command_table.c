@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 18:57:32 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/11 15:26:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 18:24:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_final_command_table	*new_f_cmd_table_node(t_command_table *command_table,
 	new_node = set_final_redirs(new_node, command_table->redirs);
 	if (!new_node)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-	free_redir_list(command_table->redirs);
+	free_redir_list(command_table->redirs, 0);
 	new_node->previous_symbol = previous_symbol;
 	new_node->next_symbol = check_next_symbol(command_table->next);
 	new_node->next = NULL;
@@ -76,18 +76,21 @@ t_final_command_table	*create_final_cmd_table(t_command_table *command_table)
 		if (!new_table_node)
 		{
 			free_f_command_table(final_command_table);
-			return (free_command_table(command_table), NULL);
+			return (free_command_table(command_table, 1), NULL);
 		}
 		previous_symbol = new_table_node->next_symbol;
 		tmp = command_table->next;
 		free(command_table);
 		command_table = tmp;
-		if (new_table_node->next_symbol > -1)
+		if (new_table_node->next_symbol != NO_SYMBOL)
 		{
 			tmp = command_table->next;
-			free_redir_list(command_table->redirs);
-			free_arr(command_table->simplecmd->arg_arr);
-			free(command_table->simplecmd);
+			free_redir_list(command_table->redirs, 0);
+			if (command_table->simplecmd)
+			{
+				free_arr(command_table->simplecmd->arg_arr);
+				free(command_table->simplecmd);
+			}
 			free(command_table);
 			command_table = tmp;
 		}

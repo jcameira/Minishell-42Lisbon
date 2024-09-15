@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 15:40:02 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:23:07 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,8 @@ typedef struct s_final_command_table
 	struct s_final_command_table	*next;
 }				t_final_command_table;
 
-void					free_command_table(t_command_table *command_table);
+void					free_command_table(t_command_table *command_table, int close_all_fds);
 void					print_cmd_table(t_command_table *command_table);
-void					free_command_table(t_command_table *command_table);
 void					free_arr(char **array);
 int						quote_removal_str_len(char *content);
 char					*remove_quotes_expansion(char *content, int len);
@@ -153,7 +152,7 @@ char					*append_more_wildcard_content(char *new_content,
 							struct dirent *file);
 t_final_command_table	*set_final_redirs(t_final_command_table	*new_table_node,
 							t_redir_list *redirs);
-void					free_redir_list(t_redir_list *redirs);
+void					free_redir_list(t_redir_list *redirs, int close_all_fds);
 void					free_f_command_table(t_final_command_table *cmd_table);
 t_simplecmd				*simplecmdcpy(t_simplecmd *simplecmd);
 t_symbol				check_next_symbol(t_command_table *next_node);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 20:30:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 18:27:30 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	print_cmd_table(t_command_table *command_table)
 			command_table->subshell_level);
 		i = -1;
 		printf("\nCommand\n");
-		if (command_table->simplecmd->arg_arr)
+		if (command_table->simplecmd)
 		{
 			while (command_table->simplecmd->arg_arr[++i])
 				printf("%s->", command_table->simplecmd->arg_arr[i]);
@@ -111,7 +111,7 @@ void	print_cmd_table(t_command_table *command_table)
 		{
 			if (tmp_redir->type == HERE_DOC)
 				printf("'<<'\n%s\n", tmp_redir->here_doc_limiter);
-			if (tmp_redir->type == INFILE)
+			else if (tmp_redir->type == INFILE)
 				printf("'<'\n%s\n", tmp_redir->file);
 			else if (tmp_redir->type == APPEND)
 				printf("'>>'\n%s\n", tmp_redir->file);
@@ -151,7 +151,8 @@ int	parser(t_minishell *msh, t_token_list *token_list)
 	create_command_table(msh, root, &command_table);
 	if (!command_table)
 		return (free_ast(root), -1);
-	print_cmd_table(command_table);
+	//print_cmd_table(command_table);
 	free_ast(root);
 	return(expander(msh, command_table));
+	//return(0);
 }

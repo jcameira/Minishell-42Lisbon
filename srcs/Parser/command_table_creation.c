@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 20:08:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:58:11 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,20 @@ void	add_more_content_to_table_node(t_minishell *msh, t_ast **root,
 
 	last_node = last_table_node(*command_table);
 	last_redir = last_redir_node((*command_table)->redirs);
-	if ((*root)->type == REDIRECTION
-		&& (last_redir->file || last_redir->here_doc_limiter))
-		last_redir->next = new_command_table_redir(msh, root, *command_table);
-	else if ((*root)->type == REDIRECTION
-		&& !last_redir->file && !last_redir->here_doc_limiter)
-		//last_redir = set_redir_values(msh, root, last_redir);
-		last_redir = set_redir_values(msh, root, *command_table, last_redir);
+	if ((*root)->type == REDIRECTION)
+	{
+		if (last_redir)
+			last_redir->next = new_command_table_redir(msh, root, *command_table);
+		else
+			last_node->redirs = new_command_table_redir(msh, root, *command_table);
+	}
 	else if ((*root)->type == SIMPLE_COMMAND)
-		add_simple_command_argument(*root, &last_node);
+	{
+		if (last_node->simplecmd)
+			add_simple_command_argument(*root, &last_node);
+		else
+			last_node->simplecmd = new_command_table_simple_command(*root);
+	}
 }
 
 void	create_command_table(t_minishell *msh, t_ast *root,
@@ -114,17 +119,18 @@ void	create_command_table(t_minishell *msh, t_ast *root,
 		create_command_table(msh, root->subshell_ast, command_table);
 	else if (!root->visited)
 	{
-		last_node = last_table_node(*command_table);
-		if ((root->type == REDIRECTION || root->type == SIMPLE_COMMAND)
-			&& *command_table && last_node->type == TABLE_NO_TYPE)
-			add_more_content_to_table_node(msh, &root, command_table);
-		else
+		if (!*command_table || last_table_node(*command_table)->type != TABLE_NO_TYPE
+			|| (root->type != REDIRECTION && root->type != SIMPLE_COMMAND))
 		{
 			new_table_node = new_command_table_node(msh, root, *command_table);
 			if (!new_table_node)
 				return ;
 			add_new_table_node(command_table, new_table_node);
 		}
+		last_node = last_table_node(*command_table);
+		if ((root->type == REDIRECTION || root->type == SIMPLE_COMMAND)
+			&& *command_table && last_node->type == TABLE_NO_TYPE)
+			add_more_content_to_table_node(msh, &root, command_table);
 		root->visited = !(root->visited);
 	}
 	if (root)

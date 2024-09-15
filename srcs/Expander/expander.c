@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/11 15:26:03 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/14 18:03:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 					tmp_redir->file);
 			tmp_redir->file = expand_content(msh, tmp_redir->file);
 			if (!tmp_redir->file)
-				return (free_command_table(command_table), NULL);
+				return (free_command_table(command_table, 1), NULL);
 			if (has_space(tmp_redir->file) && tmp_redir->ambiguous_redirect)
 			{
-				free_command_table(command_table);
+				free_command_table(command_table, 1);
 				return (ft_putstr_fd(AMBIGUOUS_REDIRECT, 2), NULL);
 			}
 		}
@@ -104,7 +104,8 @@ int	expander(t_minishell *msh, t_command_table *command_table)
 	tmp_table = command_table;
 	while (tmp_table)
 	{
-		if (tmp_table->simplecmd->arg_arr)
+		if (tmp_table->simplecmd)
+		//if (tmp_table->simplecmd->arg_arr)
 		{
 			i = -1;
 			while (tmp_table->simplecmd->arg_arr[++i])
@@ -112,10 +113,11 @@ int	expander(t_minishell *msh, t_command_table *command_table)
 				tmp_table->simplecmd->arg_arr[i] = expand_content(msh,
 						tmp_table->simplecmd->arg_arr[i]);
 				if (!tmp_table->simplecmd->arg_arr[i])
-					return (free_command_table(command_table), -1);
+					return (free_command_table(command_table, 1), -1);
 			}
 		}
-		if (tmp_table->redirs->file || tmp_table->redirs->here_doc_limiter)
+		if (tmp_table->redirs && (tmp_table->redirs->file || tmp_table->redirs->here_doc_limiter))
+		//if (tmp_table->redirs->file || tmp_table->redirs->here_doc_limiter)
 			tmp_table->redirs = expand_redirs(msh, tmp_table);
 		tmp_table = tmp_table->next;
 	}
