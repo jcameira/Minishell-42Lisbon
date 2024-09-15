@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/13 17:17:30 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/15 17:36:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	msh_loop(t_minishell *msh)
 		if (!line)
 		{
 			printf("exit\n");
-			exit_shell(msh, SUCCESS);
+			exit_shell(msh, EXIT_SUCCESS);
 		}
 		if (!line[0] || full_white_space(line))
 		{

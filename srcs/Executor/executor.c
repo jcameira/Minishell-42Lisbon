@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 19:26:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/15 19:25:40 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ void	child(t_minishell *msh, t_final_command_table *final_command_table)
 	char	*path;
 
 	if (final_command_table->infile_fd)
-		dup2(final_command_table->infile_fd, STDIN_FD);
+		dup2(final_command_table->infile_fd, STDIN_FILENO);
 	if (final_command_table->outfile_fd)
-		dup2(final_command_table->outfile_fd, STDOUT_FD);
+		dup2(final_command_table->outfile_fd, STDOUT_FILENO);
 	if (!access(final_command_table->simplecmd->arg_arr[0], X_OK))
 		path = final_command_table->simplecmd->arg_arr[0];
 	else if (!msh->envp)
@@ -135,16 +135,33 @@ int	set_out(t_final_command_table *final_command_table)
 	return (1);
 }
 
+void	reset_std_fds(t_minishell *msh)
+{
+	if (!isatty(STDIN_FILENO))
+		dup2(msh->original_stdin, STDIN_FILENO);
+	if (!isatty(STDOUT_FILENO))
+		dup2(msh->original_stdout, STDOUT_FILENO);
+	if (!isatty(STDERR_FILENO))
+		dup2(msh->original_stderr, STDERR_FILENO);
+}
+
 int	executor_simplecommand(t_minishell *msh,
 	t_final_command_table *final_command_table, pid_t *pid, int *i)
 {
 	pid[*i] = fork();
 	if (pid[*i] == 0)
 	{
-		if (final_command_table->builtin)
+		if (final_command_table->builtin && set_in(final_command_table) && set_out(final_command_table))
 		{
+			if (final_command_table->infile_fd)
+				dup2(final_command_table->infile_fd, STDIN_FILENO);
+			if (final_command_table->outfile_fd)
+				dup2(final_command_table->outfile_fd, STDOUT_FILENO);
 			final_command_table->builtin(msh, final_command_table->simplecmd);
-			return (1);
+			reset_std_fds(msh);
+			free_f_command_table(final_command_table);
+			free(pid);
+			return (FAILURE);
 		}
 		if (set_in(final_command_table) && set_out(final_command_table))
 			child(msh, final_command_table);
@@ -152,7 +169,7 @@ int	executor_simplecommand(t_minishell *msh,
 		{
 			free_f_command_table(final_command_table);
 			free(pid);
-			return(0);
+			return(FAILURE);
 		}
 	}
 	return(1);
@@ -214,7 +231,21 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 		if (tmp->next_symbol == PIPE
 			&& tmp->outfile_fd == -2)
 			tmp->outfile_fd = out_pipe[WRITE];
-		if (!executor_simplecommand(msh, tmp, pid, &i))
+		if (tmp->builtin && pipeline_size == 1)
+		{
+			tmp->builtin(msh, tmp->simplecmd);
+			if (in_pipe[READ] > -1)
+				close(in_pipe[READ]);
+			if (in_pipe[WRITE] > -1)
+				close(in_pipe[WRITE]);
+			if (out_pipe[READ] > -1)
+				close(out_pipe[READ]);
+			if (out_pipe[WRITE] > -1)
+				close(out_pipe[WRITE]);
+			free_f_command_table(tmp);
+			break ;
+		}
+		else if (!executor_simplecommand(msh, tmp, pid, &i))
 		{
 			if (in_pipe[READ] > -1)
 				close(in_pipe[READ]);
@@ -251,6 +282,7 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 			in_pipe[READ] = out_pipe[READ];
 		}
 		i++;
+		//tmp = tmp->next;
 		free_f_command_table_node(&tmp);
 	}
 	free(pid);
