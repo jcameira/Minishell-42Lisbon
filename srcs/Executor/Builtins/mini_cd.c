@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/15 11:00:23 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:52:19 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,27 +54,45 @@ int	chdir_cd(char *cur_path, char *final_path)
 void	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 {
 	char	*cur_path;
+	char	*tmp;
 	char	*final_path;
 
 	cur_path = getcwd(NULL, 0);
 	if (cmd->arg_nbr > 2)
-		return (ft_putstr_fd("cd: too many arguments\n", 2));
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2));
 	if (cmd->arg_nbr == 1)
 	{
 		final_path = find_path(msh, cmd, HOME);
 		if (!final_path)
-			return (ft_putstr_fd("cd: HOME not set\n", 2));
+			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2));
 	}
 	else if (!ft_strncmp(cmd->arg_arr[1], "..", 2))
-		final_path = find_slash(cur_path);
+		final_path = find_last_slash(cur_path);
 	else if (*cmd->arg_arr[1] == '-' )
 	{
 		final_path = find_path(msh, cmd, OLDPWD);
 		if (!final_path)
-			return (ft_putstr_fd("cd: OLDPWD not set\n", 2));
+			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2));
 	}
 	else
-		final_path = ft_strjoin(cur_path, cmd->arg_arr[1]);
+	{
+		if (cur_path[ft_strlen(cur_path) - 1] != '/')
+		{
+			tmp = ft_strjoin(cur_path, "/");
+			if (!tmp)
+				return (ft_putstr_fd(NO_SPACE, 2));
+			final_path = ft_strjoin(tmp, cmd->arg_arr[1]);
+			free(tmp);
+			if (!final_path)
+				return (ft_putstr_fd(NO_SPACE, 2));
+		}
+		else
+		{
+			final_path = ft_strjoin(cur_path, cmd->arg_arr[1]);
+			if (!final_path)
+				return (ft_putstr_fd(NO_SPACE, 2));
+		}
+	}
 	if (!chdir_cd(cur_path, final_path))
 		return ;
 	aux_cd(msh->envp, cur_path, final_path);

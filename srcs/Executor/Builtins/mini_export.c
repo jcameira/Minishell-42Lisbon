@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/07/04 01:51:33 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/17 21:05:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,15 @@ char	**add_env(char **array, char *new_env)
 
 void	print_declare(char **env)
 {
-	char	**copy_env;
 	char	**tmp;
 	int		i;
 
 	i = -1;
-	copy_env = arrdup(env);
-	bubble_sort(copy_env);
-	while (copy_env[++i])
+	while (env[++i])
 	{
-		if (!ft_strncmp(copy_env[i], "_=", 2))
+		if (!ft_strncmp(env[i], "_=", 2))
 			continue ;
-		tmp = ft_split(copy_env[i], '=');
+		tmp = ft_split(env[i], '=');
 		printf("declare -x %s", tmp[0]);
 		if (!tmp[1])
 			printf("\n");
@@ -77,17 +74,60 @@ void	aux_export(char **msh_envp, char *cmd_argarr, char **tmp_cmd)
 	}
 }
 
+char	**get_new_strs(char **new_strs, char *str, char c)
+{
+	int	i;
+	int	j;
+	int k;
+
+	i = 0;
+	k = -1;
+	while (str[i])
+	{
+		if (str[i] && (str[i] == c))
+			i++;
+		else
+		{
+			j = 0;
+			while (str[i + j] && str[i + j] != c)
+				j++;
+			if (k < 1)
+			{
+				new_strs[++k] = ft_substr(str, i, j);
+				if (!new_strs[k])
+					return (free_arr(new_strs), NULL);
+			}
+			i += j;
+		}
+	}
+	printf("%s %s\n", new_strs[0], new_strs[1]);
+	return (new_strs);
+}
+
+char	**split_by_char(char *str, char c)
+{
+	char	**new_strs;
+
+	new_strs = (char **)malloc(sizeof (char *) * 3);
+	if (!new_strs)
+		return (NULL);
+	new_strs = get_new_strs(new_strs, str, c);
+	new_strs[2] = 0;
+	return (new_strs);
+}
+
 void	mini_export(t_minishell *msh, t_simplecmd *cmd)
 {
 	char	**tmp_cmd;
 	int		i;
 
 	if (cmd->arg_nbr == 1)
-		print_declare(msh->envp);
+		print_declare(msh->export_list);
 	i = 0;
 	while (cmd->arg_arr[++i])
 	{
-		tmp_cmd = ft_split(cmd->arg_arr[i], '=');
+		//tmp_cmd = ft_split(cmd->arg_arr[i], '=');
+		tmp_cmd = split_by_char(cmd->arg_arr[i], '=');
 		aux_export(msh->envp, cmd->arg_arr[i], tmp_cmd);
 	}
 }

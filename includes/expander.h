@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 17:23:07 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:56:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_command_table
 typedef struct s_minishell
 {
 	char				**envp;
+	char				**export_list;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;

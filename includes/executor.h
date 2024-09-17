@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/15 19:14:31 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:56:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_simplecmd
 typedef struct s_minishell
 {
 	char				**envp;
+	char				**export_list;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;

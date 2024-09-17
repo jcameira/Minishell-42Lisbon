@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/15 17:36:49 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:21:02 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,5 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh->envp)
 		return (1);
 	msh_loop(msh);
-	free_arr(msh->envp);
 	return (0);
 }

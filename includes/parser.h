@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/15 17:37:40 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:57:11 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ typedef struct s_ast
 typedef struct s_minishell
 {
 	char				**envp;
+	char				**export_list;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;
