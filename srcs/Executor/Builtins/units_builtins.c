@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   units_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpais-go <mpais-go@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/05/13 16:15:27 by mpais-go         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:38:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,26 +36,29 @@ char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *macro)
 	return (NULL);
 }
 
-char	*find_slash(char *path)
+char	*find_last_slash(char *path)
 {
 	int		i;
 	int		j;
 	char	*new_path;
 
-	i = -1;
-	j = 0;
-	while (path[++i])
+	i = ft_strlen(path);
+	while (i >= 0)
+		if (path[--i] == '/')
+			break ;
+	if (i == 0)
 	{
-		if (path[i] == '/')
-			j = i;
+		new_path = malloc(sizeof (char) * 2);
+		new_path[0] = path[0];
+		new_path[1] = '\0';
+		return (new_path);
 	}
-	i = 0;
-	new_path = malloc(sizeof (char) * (j + 1));
-	while (i < j)
+	new_path = malloc(sizeof (char) * (i + 1));
+	j = -1;
+	while (++j < i)
 	{
-		new_path[i] = path[i];
+		new_path[j] = path[j];
 	}
-	new_path[i] = '\0';
-	free(path);
+	new_path[j] = '\0';
 	return (new_path);
 }
