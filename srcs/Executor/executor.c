@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/15 19:25:40 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/19 21:13:05 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,13 @@ void	execute_cmd_bonus(char *path, char **cmd_args, char **envp)
 {
 	if (!path || access(path, 0))
 	{
+		printf("1\n");
 		//close_everything_bonus(info);
 		//write_command_error_bonus(info, cmd_args);
 	}
 	if (execve(path, cmd_args, envp) < 0)
 	{
+		printf("2\n");
 		//execute_error_bonus(info, cmd_args);
 		exit(errno);
 	}
@@ -206,8 +208,10 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 	pid= NULL;
 	pipeline_start = 1;
 	tmp = final_command_table;
+	status = 0;
 	while (tmp)
 	{
+		printf("HERE\n");
 		if (pipe(out_pipe) == -1)
 		{
 			free_f_command_table(tmp);
@@ -233,6 +237,7 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 			tmp->outfile_fd = out_pipe[WRITE];
 		if (tmp->builtin && pipeline_size == 1)
 		{
+			printf("HERE!!!!!!!!!!!!!!!!!\n");
 			tmp->builtin(msh, tmp->simplecmd);
 			if (in_pipe[READ] > -1)
 				close(in_pipe[READ]);
@@ -242,8 +247,9 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 				close(out_pipe[READ]);
 			if (out_pipe[WRITE] > -1)
 				close(out_pipe[WRITE]);
-			free_f_command_table(tmp);
-			break ;
+			//free_f_command_table(tmp);
+			//break ;
+			status = 0;
 		}
 		else if (!executor_simplecommand(msh, tmp, pid, &i))
 		{
@@ -259,6 +265,7 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 		}
 		if (tmp->next_symbol != PIPE)
 		{
+			printf("HERE2\n");
 			if (in_pipe[READ] > -1)
 				close(in_pipe[READ]);
 			if (in_pipe[WRITE] > -1)
@@ -268,9 +275,20 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 			if (out_pipe[WRITE] > -1)
 				close(out_pipe[WRITE]);
 			i = -1;
-			while (++i < pipeline_size)
-				waitpid(pid[i], &status, 0);
+			printf("HERE3\n");
+			if (!tmp->builtin || pipeline_size > 1)
+			{
+				printf("HERE4\n");
+				while (++i < pipeline_size)
+					waitpid(pid[i], &status, 0);
+			}
 			pipeline_start = !pipeline_start;
+			printf("Status -> %d\n", status);
+			if ((tmp->next_symbol == AND && status != 0) || (tmp->next_symbol == OR && status == 0))
+			{
+				free_f_command_table(tmp);
+				break ;
+			}
 		}
 		else
 		{
@@ -283,6 +301,7 @@ int	executor(t_minishell *msh, t_final_command_table *final_command_table)
 		}
 		i++;
 		//tmp = tmp->next;
+		printf("HERE5\n");
 		free_f_command_table_node(&tmp);
 	}
 	free(pid);

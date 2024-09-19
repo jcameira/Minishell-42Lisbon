@@ -6,29 +6,50 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/17 21:05:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:23:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <builtins.h>
 
-char	**add_env(char **array, char *new_env)
+char	**get_new_strs(char **new_strs, char *str, char c)
 {
-	char	**new_arr;
-	int		size;
-	int		i;
+	int	i;
+	int	j;
 
-	if (!(*array))
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			i++;
+		else
+		{
+			j = 0;
+			while (str[i + j] && str[i + j] != c)
+				j++;
+			new_strs[0] = ft_substr(str, i, j);
+			if (!new_strs[0])
+				return (free_arr(new_strs), NULL);
+			i += j + 1;
+			break ;
+		}
+	}
+	new_strs[1] = ft_substr(str, i, ft_strlen(str) - i);
+	if (!new_strs[1])
+		return (free_arr(new_strs), NULL);
+	return (new_strs);
+}
+
+char	**split_by_char(char *str, char c)
+{
+	char	**new_strs;
+
+	new_strs = (char **)malloc(sizeof (char *) * 3);
+	if (!new_strs)
 		return (NULL);
-	size = array_size(array);
-	new_arr = malloc(sizeof(char *) * (size + 2));
-	i = -1;
-	while (array[++i])
-		new_arr[i] = ft_strdup(array[i]);
-	new_arr[i] = ft_strdup(new_env);
-	new_arr[i + 1] = NULL;
-	free_arr(array);
-	return (new_arr);
+	new_strs = get_new_strs(new_strs, str, c);
+	new_strs[2] = NULL;
+	return (new_strs);
 }
 
 void	print_declare(char **env)
@@ -41,79 +62,77 @@ void	print_declare(char **env)
 	{
 		if (!ft_strncmp(env[i], "_=", 2))
 			continue ;
-		tmp = ft_split(env[i], '=');
+		tmp = split_by_char(env[i], '=');
 		printf("declare -x %s", tmp[0]);
-		if (!tmp[1])
-			printf("\n");
-		else
+		if (ft_strchr(env[i], '='))
 			printf("=\"%s\"\n", tmp[1]);
+		else
+			printf("\n");
 		free_arr(tmp);
 	}
 }
 
-void	aux_export(char **msh_envp, char *cmd_argarr, char **tmp_cmd)
+void	add_var_to_list(char *cmd_argarr, char ***list_to_add)
 {
-	char	**tmp_env;
+	char	**new_export;
+	int		arr_size;
+
+	new_export = malloc(sizeof(char *) * (array_size(*list_to_add) + 2));
+	if (!new_export)
+		return (ft_putstr_fd(NO_SPACE, 2));
+	arr_size = array_size(*list_to_add);
+	new_export = arrcpy(new_export, *list_to_add);
+	if (!new_export)
+		return ;
+	new_export[arr_size] = ft_strdup(cmd_argarr);
+	if (!new_export[arr_size])
+		return (ft_putstr_fd(NO_SPACE, 2));
+	new_export[arr_size + 1] = NULL;
+	*list_to_add = new_export;
+}
+
+int	get_pos_in_list(char **list, char *target)
+{
+	char	**tmp_split;
 	int		i;
 
 	i = -1;
-	while (msh_envp[++i])
+	while (list[++i])
 	{
-		tmp_env = ft_split(msh_envp[i], '=');
-		if (!tmp_cmd[1]
-			&& !ft_strncmp(tmp_cmd[0], tmp_env[0], ft_strlen(tmp_cmd[0])))
-			break ;
-		if (!msh_envp[i + 1] || (tmp_cmd[1] && !ft_strncmp(tmp_cmd[0],
-					tmp_env[0], ft_strlen(tmp_cmd[0]))))
-		{
-			free(msh_envp[i]);
-			msh_envp[i] = ft_strdup(cmd_argarr);
-			free_arr(tmp_cmd);
-			free_arr(tmp_env);
-		}
+		tmp_split = split_by_char(list[i], '=');
+		if (!ft_strcmp(target, tmp_split[0]))
+			return (free_arr(tmp_split), i);
+		free_arr(tmp_split);
 	}
+	return (-1);
 }
 
-char	**get_new_strs(char **new_strs, char *str, char c)
+void	aux_export(t_minishell *msh, char *cmd_argarr, char **tmp_cmd, char ***list)
 {
 	int	i;
-	int	j;
-	int k;
 
-	i = 0;
-	k = -1;
-	while (str[i])
+	if (*list == msh->export_list)
 	{
-		if (str[i] && (str[i] == c))
-			i++;
-		else
+		i = get_pos_in_list(msh->export_list, tmp_cmd[0]);
+		if (i == -1)
+			add_var_to_list(cmd_argarr, list);
+	}
+	else
+	{
+		i = get_pos_in_list(msh->envp, tmp_cmd[0]);
+		if (i == -1 && ft_strchr(cmd_argarr, '='))
+			add_var_to_list(cmd_argarr, list);
+	}
+	if (i != -1)
+	{
+		if (tmp_cmd[1][0] || (!tmp_cmd[1][0] && ft_strchr(cmd_argarr, '=')))
 		{
-			j = 0;
-			while (str[i + j] && str[i + j] != c)
-				j++;
-			if (k < 1)
-			{
-				new_strs[++k] = ft_substr(str, i, j);
-				if (!new_strs[k])
-					return (free_arr(new_strs), NULL);
-			}
-			i += j;
+			free((*list)[i]);
+			(*list)[i] = ft_strdup(cmd_argarr);
+			if (!(*list)[i])
+				return (free_arr(tmp_cmd), ft_putstr_fd(NO_SPACE, 2));
 		}
 	}
-	printf("%s %s\n", new_strs[0], new_strs[1]);
-	return (new_strs);
-}
-
-char	**split_by_char(char *str, char c)
-{
-	char	**new_strs;
-
-	new_strs = (char **)malloc(sizeof (char *) * 3);
-	if (!new_strs)
-		return (NULL);
-	new_strs = get_new_strs(new_strs, str, c);
-	new_strs[2] = 0;
-	return (new_strs);
 }
 
 void	mini_export(t_minishell *msh, t_simplecmd *cmd)
@@ -126,8 +145,9 @@ void	mini_export(t_minishell *msh, t_simplecmd *cmd)
 	i = 0;
 	while (cmd->arg_arr[++i])
 	{
-		//tmp_cmd = ft_split(cmd->arg_arr[i], '=');
 		tmp_cmd = split_by_char(cmd->arg_arr[i], '=');
-		aux_export(msh->envp, cmd->arg_arr[i], tmp_cmd);
+		aux_export(msh, cmd->arg_arr[i], tmp_cmd, &msh->export_list);
+		aux_export(msh, cmd->arg_arr[i], tmp_cmd, &msh->envp);
+		free_arr(tmp_cmd);
 	}
 }
