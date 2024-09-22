@@ -6,13 +6,53 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/17 16:38:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:21:29 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <builtins.h>
 
-char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *macro)
+char	**get_new_strs(char **new_strs, char *str, char c)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			i++;
+		else
+		{
+			j = 0;
+			while (str[i + j] && str[i + j] != c)
+				j++;
+			new_strs[0] = ft_substr(str, i, j);
+			if (!new_strs[0])
+				return (free_arr(new_strs), NULL);
+			i += j + 1;
+			break ;
+		}
+	}
+	new_strs[1] = ft_substr(str, i, ft_strlen(str) - i);
+	if (!new_strs[1])
+		return (free_arr(new_strs), NULL);
+	return (new_strs);
+}
+
+char	**split_by_char(char *str, char c)
+{
+	char	**new_strs;
+
+	new_strs = (char **)malloc(sizeof (char *) * 3);
+	if (!new_strs)
+		return (NULL);
+	new_strs = get_new_strs(new_strs, str, c);
+	new_strs[2] = NULL;
+	return (new_strs);
+}
+
+char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *target)
 {
 	char	*tmp;
 	int		lenght;
@@ -20,11 +60,11 @@ char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *macro)
 	int		j;
 
 	i = -1;
-	lenght = ft_strlen(macro);
+	lenght = ft_strlen(target);
 	(void)cmd;
 	while (msh->envp[++i])
 	{
-		if (!ft_strncmp(msh->envp[i], macro, lenght))
+		if (!ft_strncmp(msh->envp[i], target, lenght))
 		{
 			tmp = msh->envp[i];
 			j = -1;
@@ -36,7 +76,7 @@ char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *macro)
 	return (NULL);
 }
 
-char	*find_last_slash(char *path)
+char	*parent_dir(char *path)
 {
 	int		i;
 	int		j;

@@ -6,13 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 18:24:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:12:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
-
-extern int	g_signal;
 
 char	*add_line_to_buffer(char *new_line, char *previous_buffer)
 {
@@ -57,7 +55,8 @@ void	handle_here_doc(t_minishell *msh, t_redir_list **redirs, int *fd)
 	close(fd[WRITE]);
 }
 
-int	fork_here_doc(t_minishell *msh, t_ast *root, t_command_table *command_table, t_redir_list **redirs)
+int	fork_here_doc(t_minishell *msh, t_ast *root,
+	t_command_table *command_table, t_redir_list **redirs)
 {
 	pid_t	fork_here_doc;
 	int		fd[2];

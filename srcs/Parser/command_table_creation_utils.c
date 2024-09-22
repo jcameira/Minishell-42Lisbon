@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:24:54 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 15:10:13 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:37:07 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,26 @@ t_redir_list	*set_redir_values(t_minishell *msh, t_ast **root,
 	if (!redirs->here_doc_limiter && !redirs->file)
 		return (NULL);
 	return (redirs);
+}
+
+void	visit_node(t_minishell *msh, t_ast **root,
+	t_command_table **command_table)
+{
+	t_command_table	*new_table_node;
+	t_command_table	*last_node;
+
+	if (!*command_table
+		|| last_table_node(*command_table)->type != TABLE_NO_TYPE
+		|| ((*root)->type != REDIRECTION && (*root)->type != SIMPLE_COMMAND))
+	{
+		new_table_node = new_command_table_node(msh, *root, *command_table);
+		if (!new_table_node)
+			return ;
+		add_new_table_node(command_table, new_table_node);
+	}
+	last_node = last_table_node(*command_table);
+	if (((*root)->type == REDIRECTION || (*root)->type == SIMPLE_COMMAND)
+		&& *command_table && last_node->type == TABLE_NO_TYPE)
+		add_more_content_to_table_node(msh, root, command_table);
+	(*root)->visited = !((*root)->visited);
 }
