@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:28:03 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 21:48:05 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:37:26 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,8 @@ int	get_wildcards_len(char *content)
 	real_len = 0;
 	directory = NULL;
 	directory = get_directory_info(directory, NULL, &file, 0);
-	printf("%s\n", content);
 	while (file)
 	{
-		
 		if (ft_strncmp(content, ".", 1) && file->d_name[0] == '.')
 		{
 			file = readdir(directory);

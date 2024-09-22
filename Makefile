@@ -20,7 +20,7 @@ PARSER_FILES		=	ast_creation_utils.c ast_creation.c command_table_creation_utils
 PARSER_PATH			=	srcs/Parser/
 PARSER				=	$(addprefix $(PARSER_PATH), $(PARSER_FILES))
 
-EXPANDER_FILES		=	create_final_command_table_utils.c create_final_command_table.c expander_memory_handle.c expander.c here_doc_expansions_utils.c here_doc_expansions.c parameter_expansion_utils.c parameter_expansion.c quote_removal_expansion_utils.c quote_removal_expansion.c wildcard_expansion_utils.c wildcard_expansion.c
+EXPANDER_FILES		=	create_final_cmd_table_utils.c create_final_cmd_table.c expander_memory_handle.c expander.c here_doc_expansions_utils.c here_doc_expansions.c parameter_expansion_utils.c parameter_expansion.c quote_removal_expansion_utils.c quote_removal_expansion.c wildcard_expansion_utils.c wildcard_expansion.c
 EXPANDER_PATH		=	srcs/Expander/
 EXPANDER			=	$(addprefix $(EXPANDER_PATH), $(EXPANDER_FILES))
 
@@ -28,7 +28,7 @@ BUILTIN_FILES		=	builtins.c mini_cd.c mini_echo.c mini_env.c mini_export.c mini_
 BUILTIN_PATH		=	Builtins/
 BUILTINS			=	$(addprefix $(BUILTIN_PATH_PATH), $(BUILTIN_FILES))
 
-EXECUTOR_FILES		=	$(BUILTIN_FILES) executor.c
+EXECUTOR_FILES		=	$(BUILTIN_FILES) execution_in_fork.c executor_inits.c executor_memory_handle.c executor_utils.c executor.c
 EXECUTOR_PATH		=	srcs/Executor/
 EXECUTOR			=	$(addprefix $(EXECUTOR_PATH), $(EXECUTOR_FILES))
 

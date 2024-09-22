@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/17 17:14:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:01:26 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,9 @@ void	child_signals_init(void)
 void	minishell_init(t_minishell *msh, char **envp)
 {
 	msh->envp = arrdup(envp);
-	if (!msh->envp)
-		return ;
-	msh->export_list = arrdup(msh->envp);
-	if (!msh->export_list)
-		return ;
+	msh->export_list = arrdup(envp);
+	if (!msh->envp || !msh->export_list)
+		return (free_arr(msh->envp), free_arr(msh->export_list));
 	bubble_sort(msh->export_list);
 	if (msh->envp && !msh->envp[0])
 	{

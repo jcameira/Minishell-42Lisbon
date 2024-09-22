@@ -6,11 +6,26 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 00:36:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/15 19:09:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:24:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expander.h>
+
+void	free_symbol_node(t_command_table **command_table)
+{
+	t_command_table	*tmp;
+
+	tmp = (*command_table)->next;
+	free_redir_list((*command_table)->redirs, 0);
+	if ((*command_table)->simplecmd)
+	{
+		free_arr((*command_table)->simplecmd->arg_arr);
+		free((*command_table)->simplecmd);
+	}
+	free(*command_table);
+	*command_table = tmp;
+}
 
 void	free_redir_list(t_redir_list *redirs, int close_all_fds)
 {
@@ -30,9 +45,9 @@ void	free_redir_list(t_redir_list *redirs, int close_all_fds)
 	}
 }
 
-void	free_f_command_table(t_final_command_table *cmd_table)
+void	free_f_command_table(t_final_cmd_table *cmd_table)
 {
-	t_final_command_table	*tmp;
+	t_final_cmd_table	*tmp;
 
 	while (cmd_table)
 	{

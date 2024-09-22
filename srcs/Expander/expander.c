@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 18:03:56 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:26:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,13 @@ t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
 int	expander(t_minishell *msh, t_command_table *command_table)
 {
 	t_command_table			*tmp_table;
-	t_final_command_table	*final_command_table;
+	t_final_cmd_table		*final_cmd_table;
 	int						i;
 
 	tmp_table = command_table;
 	while (tmp_table)
 	{
 		if (tmp_table->simplecmd)
-		//if (tmp_table->simplecmd->arg_arr)
 		{
 			i = -1;
 			while (tmp_table->simplecmd->arg_arr[++i])
@@ -116,12 +115,11 @@ int	expander(t_minishell *msh, t_command_table *command_table)
 					return (free_command_table(command_table, 1), -1);
 			}
 		}
-		if (tmp_table->redirs && (tmp_table->redirs->file || tmp_table->redirs->here_doc_limiter))
-		//if (tmp_table->redirs->file || tmp_table->redirs->here_doc_limiter)
+		if (tmp_table->redirs && (tmp_table->redirs->file
+				|| tmp_table->redirs->here_doc_limiter))
 			tmp_table->redirs = expand_redirs(msh, tmp_table);
 		tmp_table = tmp_table->next;
 	}
-	//print_cmd_table(command_table);
-	final_command_table = create_final_cmd_table(command_table);
-	return(executor(msh, final_command_table));
+	final_cmd_table = create_final_cmd_table(command_table);
+	return (executor(msh, final_cmd_table));
 }

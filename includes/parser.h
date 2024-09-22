@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/17 16:57:11 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:37:24 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 
 # define NO_SPACE "No more space left in device\n"
 # define NO_HERE_DOC_LINE "\nminishell: warning: here-document at line %d \
-delimited by end-of-file (wanted `%s')"
+delimited by end-of-file (wanted `%s')\n"
 # define OPEN_PIPE_ERROR "Error opening pipe\n"
 # define FORK_ERROR "Error creating fork\n"
 
@@ -193,7 +193,8 @@ t_command_table		*last_table_node(t_command_table *command_table);
 t_redir_list		*last_redir_node(t_redir_list *redir_list);
 void				add_new_table_node(t_command_table **command_table,
 						t_command_table *new);
-t_command_table		*new_command_table_node(t_minishell *msh, t_ast *root, t_command_table *command_table);
+t_command_table		*new_command_table_node(t_minishell *msh, t_ast *root,
+						t_command_table *command_table);
 t_redir_list		*new_command_table_redir(t_minishell *msh, t_ast **root,
 						t_command_table *command_table);
 t_simplecmd			*new_command_table_simple_command(t_ast *root);
@@ -203,7 +204,8 @@ void				add_more_content_to_table_node(t_minishell *msh,
 						t_ast **root, t_command_table **command_table);
 void				create_command_table(t_minishell *msh, t_ast *root,
 						t_command_table **command_table);
-void				free_command_table(t_command_table *command_table, int close_all_fds);
+void				free_command_table(t_command_table *command_table,
+						int close_all_fds);
 int					expander(t_minishell *msh, t_command_table *command_table);
 void				free_token_list(t_token_list *list);
 t_redir_list		*set_redir_values(t_minishell *msh, t_ast **root,
@@ -226,5 +228,7 @@ char				*expansion_inside_here_doc(t_minishell *msh, char *content,
 void				child_signals_init(void);
 void				exit_shell(t_minishell *msh, int exit_code);
 void				free_redir_list(t_redir_list *redirs, int close_all_fds);
+void				visit_node(t_minishell *msh, t_ast **root,
+						t_command_table **command_table);
 
 #endif
