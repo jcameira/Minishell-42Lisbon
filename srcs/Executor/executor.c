@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 02:24:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:35:04 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	next_command_setup(t_execution_info **info, int *status, int *i)
 		if (((*info)->tmp_table->next_symbol == AND && *status != 0)
 			|| ((*info)->tmp_table->next_symbol == OR && *status == 0))
 			return (free_f_command_table((*info)->tmp_table), FAILURE);
+			//return (2);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 02:27:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 15:30:58 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,5 +171,6 @@ t_final_cmd_table		*set_redir_info(t_final_cmd_table *new_table_node,
 							t_redir_list *redirs);
 t_final_cmd_table		*set_redir_info_infile(t_final_cmd_table *node,
 							t_redir_list *redirs);
+int						array_size(char **array);
 
 #endif

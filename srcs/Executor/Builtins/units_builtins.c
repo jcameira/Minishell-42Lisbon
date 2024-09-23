@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/22 02:21:29 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 11:02:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ char	**split_by_char(char *str, char c)
 
 char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *target)
 {
+	char	*final_path;
 	char	*tmp;
 	int		lenght;
 	int		i;
@@ -70,7 +71,10 @@ char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *target)
 			j = -1;
 			while (++j < lenght)
 				tmp++;
-			return (tmp);
+			final_path = ft_strdup(tmp);
+			if (!final_path)
+				return (ft_putstr_fd(NO_SPACE, 2), NULL);
+			return (final_path);
 		}
 	}
 	return (NULL);
