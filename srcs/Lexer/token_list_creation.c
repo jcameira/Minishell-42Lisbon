@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/22 12:45:56 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 11:49:41 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	*get_initial_token_data(char *line, int *i)
 		(*i)++;
 	}
 	data = ft_substr(line, data_start, (*i) - data_start);
-	if (!data || !(*data))
+	if (!data)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	return (data);
 }
@@ -80,6 +80,11 @@ t_token_list	*get_initial_list(char *line)
 		tmp = get_initial_token_data(line, &i);
 		if (!tmp)
 			return (free_token_list(token_list), NULL);
+		if (!(*tmp))
+		{
+			free(tmp);
+			continue ;
+		}
 		new = new_token(NO_TYPE, tmp);
 		if (!new)
 		{

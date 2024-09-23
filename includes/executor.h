@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/22 02:27:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:17:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,7 @@ int					get_pipeline_size(t_final_cmd_table *final_cmd_table);
 void				check_if_pipefd_needed(t_execution_info **info);
 t_execution_info	*exec_info_init(t_final_cmd_table *final_cmd_table);
 int					init_pipeline(t_execution_info **info, int *i);
+void				child_signals_init(void);
+void				ignore_signals_init(void);
 
 #endif
