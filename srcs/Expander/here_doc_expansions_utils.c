@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:39:04 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:41:19 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:07:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,25 @@ char	*add_expanded_var(char *env_value, char *expanded_content, int *j)
 	return (expanded_content);
 }
 
-char	*add_expanded_parameter(t_minishell *msh, char *content,
-	char *new_content, int *indexes)
+char	*add_expanded_parameter(t_minishell *msh, t_command_table *table, char **contents,
+	int *indexes)
 {
 	char	*env_name;
 	char	*env_value;
 
-	env_name = get_env_name(content, &indexes[0]);
+	env_name = get_env_name(contents[0], &indexes[0]);
 	if (!env_name)
-	{
-		free(content);
-		return (free(new_content), NULL);
-	}
-	env_value = get_env_value(msh, env_name);
+		return (free(contents[0]), free(contents[1]), NULL);
+	if (!ft_strcmp(env_name, "?"))
+		env_value = ft_itoa(msh->exit_code);
+	else if (!ft_strcmp(env_name, EXPAND_SUBSHELL))
+		env_value = ft_itoa(table->subshell_level);
+	else
+		env_value = get_env_value(msh, env_name);
 	if (!env_value)
-	{
-		free(env_name);
-		free(content);
-		return (free(new_content), NULL);
-	}
-	new_content = add_expanded_var(env_value, new_content, &indexes[1]);
+		return (free(env_name), free(contents[0]), free(contents[1]), NULL);
+	contents[1] = add_expanded_var(env_value, contents[1], &indexes[1]);
 	free(env_name);
 	free(env_value);
-	return (new_content);
+	return (contents[1]);
 }

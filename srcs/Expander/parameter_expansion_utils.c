@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:36:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:40:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:07:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	isenvchar(int c)
 {
-	return (ft_isalnum(c) || c == 95);
+	return (ft_isalnum(c) || c == 63 || c == 95);
 }
 
 char	*get_env_value(t_minishell *msh, char *env_name)
@@ -61,7 +61,8 @@ char	*get_env_name(char *content, int *i)
 	return (env_name);
 }
 
-int	get_env_variable_len(t_minishell *msh, char *content, int *i)
+int	get_env_variable_len(t_minishell *msh, t_command_table *table,
+	char *content, int *i)
 {
 	int		env_len;
 	char	*env_name;
@@ -70,7 +71,12 @@ int	get_env_variable_len(t_minishell *msh, char *content, int *i)
 	env_name = get_env_name(content, i);
 	if (!env_name)
 		return (-1);
-	env_value = get_env_value(msh, env_name);
+	if (!ft_strcmp(env_name, "?"))
+		env_value = ft_itoa(msh->exit_code);
+	else if (!ft_strcmp(env_name, EXPAND_SUBSHELL))
+		env_value = ft_itoa(table->subshell_level);
+	else
+		env_value = get_env_value(msh, env_name);
 	free(env_name);
 	if (!env_value)
 		return (-1);

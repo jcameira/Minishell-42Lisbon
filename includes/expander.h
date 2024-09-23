@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 15:30:58 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:05:40 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <libft.h>
 
 # define NO_SPACE "No more space left in device\n"
+
+# define EXPAND_SUBSHELL "MINISHELL_SUBSHELL"
 
 # define AMBIGUOUS_REDIRECT "minishell: %s: ambiguous redirect\n"
 
@@ -125,10 +127,10 @@ void					print_cmd_table(t_command_table *command_table);
 void					free_arr(char **array);
 int						quote_removal_str_len(char *content);
 char					*remove_quotes_expansion(char *content, int len);
-int						parameter_expansion_str_len(t_minishell *msh, char
-							*content);
-char					*expand_parameter(t_minishell *msh, char *content,
-							int len);
+int						parameter_expansion_str_len(t_minishell *msh,
+							t_command_table *table, char *content);
+char					*expand_parameter(t_minishell *msh,
+							t_command_table *table, char *content, int len);
 int						needs_wildcard_expansion(char *content);
 int						wildcards_str_len(char *content);
 char					*expand_wildcards(char *content, int len,
@@ -138,10 +140,11 @@ char					*set_no_quotes_content(char	*content, int real_len);
 int						isenvchar(int c);
 char					*get_env_value(t_minishell *msh, char *env_name);
 char					*get_env_name(char *content, int *i);
-int						get_env_variable_len(t_minishell *msh, char *content,
-							int *i);
-char					*add_expanded_parameter(t_minishell *msh, char *content,
-							char *new_content, int *indexes);
+int						get_env_variable_len(t_minishell *msh,
+							t_command_table *table, char *content, int *i);
+char					*add_expanded_parameter(t_minishell *msh,
+							t_command_table *table, char **contents,
+							int *indexes);
 int						expansion_inside_quotes(char *content, int i, char c,
 							t_quote_flag flag);
 int						len_inside_quotes(char *content, int *i, char c);
