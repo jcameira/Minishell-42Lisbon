@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:30:01 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:41:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 21:53:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ char	*expand_parameter_inside_here_doc(t_minishell *msh,
 	char *content, int len)
 {
 	char	*new_content;
+	char	*contents[2];
 	int		indexes[2];
 
 	new_content = malloc(sizeof(char) * (len + 1));
@@ -89,17 +90,19 @@ char	*expand_parameter_inside_here_doc(t_minishell *msh,
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	indexes[0] = -1;
 	indexes[1] = -1;
-	while (content[++indexes[0]])
+	contents[0] = content;
+	contents[1] = new_content;
+	while (contents[0][++indexes[0]])
 	{
-		if (content[indexes[0]] == '$' && content[indexes[0] + 1])
-			new_content = add_expanded_parameter(msh, content, new_content,
+		if (contents[0][indexes[0]] == '$' && contents[0][indexes[0] + 1])
+			contents[1] = add_expanded_parameter(msh, NULL, contents,
 					indexes);
 		else
-			new_content[++indexes[1]] = content[indexes[0]];
+			contents[1][++indexes[1]] = contents[0][indexes[0]];
 	}
-	new_content[++indexes[1]] = '\0';
-	free(content);
-	return (new_content);
+	contents[1][++indexes[1]] = '\0';
+	free(contents[0]);
+	return (contents[1]);
 }
 
 char	*expansion_inside_here_doc(t_minishell *msh, char *content, int flag)

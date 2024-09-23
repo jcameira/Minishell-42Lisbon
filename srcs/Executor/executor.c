@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 13:35:04 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:43:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ int	next_command_setup(t_execution_info **info, int *status, int *i)
 		(*info)->pipeline_start = !(*info)->pipeline_start;
 		if (((*info)->tmp_table->next_symbol == AND && *status != 0)
 			|| ((*info)->tmp_table->next_symbol == OR && *status == 0))
-			return (free_f_command_table((*info)->tmp_table), FAILURE);
-			//return (2);
+			return (FAILURE);
 	}
 	else
 	{
@@ -61,6 +60,7 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 {
 	int					i;
 	int					status;
+	int					skip;
 	t_execution_info	*info;
 
 	info = exec_info_init(final_cmd_table);
@@ -77,7 +77,16 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 		check_if_pipefd_needed(&info);
 		execution_setup(msh, info, &status, &i);
 		if (!next_command_setup(&info, &status, &i))
-			break ;
+		{
+			if (info->tmp_table->next->subshell_level == info->tmp_table->subshell_level)
+				free_f_command_table_node(&info->tmp_table);
+			else
+			{
+				skip = info->tmp_table->subshell_level;
+				while (info->tmp_table->next && info->tmp_table->next->subshell_level != skip)
+					free_f_command_table_node(&info->tmp_table);
+			}
+		}
 		i++;
 		free_f_command_table_node(&info->tmp_table);
 	}

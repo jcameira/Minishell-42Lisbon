@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 13:16:59 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/23 20:53:55 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	minishell_init(t_minishell *msh, char **envp)
 			return (free(msh->envp), free(msh->export_list));
 	}
 	msh->prompt = MSH_PROMPT;
+	msh->exit_code = 0;
 	msh->original_stdin = dup(STDIN_FILENO);
 	msh->original_stdout = dup(STDOUT_FILENO);
 	msh->original_stderr = dup(STDERR_FILENO);
