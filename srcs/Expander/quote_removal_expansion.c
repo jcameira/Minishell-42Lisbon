@@ -3,21 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   quote_removal_expansion.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:24:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 01:32:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 16:46:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expander.h>
 
-void	quote_removal_expansion_aux(char *content, int *i, int *quotes)
+void	quote_removal_expansion_aux(char *content, int *i, int *quotes, int *real_len)
 {
 	if (content[*i] == '\'' && !quotes[D])
+	{
 		quotes[S] = !quotes[S];
+		return ;
+	}
 	else if (content[*i] == '"' && !quotes[S])
+	{
 		quotes[D] = !quotes[D];
+		return ;
+	}
+	(*real_len)++;
 }
 
 int	quote_removal_str_len(char *content)
@@ -33,10 +40,12 @@ int	quote_removal_str_len(char *content)
 	while (content[++i])
 	{
 		if (content[i] == '\'' || content[i] == '"')
-			quote_removal_expansion_aux(content, &i, quotes);
+			quote_removal_expansion_aux(content, &i, quotes, &real_len);
 		else
 			real_len++;
+		printf("Cycle %d - S = %d, D = %d, Len %d\n", i + 1, quotes[S], quotes[D], real_len);
 	}
+	printf("%d\n", real_len);
 	return (real_len);
 }
 
@@ -56,7 +65,7 @@ char	*remove_quotes_expansion(char *content, int len)
 	while (content[++indexes[0]])
 	{
 		if (content[indexes[0]] == '\'' || content[indexes[0]] == '"')
-			quote_removal_expansion_aux(content, &indexes[0], quotes);
+			quote_removal_expansion_aux(content, &indexes[0], quotes, NULL);
 		else
 			new_content[++indexes[1]] = content[indexes[0]];
 	}

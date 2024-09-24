@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 04:13:35 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:54:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,8 +194,7 @@ t_command_table		*last_table_node(t_command_table *command_table);
 t_redir_list		*last_redir_node(t_redir_list *redir_list);
 void				add_new_table_node(t_command_table **command_table,
 						t_command_table *new);
-t_command_table		*new_command_table_node(t_minishell *msh, t_ast *root,
-						t_command_table *command_table);
+t_command_table		*new_command_table_node(t_ast *root);
 t_redir_list		*new_command_table_redir(t_minishell *msh, t_ast **root,
 						t_command_table *command_table);
 t_simplecmd			*new_command_table_simple_command(t_ast *root);

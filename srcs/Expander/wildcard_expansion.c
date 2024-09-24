@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:28:03 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 01:46:46 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:54:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ int	wildcards_str_len(char *content)
 	return (real_len);
 }
 
-char	*expand_wildcards_aux(char *new_content, char *content,
-	int needs_expansion)
+char	*expand_wildcards_aux(char *new_content, char *content)
 {
 	int		quotes[2];
 	int		i;
@@ -106,7 +105,6 @@ char	*expand_wildcards_aux(char *new_content, char *content,
 	quotes[S] = 0;
 	i = -1;
 	j = -1;
-	(void)needs_expansion;
 	while (content[++i])
 	{
 		if (content[i] == '\'' && !quotes[D])
@@ -136,7 +134,7 @@ char	*expand_wildcards(char *content, int len, int needs_expansion)
 			return (ft_putstr_fd(NO_SPACE, 2), NULL);
 		new_content[len] = '\0';
 	}
-	new_content = expand_wildcards_aux(new_content, content, needs_expansion);
+	new_content = expand_wildcards_aux(new_content, content);
 	if (!new_content)
 		return (NULL);
 	return (new_content);

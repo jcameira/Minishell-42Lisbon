@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkers.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/05/23 14:09:01 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 16:29:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	check_odd_number_tokens(char *line)
 	c_par = 0;
 	while (line[++i] && c_par <= o_par)
 	{
-		if (line[i] == '\'')
+		if (line[i] == '\'' && d_quotes % 2 != 0)
 			s_quotes++;
-		else if (line[i] == '\"')
+		else if (line[i] == '\"' && s_quotes % 2 != 0)
 			d_quotes++;
 		else if (line[i] == '(')
 			o_par++;
