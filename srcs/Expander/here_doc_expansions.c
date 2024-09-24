@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:30:01 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 03:41:29 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:00:39 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*expand_parameter_inside_here_doc(t_minishell *msh,
 	{
 		if (contents[0][indexes[0]] == '$' && contents[0][indexes[0] + 1])
 			contents[1] = add_expanded_parameter(msh, NULL, contents,
-					indexes);
+					&indexes);
 		else
 			contents[1][++indexes[1]] = contents[0][indexes[0]];
 	}

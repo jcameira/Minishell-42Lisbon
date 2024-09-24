@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 15:28:43 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/24 20:03:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,23 @@ char	*expand_content(t_minishell *msh, t_command_table *table,
 	expanded_content = ft_strdup((*content)[i]);
 	if (!expanded_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	// printf("Content -> %s\n", expanded_content);
 	expanded_len = parameter_expansion_str_len(msh, table, expanded_content);
 	expanded_content = expand_parameter(msh, table, expanded_content,
 			expanded_len);
 	if (!expanded_content)
 		return (free((*content)[i]), NULL);
+	// printf("Content -> %s\n", expanded_content);
 	expanded_content = word_split(expanded_content, content, i);
 	if (!expanded_content)
 		return (free((*content)[i]), NULL);
+	// printf("Content -> %s\n", expanded_content);
 	expanded_len = wildcards_str_len(expanded_content);
 	expanded_content = expand_wildcards(expanded_content, expanded_len,
 			needs_wildcard_expansion(expanded_content));
 	if (!expanded_content)
 		return (free((*content)[i]), NULL);
+	// printf("Content -> %s\n", expanded_content);
 	expanded_len = quote_removal_str_len(expanded_content);
 	expanded_content = remove_quotes_expansion(expanded_content, expanded_len);
 	if (!expanded_content)

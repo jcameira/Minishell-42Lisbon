@@ -3,16 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   quote_removal_expansion.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:24:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 16:46:45 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/24 17:49:48 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expander.h>
 
-void	quote_removal_expansion_aux(char *content, int *i, int *quotes, int *real_len)
+void	quote_removal_expansion_aux(char *content, char *new_content, int (*indexes)[2], int *quotes)
+{
+	if (content[(*indexes)[0]] == '\'' && !quotes[D])
+	{
+		quotes[S] = !quotes[S];
+		return ;
+	}
+	else if (content[(*indexes)[0]] == '"' && !quotes[S])
+	{
+		quotes[D] = !quotes[D];
+		return ;
+	}
+	new_content[++(*indexes)[1]] = content[(*indexes)[0]];
+}
+
+void	quote_removal_expansion_len_aux(char *content, int *i, int *quotes, int *real_len)
 {
 	if (content[*i] == '\'' && !quotes[D])
 	{
@@ -40,12 +55,10 @@ int	quote_removal_str_len(char *content)
 	while (content[++i])
 	{
 		if (content[i] == '\'' || content[i] == '"')
-			quote_removal_expansion_aux(content, &i, quotes, &real_len);
+			quote_removal_expansion_len_aux(content, &i, quotes, &real_len);
 		else
 			real_len++;
-		printf("Cycle %d - S = %d, D = %d, Len %d\n", i + 1, quotes[S], quotes[D], real_len);
 	}
-	printf("%d\n", real_len);
 	return (real_len);
 }
 
@@ -65,7 +78,7 @@ char	*remove_quotes_expansion(char *content, int len)
 	while (content[++indexes[0]])
 	{
 		if (content[indexes[0]] == '\'' || content[indexes[0]] == '"')
-			quote_removal_expansion_aux(content, &indexes[0], quotes, NULL);
+			quote_removal_expansion_aux(content, new_content, &indexes, quotes);
 		else
 			new_content[++indexes[1]] = content[indexes[0]];
 	}

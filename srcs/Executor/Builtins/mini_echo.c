@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:42 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 16:20:51 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/24 20:35:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	flag_handler(char *str)
 	return (1);
 }
 
-void	mini_echo(t_minishell *msh, t_simplecmd *cmd)
+int	mini_echo(t_minishell *msh, t_simplecmd *cmd)
 {
 	int		i;
 	int		flag;
@@ -46,4 +46,5 @@ void	mini_echo(t_minishell *msh, t_simplecmd *cmd)
 	}
 	if (!flag)
 		ft_putstr_fd("\n", 1);
+	return (EXIT_SUCCESS);
 }

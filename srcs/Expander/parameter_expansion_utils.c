@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:36:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 05:28:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:09:18 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	isenvchar(int c)
 {
-	return (ft_isalnum(c) || c == 63 || c == 95);
+	return (ft_isalnum(c) || c == 95);
 }
 
 char	*get_env_value(t_minishell *msh, char *env_name)
@@ -65,15 +65,17 @@ int	get_env_variable_len(t_minishell *msh, t_command_table *table,
 	char *content, int *i)
 {
 	int		env_len;
+	int		tmp_i;
 	char	*env_name;
 	char	*env_value;
 
+	tmp_i = *i;
 	env_name = get_env_name(content, i);
 	if (!env_name)
 		return (-1);
 	if (!ft_strcmp(env_name, "PATH") && msh->private_path)
 		env_value = ft_strdup(msh->private_path);
-	else if (!ft_strcmp(env_name, "?"))
+	else if (content[tmp_i + 1] == '?')
 		env_value = ft_itoa(msh->exit_code);
 	else if (!ft_strcmp(env_name, EXPAND_SUBSHELL))
 		env_value = ft_itoa(table->subshell_level);
@@ -84,5 +86,7 @@ int	get_env_variable_len(t_minishell *msh, t_command_table *table,
 		return (-1);
 	env_len = ft_strlen(env_value);
 	free(env_value);
+	if (content[tmp_i + 1] == '?')
+		*i = tmp_i + 1;
 	return (env_len);
 }

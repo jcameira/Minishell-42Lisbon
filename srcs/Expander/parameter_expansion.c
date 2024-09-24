@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:26:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 03:42:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:02:54 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,15 @@ void	parameter_expansion_str_len_aux(char *content, int *quotes, int *i,
 	{
 		quotes[S] = !quotes[S];
 		(*real_len)++;
+		return ;
 	}
 	else if (content[*i] == '"' && !quotes[S])
 	{
 		quotes[D] = !quotes[D];
 		(*real_len)++;
+		return ;
 	}
+	(*real_len)++;
 }
 
 int	parameter_expansion_str_len(t_minishell *msh, t_command_table *table,
@@ -42,6 +45,8 @@ int	parameter_expansion_str_len(t_minishell *msh, t_command_table *table,
 	{
 		if (content[i] == '\'' || content[i] == '"')
 			parameter_expansion_str_len_aux(content, quotes, &i, &real_len);
+		else if (content[i] == '$' && quotes[D] && content[i + 1] == '"')
+			real_len++;
 		else if (content[i] == '$' && content[i + 1]
 			&& isenvchar(content[i + 1]) && !quotes[S])
 			real_len += get_env_variable_len(msh, table, content, &i);
@@ -58,12 +63,15 @@ void	check_parameter_quotes(char *content, char **new_content, int *indexes,
 	{
 		quotes[S] = !quotes[S];
 		(*new_content)[++indexes[1]] = content[indexes[0]];
+		return ;
 	}
 	else if (content[indexes[0]] == '"' && !quotes[S])
 	{
 		quotes[D] = !quotes[D];
 		(*new_content)[++indexes[1]] = content[indexes[0]];
+		return ;
 	}
+	(*new_content)[++indexes[1]] = content[indexes[0]];
 }
 
 void	init_needed_variables(char *content, int (*quotes)[2],
@@ -93,9 +101,11 @@ char	*expand_parameter(t_minishell *msh, t_command_table *table,
 	{
 		if (contents[0][indexes[0]] == '\'' || contents[0][indexes[0]] == '"')
 			check_parameter_quotes(contents[0], &new_content, indexes, quotes);
+		else if (contents[0][indexes[0]] == '$' && quotes[D] && contents[0][indexes[0] + 1] == '"')
+			contents[1][++indexes[1]] = contents[0][indexes[0]];
 		else if (contents[0][indexes[0]] == '$' && contents[0][indexes[0] + 1]
 			&& contents[0][indexes[0] + 1] != ' ' && !quotes[S])
-			contents[1] = add_expanded_parameter(msh, table, contents, indexes);
+			contents[1] = add_expanded_parameter(msh, table, contents, &indexes);
 		else
 			contents[1][++indexes[1]] = contents[0][indexes[0]];
 	}
