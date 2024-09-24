@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/17 16:57:07 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 05:00:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define SHLVL "SHLVL="
 # define SET_SHLVL "SHLVL=1"
 # define PWD "PWD="
+# define PRIVATE_PATH "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # define STDIN_FD 0
 # define STDOUT_FD 1
@@ -53,6 +54,7 @@ typedef struct s_minishell
 {
 	char				**envp;
 	char				**export_list;
+	char				*private_path;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;

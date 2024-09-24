@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/23 17:51:01 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 01:28:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	cd_special_checks(t_minishell *msh, t_simplecmd *cmd, char **final_path,
 	if (cmd->arg_nbr > 2)
 		return (ft_putstr_fd(CD_TOO_MANY_ARGS, 2), FAILURE);
 	else if (cmd->arg_nbr == 1 || (cmd->arg_nbr == 2
-		&& *cmd->arg_arr[1] == '~'))
+			&& *cmd->arg_arr[1] == '~'))
 	{
 		*final_path = find_path(msh, cmd, HOME);
 		if (!(*final_path))

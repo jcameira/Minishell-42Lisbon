@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:39:04 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 22:07:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 05:30:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ char	*add_expanded_var(char *env_value, char *expanded_content, int *j)
 	return (expanded_content);
 }
 
-char	*add_expanded_parameter(t_minishell *msh, t_command_table *table, char **contents,
-	int *indexes)
+char	*add_expanded_parameter(t_minishell *msh, t_command_table *table,
+	char **contents, int *indexes)
 {
 	char	*env_name;
 	char	*env_value;
@@ -73,7 +73,9 @@ char	*add_expanded_parameter(t_minishell *msh, t_command_table *table, char **co
 	env_name = get_env_name(contents[0], &indexes[0]);
 	if (!env_name)
 		return (free(contents[0]), free(contents[1]), NULL);
-	if (!ft_strcmp(env_name, "?"))
+	if (!ft_strcmp(env_name, "PATH") && msh->private_path)
+		env_value = ft_strdup(msh->private_path);
+	else if (!ft_strcmp(env_name, "?"))
 		env_value = ft_itoa(msh->exit_code);
 	else if (!ft_strcmp(env_name, EXPAND_SUBSHELL))
 		env_value = ft_itoa(table->subshell_level);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 02:37:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:13:35 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ typedef struct s_minishell
 {
 	char				**envp;
 	char				**export_list;
+	char				*private_path;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;
@@ -216,14 +217,14 @@ char				*set_no_quotes_content(char	*content, int real_len);
 char				*remove_quotes(char *content);
 char				*get_env_value(t_minishell *msh, char *env_name);
 char				*get_env_name(char *content, int *i);
-int					get_env_variable_len(t_minishell *msh, char *content,
+int					get_env_variable_len(t_minishell *msh, t_command_table *table, char *content,
 						int *i);
 char				*add_expanded_var(char *env_value, char *expanded_content,
 						int *j);
 int					isenvchar(int c);
 int					fork_here_doc(t_minishell *msh, t_ast *root,
 						t_command_table *command_table, t_redir_list **redirs);
-char				*expansion_inside_here_doc(t_minishell *msh, char *content,
+char				*expansion_inside_here_doc(t_minishell *msh, t_command_table *table, char *content,
 						int flag);
 void				child_signals_init(void);
 void				exit_shell(t_minishell *msh, int exit_code);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/23 13:17:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:13:27 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 
 # define EXECUTION_ERROR_MSG_PREFIX "minishell: "
 # define COMMAND_ERROR_MSG ": command not found\n"
+# define AMBIGUOUS_REDIRECT "minishell: %s: ambiguous redirect\n"
 
 # define COMMAND_NOT_FOUND_CODE 127
 
@@ -71,6 +72,7 @@ typedef struct s_minishell
 {
 	char				**envp;
 	char				**export_list;
+	char				*private_path;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;

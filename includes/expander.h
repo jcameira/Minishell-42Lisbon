@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 22:05:40 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:13:29 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@
 # define NO_SPACE "No more space left in device\n"
 
 # define EXPAND_SUBSHELL "MINISHELL_SUBSHELL"
-
-# define AMBIGUOUS_REDIRECT "minishell: %s: ambiguous redirect\n"
 
 # define S 0
 # define D 1
@@ -96,6 +94,7 @@ typedef struct s_minishell
 {
 	char				**envp;
 	char				**export_list;
+	char				*private_path;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;
@@ -175,5 +174,9 @@ t_final_cmd_table		*set_redir_info(t_final_cmd_table *new_table_node,
 t_final_cmd_table		*set_redir_info_infile(t_final_cmd_table *node,
 							t_redir_list *redirs);
 int						array_size(char **array);
+int						has_space(char *content);
+int						space_not_in_quotes(char *str);
+int						set_ambiguous_redirect(t_minishell *msh,
+							t_command_table *table, char *content);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 11:49:41 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:10:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,22 +77,17 @@ t_token_list	*get_initial_list(char *line)
 	{
 		while (line[i] && ft_strchr(WHITESPACE, line[i]))
 			i++;
-		tmp = get_initial_token_data(line, &i);
-		if (!tmp)
-			return (free_token_list(token_list), NULL);
-		if (!(*tmp))
+		if (line[i])
 		{
+			tmp = get_initial_token_data(line, &i);
+			if (!tmp)
+				return (free_token_list(token_list), NULL);
+			new = new_token(NO_TYPE, tmp);
+			if (!new)
+				return (free_token_list(token_list), NULL);
+			add_new_token(&token_list, new);
 			free(tmp);
-			continue ;
 		}
-		new = new_token(NO_TYPE, tmp);
-		if (!new)
-		{
-			free_token_list(token_list);
-			return (NULL);
-		}
-		add_new_token(&token_list, new);
-		free(tmp);
 	}
 	return (token_list);
 }

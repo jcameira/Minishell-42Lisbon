@@ -46,6 +46,7 @@ t_final_cmd_table	*new_f_cmd_table_node(t_command_table *command_table,
 	if (!new_node->simplecmd)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	new_node->builtin = builtin_arr(new_node->simplecmd->arg_arr[0]);
+	new_node->ambiguous_redirect = 0;
 	new_node = set_final_redirs(new_node, command_table->redirs);
 	if (!new_node)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);

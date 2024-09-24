@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 13:17:49 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 05:19:26 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,18 @@ char	*find_cmd_path(char **envp, char *cmd)
 	path = NULL;
 	i = -1;
 	while (envp[++i])
+	{
 		if (!ft_strncmp("PATH", envp[i], 4))
 			path = ft_strchr(envp[i], '/');
+	}
 	if (!path || !path[0])
 		return (NULL);
 	cmd_paths = ft_split(path, ':');
 	if (!cmd_paths)
+	{
+		ft_putstr_fd(NO_SPACE, 2);
 		exit(EXIT_FAILURE);
+	}
 	return (write_command_path(cmd_paths, cmd));
 }
 
@@ -84,6 +89,7 @@ void	execute_cmd(t_minishell *msh, char *path, char **cmd_args,
 void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 	t_execution_info *info)
 {
+	char	**cmd_paths;
 	char	*path;
 
 	if (final_cmd_table->infile_fd)
@@ -92,9 +98,17 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 		dup2(final_cmd_table->outfile_fd, STDOUT_FILENO);
 	if (!access(final_cmd_table->simplecmd->arg_arr[0], X_OK))
 		path = final_cmd_table->simplecmd->arg_arr[0];
-	else if (!msh->envp)
-		path = ft_strjoin(DEFAULT_CMD_PATH,
+	else if (msh->private_path)
+	{
+		cmd_paths = ft_split(msh->private_path, ':');
+		if (!cmd_paths)
+		{
+			ft_putstr_fd(NO_SPACE, 2);
+			exit(EXIT_FAILURE);
+		}
+		path = write_command_path(cmd_paths,
 				final_cmd_table->simplecmd->arg_arr[0]);
+	}
 	else
 		path = find_cmd_path(msh->envp,
 				final_cmd_table->simplecmd->arg_arr[0]);

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 20:53:55 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:19:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,27 @@ void	child_signals_init(void)
 	sigaction(SIGQUIT, &sa_quit, 0);
 }
 
-void	minishell_init(t_minishell *msh, char **envp)
+t_minishell	*init_envs(t_minishell *msh, char **envp)
 {
 	msh->envp = arrdup(envp);
 	msh->export_list = arrdup(envp);
 	if (!msh->envp || !msh->export_list)
-		return (free_arr(msh->envp), free_arr(msh->export_list));
+		return (free_arr(msh->envp), free_arr(msh->export_list), NULL);
+	msh->private_path = NULL;
+	if (msh->envp && !msh->envp[0])
+	{
+		msh->private_path = strdup(PRIVATE_PATH);
+		if (!msh->private_path)
+			return (free_arr(msh->envp), free_arr(msh->export_list), NULL);
+	}
+	return (msh);
+}
+
+void	minishell_init(t_minishell *msh, char **envp)
+{
+	msh = init_envs(msh, envp);
+	if (!msh)
+		return ;
 	bubble_sort(msh->export_list);
 	if (msh->envp && !msh->envp[0])
 	{
