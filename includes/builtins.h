@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 04:13:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:55:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	mini_unset(t_minishell *msh, t_simplecmd *cmd);
 void	exit_shell(t_minishell *msh, int exit_code);
 void	free_arr(char **array);
 int		array_size(char **array);
-char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *macro);
+char	*find_path(t_minishell *msh, char *macro);
 char	*parent_dir(char *path);
 char	**arrcpy(char **dest, char **src);
 char	**split_by_char(char *str, char c);

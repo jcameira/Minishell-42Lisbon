@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   units_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/23 11:02:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:52:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	**split_by_char(char *str, char c)
 	return (new_strs);
 }
 
-char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *target)
+char	*find_path(t_minishell *msh, char *target)
 {
 	char	*final_path;
 	char	*tmp;
@@ -62,7 +62,6 @@ char	*find_path(t_minishell *msh, t_simplecmd *cmd, char *target)
 
 	i = -1;
 	lenght = ft_strlen(target);
-	(void)cmd;
 	while (msh->envp[++i])
 	{
 		if (!ft_strncmp(msh->envp[i], target, lenght))

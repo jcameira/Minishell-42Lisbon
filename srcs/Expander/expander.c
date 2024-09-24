@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 03:47:28 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:28:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int	expander(t_minishell *msh, t_command_table *command_table)
 {
 	t_command_table			*tmp_table;
 	t_final_cmd_table		*final_cmd_table;
+	char					*tmp; 
 	int						i;
 
 	tmp_table = command_table;
@@ -140,8 +141,10 @@ int	expander(t_minishell *msh, t_command_table *command_table)
 			i = -1;
 			while (tmp_table->simplecmd->arg_arr[++i])
 			{
-				tmp_table->simplecmd->arg_arr[i] = expand_content(msh,
+				tmp = expand_content(msh,
 						tmp_table, &tmp_table->simplecmd->arg_arr, i);
+				tmp_table->simplecmd->arg_arr[i] = ft_strdup(tmp);
+				free(tmp);
 				if (!tmp_table->simplecmd->arg_arr[i])
 					return (free_command_table(command_table, 1), -1);
 			}

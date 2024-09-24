@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_table_creation_utils.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:24:54 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 02:37:07 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 16:18:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	visit_node(t_minishell *msh, t_ast **root,
 		|| last_table_node(*command_table)->type != TABLE_NO_TYPE
 		|| ((*root)->type != REDIRECTION && (*root)->type != SIMPLE_COMMAND))
 	{
-		new_table_node = new_command_table_node(msh, *root, *command_table);
+		new_table_node = new_command_table_node(*root);
 		if (!new_table_node)
 			return ;
 		add_new_table_node(command_table, new_table_node);

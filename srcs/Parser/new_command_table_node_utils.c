@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_command_table_node_utils.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:29:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 00:12:17 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:52:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,10 @@ void	add_new_table_node(t_command_table **command_table,
 	last->next = new;
 }
 
-t_command_table	*new_command_table_node(t_minishell *msh, t_ast *root,
-	t_command_table *command_table)
+t_command_table	*new_command_table_node(t_ast *root)
 {
 	t_command_table	*node;
 
-	(void)msh;
-	(void)command_table;
 	node = malloc(sizeof(t_command_table));
 	if (!node)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
