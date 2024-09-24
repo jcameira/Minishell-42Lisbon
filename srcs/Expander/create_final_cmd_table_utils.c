@@ -83,6 +83,8 @@ t_final_cmd_table	*set_final_redirs(t_final_cmd_table	*new_table_node,
 	while (tmp)
 	{
 		new_table_node->ambiguous_redirect = tmp->ambiguous_redirect;
+		if (new_table_node->ambiguous_redirect)
+			break ;
 		new_table_node = set_redir_info(new_table_node, tmp);
 		if (!new_table_node)
 			return (NULL);

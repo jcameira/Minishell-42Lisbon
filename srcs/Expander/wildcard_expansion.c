@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:28:03 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 20:31:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 01:46:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,15 @@ int	wildcards_str_len(char *content)
 	while (content[++i])
 	{
 		if (content[i] == '\'' && !quotes[D])
-		{
 			quotes[S] = !quotes[S];
-			real_len++;
-		}
 		else if (content[i] == '"' && !quotes[S])
-		{
 			quotes[D] = !quotes[D];
-			real_len++;
-		}
 		else if (content[i] == '*' && !quotes[S] && !quotes[D])
 		{
 			real_len += get_wildcards_len(content);
 			return (real_len);
 		}
-		else
-			real_len++;
+		real_len++;
 	}
 	return (real_len);
 }
@@ -113,25 +106,19 @@ char	*expand_wildcards_aux(char *new_content, char *content,
 	quotes[S] = 0;
 	i = -1;
 	j = -1;
+	(void)needs_expansion;
 	while (content[++i])
 	{
 		if (content[i] == '\'' && !quotes[D])
-		{
 			quotes[S] = !quotes[S];
-			new_content[++j] = content[i];
-		}
 		else if (content[i] == '"' && !quotes[S])
-		{
 			quotes[D] = !quotes[D];
-			new_content[++j] = content[i];
-		}
 		else if (content[i] == '*' && !quotes[S] && !quotes[D])
 		{
 			new_content = add_wildcard_content(content);
 			break ;
 		}
-		else if (!needs_expansion)
-			new_content[++j] = content[i];
+		new_content[++j] = content[i];
 	}
 	free(content);
 	return (new_content);

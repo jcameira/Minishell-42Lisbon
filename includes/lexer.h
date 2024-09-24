@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/17 16:57:02 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:13:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_minishell
 {
 	char				**envp;
 	char				**export_list;
+	char				*private_path;
 	char				*prompt;
 	int					exit_code;
 	int					original_stdin;

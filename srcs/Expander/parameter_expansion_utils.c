@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:36:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 22:07:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 05:28:24 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ int	get_env_variable_len(t_minishell *msh, t_command_table *table,
 	env_name = get_env_name(content, i);
 	if (!env_name)
 		return (-1);
-	if (!ft_strcmp(env_name, "?"))
+	if (!ft_strcmp(env_name, "PATH") && msh->private_path)
+		env_value = ft_strdup(msh->private_path);
+	else if (!ft_strcmp(env_name, "?"))
 		env_value = ft_itoa(msh->exit_code);
 	else if (!ft_strcmp(env_name, EXPAND_SUBSHELL))
 		env_value = ft_itoa(table->subshell_level);

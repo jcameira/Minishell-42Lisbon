@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 00:12:46 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 02:06:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*add_line_to_buffer(char *new_line, char *previous_buffer)
 	return (new_buffer);
 }
 
-void	handle_here_doc(t_minishell *msh, t_redir_list **redirs, int *fd)
+void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **redirs, int *fd)
 {
 	char	*line;
 	int		line_nbr;
@@ -47,7 +47,7 @@ void	handle_here_doc(t_minishell *msh, t_redir_list **redirs, int *fd)
 			free(line);
 			break ;
 		}
-		line = expansion_inside_here_doc(msh, line, (*redirs)->expand_here_doc);
+		line = expansion_inside_here_doc(msh, table, line, (*redirs)->expand_here_doc);
 		ft_putstr_fd(line, fd[WRITE]);
 		free(line);
 	}
@@ -68,7 +68,7 @@ int	fork_here_doc(t_minishell *msh, t_ast *root,
 		return (ft_putstr_fd(FORK_ERROR, 2), -1);
 	if (fork_here_doc == 0)
 	{
-		handle_here_doc(msh, redirs, fd);
+		handle_here_doc(msh, command_table, redirs, fd);
 		free_command_table(command_table, 1);
 		if (*redirs)
 		{

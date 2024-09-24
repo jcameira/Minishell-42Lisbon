@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:30:01 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 21:53:32 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 03:41:29 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ char	*set_no_quotes_content(char	*content, int real_len)
 	return (no_quote_content);
 }
 
-int	parameter_expansion_here_doc_str_len(t_minishell *msh, char *content)
+int	parameter_expansion_here_doc_str_len(t_minishell *msh,
+	t_command_table *table, char *content)
 {
 	int	real_len;
 	int	i;
@@ -71,7 +72,7 @@ int	parameter_expansion_here_doc_str_len(t_minishell *msh, char *content)
 	while (content[++i])
 	{
 		if (content[i] == '$' && content[i + 1] && isenvchar(content[i + 1]))
-			real_len += get_env_variable_len(msh, content, &i);
+			real_len += get_env_variable_len(msh, table, content, &i);
 		else
 			real_len++;
 	}
@@ -105,7 +106,8 @@ char	*expand_parameter_inside_here_doc(t_minishell *msh,
 	return (contents[1]);
 }
 
-char	*expansion_inside_here_doc(t_minishell *msh, char *content, int flag)
+char	*expansion_inside_here_doc(t_minishell *msh, t_command_table *table,
+	char *content, int flag)
 {
 	char	*expanded_content;
 	int		expanded_len;
@@ -116,7 +118,8 @@ char	*expansion_inside_here_doc(t_minishell *msh, char *content, int flag)
 	if (!expanded_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	free(content);
-	expanded_len = parameter_expansion_here_doc_str_len(msh, expanded_content);
+	expanded_len = parameter_expansion_here_doc_str_len(msh, table,
+			expanded_content);
 	expanded_content = expand_parameter_inside_here_doc(msh, expanded_content,
 			expanded_len);
 	if (!expanded_content)

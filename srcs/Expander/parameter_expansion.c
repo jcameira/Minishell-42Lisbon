@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:26:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 22:08:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 03:42:24 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	parameter_expansion_str_len_aux(char *content, int *quotes, int *i,
 	int *real_len)
 {
-
 	if (content[*i] == '\'' && !quotes[D])
 	{
 		quotes[S] = !quotes[S];
@@ -28,7 +27,8 @@ void	parameter_expansion_str_len_aux(char *content, int *quotes, int *i,
 	}
 }
 
-int	parameter_expansion_str_len(t_minishell *msh, t_command_table *table, char *content)
+int	parameter_expansion_str_len(t_minishell *msh, t_command_table *table,
+	char *content)
 {
 	int	real_len;
 	int	quotes[2];
@@ -54,7 +54,6 @@ int	parameter_expansion_str_len(t_minishell *msh, t_command_table *table, char *
 void	check_parameter_quotes(char *content, char **new_content, int *indexes,
 	int *quotes)
 {
-
 	if (content[indexes[0]] == '\'' && !quotes[D])
 	{
 		quotes[S] = !quotes[S];
@@ -67,7 +66,8 @@ void	check_parameter_quotes(char *content, char **new_content, int *indexes,
 	}
 }
 
-void	init_needed_variables(char *content, int (*quotes)[2], int (*indexes)[2], char *(*contents)[2])
+void	init_needed_variables(char *content, int (*quotes)[2],
+	int (*indexes)[2], char *(*contents)[2])
 {
 	(*quotes)[S] = 0;
 	(*quotes)[D] = 0;
@@ -76,7 +76,8 @@ void	init_needed_variables(char *content, int (*quotes)[2], int (*indexes)[2], c
 	(*contents)[0] = content;
 }
 
-char	*expand_parameter(t_minishell *msh, t_command_table *table, char *content, int len)
+char	*expand_parameter(t_minishell *msh, t_command_table *table,
+	char *content, int len)
 {
 	char	*new_content;
 	char	*contents[2];

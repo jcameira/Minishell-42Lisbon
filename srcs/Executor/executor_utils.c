@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:43:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 02:26:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 02:54:10 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	set_in(t_final_cmd_table *final_cmd_table)
 {
+	if (final_cmd_table->ambiguous_redirect)
+		return (printf(AMBIGUOUS_REDIRECT, final_cmd_table->infile), 0);
 	if (final_cmd_table->in_type == INFILE)
 		final_cmd_table->infile_fd = open(final_cmd_table->infile,
 				O_RDONLY);
@@ -26,6 +28,8 @@ int	set_in(t_final_cmd_table *final_cmd_table)
 
 int	set_out(t_final_cmd_table *final_cmd_table)
 {
+	if (final_cmd_table->ambiguous_redirect)
+		return (printf(AMBIGUOUS_REDIRECT, final_cmd_table->outfile), 0);
 	if (final_cmd_table->out_type == OUTFILE)
 		final_cmd_table->outfile_fd = open(final_cmd_table->outfile,
 				O_CREAT | O_TRUNC | O_WRONLY, 0644);
