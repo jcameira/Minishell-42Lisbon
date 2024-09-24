@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mini_env.c                                         :+:      :+:    :+:   */
+/*   mini_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/06 14:47:51 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 20:35:45 by jcameira         ###   ########.fr       */
+/*   Created: 2024/09/24 23:08:48 by jcameira          #+#    #+#             */
+/*   Updated: 2024/09/24 23:48:31 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <builtins.h>
 
-int	mini_env(t_minishell *msh, t_simplecmd *cmd)
+int mini_exit(t_minishell *msh, t_simplecmd *cmd)
 {
-	int		i;
-	int		j;
+    int exit_code;
 
-	i = -1;
-	(void)cmd;
-	while (msh->envp[++i])
-	{
-		j = -1;
-		while (msh->envp[i][++j])
-		{
-			if (msh->envp[i][j] == '=')
-			{
-				ft_putendl_fd(msh->envp[i], 1);
-				break ;
-			}
-		}
-	}
-	return (EXIT_SUCCESS);
+    (void)msh;
+    if (cmd->arg_nbr > 2)
+    {
+        ft_putstr_fd(EXIT_PREFIX, 2);
+        ft_putstr_fd(EXIT_TOO_MANY_ARGUMENTS, 2);
+    }
+    exit_code = ft_atoi(cmd->arg_arr[1]);
+	return (exit_code);
 }

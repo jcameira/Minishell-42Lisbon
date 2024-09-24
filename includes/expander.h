@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 04:13:29 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:00:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int						get_env_variable_len(t_minishell *msh,
 							t_command_table *table, char *content, int *i);
 char					*add_expanded_parameter(t_minishell *msh,
 							t_command_table *table, char **contents,
-							int *indexes);
+							int (*indexes)[2]);
 int						expansion_inside_quotes(char *content, int i, char c,
 							t_quote_flag flag);
 int						len_inside_quotes(char *content, int *i, char c);

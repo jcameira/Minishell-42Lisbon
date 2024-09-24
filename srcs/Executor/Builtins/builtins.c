@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:46:55 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/19 20:29:35 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/24 23:21:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	(*builtin_arr(char *command))(t_minishell *msh, t_simplecmd *cmd)
 	{"export", mini_export},
 	{"unset", mini_unset},
 	{"env", mini_env},
-	{"exit", exit_shell}
+	{"exit", mini_exit}
 	};
 	int			i;
 

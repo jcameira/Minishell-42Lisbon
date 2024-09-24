@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   units_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 15:52:47 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/24 22:11:27 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	**get_new_strs(char **new_strs, char *str, char c)
 	int	j;
 
 	i = 0;
+	new_strs[0] = NULL;
 	while (str[i])
 	{
 		if (str[i] == c)
@@ -104,4 +105,28 @@ char	*parent_dir(char *path)
 	}
 	new_path[j] = '\0';
 	return (new_path);
+}
+
+int	check_non_identifier_char(char **str, char *full_str)
+{
+	int	j;
+
+	j = -1;
+	if (!str[0])
+		return (ft_putstr_fd(EXPORT_PREFIX, 2),
+			ft_putstr_fd(full_str, 2),
+			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
+			free(str[1]), free(str), FAILURE);
+	if (!ft_isalpha(str[0][0]) && str[0][0] != '_')
+		return (ft_putstr_fd(EXPORT_PREFIX, 2),
+			ft_putstr_fd(full_str, 2),
+			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
+			free_arr(str), FAILURE);
+	while (str[0][++j])
+	if (!isenvchar(str[0][j]))
+		return (ft_putstr_fd(EXPORT_PREFIX, 2),
+			ft_putstr_fd(full_str, 2),
+			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
+			free_arr(str), FAILURE);
+	return (SUCCESS);
 }

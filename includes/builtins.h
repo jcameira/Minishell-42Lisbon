@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 15:55:58 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/24 23:46:30 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,18 @@
 
 # define NO_SPACE "No more space left in device\n"
 
-# define CD_NO_FILE_DIR "minishell: cd: %s: No such file or directory"
+# define CD_PREFIX "minishell: cd: "
+# define CD_NO_FILE_DIR ": No such file or directory\n"
 # define CD_TOO_MANY_ARGS "minishell: cd: too many arguments\n"
 # define CD_NO_HOME "minishell: cd: HOME not set\n"
 # define CD_NO_OLDPWD "minishell: cd: OLDPWD not set\n"
+
+# define EXPORT_PREFIX "minishell: export: `"
+# define EXPORT_NOT_IDENTIFIER "': not a valid identifier\n"
+
+# define EXIT_PREFIX "minishell: exit: "
+# define EXIT_NON_NUMERIC_ARGUMENT ": numeric argument required"
+# define EXIT_TOO_MANY_ARGUMENTS " too many arguments"
 
 # define PWD "PWD="
 # define OLDPWD "OLDPWD="
@@ -55,12 +63,13 @@ typedef struct s_minishell
 	int					original_stderr;
 }				t_minishell;
 
-void	mini_cd(t_minishell *msh, t_simplecmd *cmd);
-void	mini_echo(t_minishell *msh, t_simplecmd *cmd);
-void	mini_env(t_minishell *msh, t_simplecmd *cmd);
-void	mini_export(t_minishell *msh, t_simplecmd *cmd);
-void	mini_pwd(t_minishell *msh, t_simplecmd *cmd);
-void	mini_unset(t_minishell *msh, t_simplecmd *cmd);
+int		mini_cd(t_minishell *msh, t_simplecmd *cmd);
+int		mini_echo(t_minishell *msh, t_simplecmd *cmd);
+int		mini_env(t_minishell *msh, t_simplecmd *cmd);
+int		mini_export(t_minishell *msh, t_simplecmd *cmd);
+int		mini_pwd(t_minishell *msh, t_simplecmd *cmd);
+int		mini_unset(t_minishell *msh, t_simplecmd *cmd);
+int		mini_exit(t_minishell *msh, t_simplecmd *cmd);
 void	exit_shell(t_minishell *msh, int exit_code);
 void	free_arr(char **array);
 int		array_size(char **array);
@@ -68,5 +77,7 @@ char	*find_path(t_minishell *msh, char *macro);
 char	*parent_dir(char *path);
 char	**arrcpy(char **dest, char **src);
 char	**split_by_char(char *str, char c);
+int		isenvchar(int c);
+int		check_non_identifier_char(char **str, char *full_str);
 
 #endif
