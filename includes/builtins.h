@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 23:46:30 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:25:52 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 # define EXPORT_NOT_IDENTIFIER "': not a valid identifier\n"
 
 # define EXIT_PREFIX "minishell: exit: "
-# define EXIT_NON_NUMERIC_ARGUMENT ": numeric argument required"
-# define EXIT_TOO_MANY_ARGUMENTS " too many arguments"
+# define EXIT_NON_NUMERIC_ARGUMENT ": numeric argument required\n"
+# define EXIT_TOO_MANY_ARGUMENTS "minishell: exit: too many arguments\n"
 
 # define PWD "PWD="
 # define OLDPWD "OLDPWD="
