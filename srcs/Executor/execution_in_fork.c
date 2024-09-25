@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 05:19:26 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/25 22:35:06 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,10 @@ void	execute_cmd(t_minishell *msh, char *path, char **cmd_args,
 		free(info);
 		exit_shell(msh, COMMAND_NOT_FOUND_CODE);
 	}
+	// int i = 2;
+	// while (++(i) < 11)
+	// 	if (fcntl(i, F_GETFL) != -1 || errno != EBADF)
+	// 		printf("Fd %d is open\n", i);
 	if (execve(path, cmd_args, msh->envp) < 0)
 	{
 		close_pipes(info);
@@ -118,6 +122,7 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i)
 {
 	ignore_signals_init();
+	printf("duplicating %d %d\n", info->tmp_table->infile_fd, info->tmp_table->outfile_fd);
 	info->pid[*i] = fork();
 	if (info->pid[*i] == 0)
 	{
