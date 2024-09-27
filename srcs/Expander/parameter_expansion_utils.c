@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parameter_expansion_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:36:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 20:09:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:47:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	get_env_variable_len(t_minishell *msh, t_command_table *table,
 
 	tmp_i = *i;
 	env_name = get_env_name(content, i);
-	if (!env_name)
+	if (!env_name && content[tmp_i + 1] != '?')
 		return (-1);
 	if (!ft_strcmp(env_name, "PATH") && msh->private_path)
 		env_value = ft_strdup(msh->private_path);

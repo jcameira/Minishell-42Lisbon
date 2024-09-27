@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/26 19:18:14 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 21:46:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
+
+extern int g_sigint;
 
 void	set_original_root(t_ast *original_root, t_ast *root)
 {
@@ -36,6 +38,11 @@ int	parser(t_minishell *msh, t_token_list *token_list)
 	create_command_table(msh, root, &command_table);
 	if (!command_table)
 		return (free_ast(root), -1);
+	if (g_sigint)
+	{
+		g_sigint = !g_sigint;
+		return (free_ast(root), 130);
+	}
 	free_ast(root);
 	return (expander(msh, command_table));
 }
