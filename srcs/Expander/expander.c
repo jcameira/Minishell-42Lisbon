@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 00:55:39 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:48:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char	*expand_content(t_minishell *msh, t_command_table *table,
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	// printf("Content -> %s\n", expanded_content);
 	expanded_len = parameter_expansion_str_len(msh, table, expanded_content);
+	// printf("%d\n", expanded_len);
 	expanded_content = expand_parameter(msh, table, expanded_content,
 			expanded_len);
 	if (!expanded_content)

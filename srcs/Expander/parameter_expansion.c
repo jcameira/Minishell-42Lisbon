@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parameter_expansion.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:26:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 20:02:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:44:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	parameter_expansion_str_len(t_minishell *msh, t_command_table *table,
 		else if (content[i] == '$' && quotes[D] && content[i + 1] == '"')
 			real_len++;
 		else if (content[i] == '$' && content[i + 1]
-			&& isenvchar(content[i + 1]) && !quotes[S])
+			&& (isenvchar(content[i + 1]) || content[i + 1] == '?')
+			&& !quotes[S])
 			real_len += get_env_variable_len(msh, table, content, &i);
 		else
 			real_len++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 04:19:20 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 20:24:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,23 @@ void	interactive_signals_init(void)
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
 	sa_int.sa_handler = interactive_handler;
+	sigaddset(&sa_int.sa_mask, SIGINT);
+	sigaction(SIGINT, &sa_int, 0);
+	sigemptyset(&sa_quit.sa_mask);
+	sa_quit.sa_flags = SA_RESTART;
+	sa_quit.sa_handler = SIG_IGN;
+	sigaddset(&sa_quit.sa_mask, SIGQUIT);
+	sigaction(SIGQUIT, &sa_quit, 0);
+}
+
+void	here_doc_signals_init(void)
+{
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
+
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = SA_RESTART;
+	sa_int.sa_handler = here_doc_handler;
 	sigaddset(&sa_int.sa_mask, SIGINT);
 	sigaction(SIGINT, &sa_int, 0);
 	sigemptyset(&sa_quit.sa_mask);

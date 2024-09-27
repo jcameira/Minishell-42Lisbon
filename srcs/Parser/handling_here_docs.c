@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handling_here_docs.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 00:13:33 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 21:56:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
+
+extern int g_sigint;
 
 char	*add_line_to_buffer(char *new_line, char *previous_buffer)
 {
@@ -26,13 +28,24 @@ char	*add_line_to_buffer(char *new_line, char *previous_buffer)
 	return (new_buffer);
 }
 
+void	disable_quit_character(struct termios *old_term)
+{
+	struct	termios new_term;
+
+	tcgetattr(STDIN_FILENO, old_term);
+	printf("HERE\n");
+	new_term = *old_term;
+	new_term.c_cc[VQUIT] = _POSIX_VDISABLE;
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
+}
+
 void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **redirs, int *fd)
 {
 	char	*line;
 	int		line_nbr;
 
 	line_nbr = 0;
-	child_signals_init();
+	here_doc_signals_init();
 	while (true && ++line_nbr)
 	{
 		ft_putstr_fd(HERE_DOC_INDICATOR, 1);
@@ -42,7 +55,7 @@ void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **re
 			printf(NO_HERE_DOC_LINE, line_nbr, (*redirs)->here_doc_limiter);
 			break ;
 		}
-		if (!ft_strncmp(line, (*redirs)->here_doc_limiter, ft_strlen(line) - 1))
+		if (!ft_strncmp(line, (*redirs)->here_doc_limiter, ft_strlen(line) - 1) || g_sigint)
 		{
 			free(line);
 			break ;
@@ -59,6 +72,7 @@ int	fork_here_doc(t_minishell *msh, t_ast *root,
 	t_command_table *command_table, t_redir_list **redirs)
 {
 	pid_t	fork_here_doc;
+	int		status;
 	int		fd[2];
 
 	if (pipe(fd) < 0)
@@ -76,9 +90,14 @@ int	fork_here_doc(t_minishell *msh, t_ast *root,
 			free(*redirs);
 		}
 		free_ast(root->original_root);
+		if (g_sigint)
+			exit_shell(msh, 130);
 		exit_shell(msh, FAILURE);
 	}
 	close(fd[WRITE]);
-	waitpid(fork_here_doc, NULL, 0);
+	waitpid(fork_here_doc, &status, 0);
+	//printf("%d\n", g_sigint);
+	//if (WEXITSTATUS(status) == 130)
+	//	g_sigint = !g_sigint;
 	return (fd[READ]);
 }

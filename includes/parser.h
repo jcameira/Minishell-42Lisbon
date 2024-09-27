@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 15:54:06 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/27 19:10:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <fcntl.h>
+# include <termios.h>
+# include <signal.h>
 # include <string.h>
 # include <errno.h>
 # include <libft.h>
@@ -225,7 +227,7 @@ int					fork_here_doc(t_minishell *msh, t_ast *root,
 						t_command_table *command_table, t_redir_list **redirs);
 char				*expansion_inside_here_doc(t_minishell *msh, t_command_table *table, char *content,
 						int flag);
-void				child_signals_init(void);
+void				here_doc_signals_init(void);
 void				exit_shell(t_minishell *msh, int exit_code);
 void				free_redir_list(t_redir_list *redirs, int close_all_fds);
 void				visit_node(t_minishell *msh, t_ast **root,
