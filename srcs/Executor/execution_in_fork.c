@@ -6,67 +6,17 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/25 22:35:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 00:08:24 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <executor.h>
 
-char	*write_command_path(char **cmd_paths, char *cmd)
-{
-	int		i;
-	char	*path;
-	char	*complete_path;
-
-	i = -1;
-	while (cmd_paths[++i])
-	{
-		path = ft_strjoin(cmd_paths[i], "/");
-		complete_path = ft_strjoin(path, cmd);
-		if (!access(complete_path, 0))
-		{
-			free_arr(cmd_paths);
-			return (complete_path);
-		}
-		free(path);
-		free(complete_path);
-	}
-	free_arr(cmd_paths);
-	if (!access(cmd, 0))
-		return (cmd);
-	return (NULL);
-}
-
-char	*find_cmd_path(char **envp, char *cmd)
-{
-	int		i;
-	char	*path;
-	char	**cmd_paths;
-
-	path = NULL;
-	i = -1;
-	while (envp[++i])
-	{
-		if (!ft_strncmp("PATH", envp[i], 4))
-			path = ft_strchr(envp[i], '/');
-	}
-	if (!path || !path[0])
-		return (NULL);
-	cmd_paths = ft_split(path, ':');
-	if (!cmd_paths)
-	{
-		ft_putstr_fd(NO_SPACE, 2);
-		exit(EXIT_FAILURE);
-	}
-	return (write_command_path(cmd_paths, cmd));
-}
-
 void	execute_cmd(t_minishell *msh, char *path, char **cmd_args,
 	t_execution_info *info)
 {
-	if (!path || access(path, 0))
+	if (!path || access(path, F_OK))
 	{
-		close_pipes(info);
 		ft_putstr_fd(cmd_args[0], 2);
 		ft_putstr_fd(COMMAND_ERROR_MSG, 2);
 		free_f_command_table(info->tmp_table);
@@ -74,14 +24,9 @@ void	execute_cmd(t_minishell *msh, char *path, char **cmd_args,
 		free(info);
 		exit_shell(msh, COMMAND_NOT_FOUND_CODE);
 	}
-	// int i = 2;
-	// while (++(i) < 11)
-	// 	if (fcntl(i, F_GETFL) != -1 || errno != EBADF)
-	// 		printf("Fd %d is open\n", i);
 	if (execve(path, cmd_args, msh->envp) < 0)
 	{
-		close_pipes(info);
-		ft_putstr_fd(EXECUTION_ERROR_MSG_PREFIX, 2);
+		ft_putstr_fd(ERROR_PREFIX, 2);
 		perror(cmd_args[0]);
 		free_f_command_table(info->tmp_table);
 		free(info->pid);
@@ -91,56 +36,55 @@ void	execute_cmd(t_minishell *msh, char *path, char **cmd_args,
 }
 
 void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
-	t_execution_info *info)
+	t_execution_info *info, int *status)
 {
-	char	**cmd_paths;
 	char	*path;
 
+	path = NULL;
 	if (final_cmd_table->infile_fd)
 		dup2(final_cmd_table->infile_fd, STDIN_FILENO);
 	if (final_cmd_table->outfile_fd)
 		dup2(final_cmd_table->outfile_fd, STDOUT_FILENO);
-	if (!access(final_cmd_table->simplecmd->arg_arr[0], X_OK))
-		path = final_cmd_table->simplecmd->arg_arr[0];
-	else if (msh->private_path)
+	close_pipes(info);
+	while (final_cmd_table->simplecmd->arg_arr
+		&& !(*final_cmd_table->simplecmd->arg_arr)[0])
+		++final_cmd_table->simplecmd->arg_arr;
+	if (!final_cmd_table->simplecmd->arg_arr
+		|| !exec_checks(*final_cmd_table->simplecmd->arg_arr, status))
 	{
-		cmd_paths = ft_split(msh->private_path, ':');
-		if (!cmd_paths)
-		{
-			ft_putstr_fd(NO_SPACE, 2);
-			exit(EXIT_FAILURE);
-		}
-		path = write_command_path(cmd_paths,
-				final_cmd_table->simplecmd->arg_arr[0]);
+		free_f_command_table(info->tmp_table);
+		free(info->pid);
+		free(info);
+		exit_shell(msh, *status);
 	}
-	else
-		path = find_cmd_path(msh->envp,
-				final_cmd_table->simplecmd->arg_arr[0]);
+	get_path(msh, final_cmd_table, &path);
 	execute_cmd(msh, path, final_cmd_table->simplecmd->arg_arr, info);
 }
 
-int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i)
+int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *status)
 {
 	ignore_signals_init();
-	printf("duplicating %d %d\n", info->tmp_table->infile_fd, info->tmp_table->outfile_fd);
 	info->pid[*i] = fork();
 	if (info->pid[*i] == 0)
 	{
 		child_signals_init();
-		if (info->tmp_table->builtin && set_in(info->tmp_table)
-			&& set_out(info->tmp_table))
+		if (info->tmp_table->builtin && set_in(info->tmp_table, status)
+			&& set_out(info->tmp_table, status))
 		{
 			if (info->tmp_table->infile_fd)
 				dup2(info->tmp_table->infile_fd, STDIN_FILENO);
 			if (info->tmp_table->outfile_fd)
 				dup2(info->tmp_table->outfile_fd, STDOUT_FILENO);
-			info->tmp_table->builtin(msh, info->tmp_table->simplecmd);
+			*status = info->tmp_table->builtin(msh, info->tmp_table->simplecmd);
 			reset_std_fds(msh);
 			return (free_f_command_table(info->tmp_table), free(info->pid),
 				FAILURE);
 		}
-		if (set_in(info->tmp_table) && set_out(info->tmp_table))
-			child(msh, info->tmp_table, info);
+		if (*status)
+			return (free_f_command_table(info->tmp_table), free(info->pid),
+				FAILURE);
+		if (set_in(info->tmp_table, status) && set_out(info->tmp_table, status))
+			child(msh, info->tmp_table, info, status);
 		else
 			return (free_f_command_table(info->tmp_table), free(info->pid),
 				FAILURE);

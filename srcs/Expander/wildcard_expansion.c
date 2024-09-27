@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:28:03 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 15:54:52 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/27 00:55:52 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	get_wildcards_len(char *content)
 int	wildcards_str_len(char *content)
 {
 	int	real_len;
+	int	expanded_len;
 	int	quotes[2];
 	int	i;
 
@@ -87,15 +88,16 @@ int	wildcards_str_len(char *content)
 			quotes[D] = !quotes[D];
 		else if (content[i] == '*' && !quotes[S] && !quotes[D])
 		{
-			real_len += get_wildcards_len(content);
-			return (real_len);
+			expanded_len = get_wildcards_len(content);
+			if (expanded_len)
+				return (expanded_len);
 		}
 		real_len++;
 	}
 	return (real_len);
 }
 
-char	*expand_wildcards_aux(char *new_content, char *content)
+char	*expand_wildcards_aux(char *new_content, char *content, int needs_expansion)
 {
 	int		quotes[2];
 	int		i;
@@ -111,12 +113,13 @@ char	*expand_wildcards_aux(char *new_content, char *content)
 			quotes[S] = !quotes[S];
 		else if (content[i] == '"' && !quotes[S])
 			quotes[D] = !quotes[D];
-		else if (content[i] == '*' && !quotes[S] && !quotes[D])
+		else if (content[i] == '*' && !quotes[S] && !quotes[D] && needs_expansion)
 		{
 			new_content = add_wildcard_content(content);
 			break ;
 		}
-		new_content[++j] = content[i];
+		if (!needs_expansion)
+			new_content[++j] = content[i];
 	}
 	free(content);
 	return (new_content);
@@ -134,7 +137,7 @@ char	*expand_wildcards(char *content, int len, int needs_expansion)
 			return (ft_putstr_fd(NO_SPACE, 2), NULL);
 		new_content[len] = '\0';
 	}
-	new_content = expand_wildcards_aux(new_content, content);
+	new_content = expand_wildcards_aux(new_content, content, needs_expansion);
 	if (!new_content)
 		return (NULL);
 	return (new_content);

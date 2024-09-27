@@ -6,11 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/23 20:55:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 01:58:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+int	g_sigint;
 
 void	msh_loop(t_minishell *msh)
 {
@@ -20,6 +22,12 @@ void	msh_loop(t_minishell *msh)
 	{
 		interactive_signals_init();
 		line = readline(msh->prompt);
+		if (g_sigint)
+		{
+			g_sigint = !g_sigint;
+			msh->exit_code = 130;
+			continue ;
+		}
 		if (!line)
 		{
 			printf("exit\n");
@@ -41,6 +49,7 @@ int	main(int argc, char **argv, char **envp)
 	t_minishell	*msh;
 
 	(void) argv;
+	g_sigint = 0;
 	if (argc != 1)
 		return (ft_putstr_fd(WRONG_ARG_N, 2), 1);
 	msh = malloc(sizeof(t_minishell));

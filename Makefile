@@ -1,4 +1,4 @@
-NAME				=	minishell
+NAME				=	minishell_bonus
 
 CC					=	cc
 CFLAGS				=	-Wall -Wextra -Werror -g
@@ -28,7 +28,7 @@ BUILTIN_FILES		=	builtins.c mini_cd.c mini_echo.c mini_env.c mini_exit.c mini_ex
 BUILTIN_PATH		=	Builtins/
 BUILTINS			=	$(addprefix $(BUILTIN_PATH_PATH), $(BUILTIN_FILES))
 
-EXECUTOR_FILES		=	$(BUILTIN_FILES) execution_in_fork.c executor_inits.c executor_memory_handle.c executor_utils.c executor.c
+EXECUTOR_FILES		=	$(BUILTIN_FILES) execution_in_fork_utils.c execution_in_fork.c executor_inits.c executor_memory_handle.c executor_utils.c executor.c
 EXECUTOR_PATH		=	srcs/Executor/
 EXECUTOR			=	$(addprefix $(EXECUTOR_PATH), $(EXECUTOR_FILES))
 

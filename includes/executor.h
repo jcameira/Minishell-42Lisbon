@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/25 15:05:35 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/26 23:16:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include <dirent.h>
 # include <libft.h>
 
 # define NO_SPACE "No more space left in device\n"
@@ -29,11 +30,15 @@
 # define SUCCESS 1
 # define FAILURE 0
 
+# define ERROR_PREFIX "minshell: "
+# define ERROR_NO_FILE ": No such file or directory\n"
+# define ERROR_NO_PERMISSION ": Permission denied\n"
+# define ERROR_DIRECTORY ": Is a directory\n"
+
 # define OPEN_IN_ERROR "Error opening infile\n"
 # define OPEN_OUT_ERROR "Error opening outfile\n"
 # define OPEN_PIPE_ERROR "Error opening pipe\n"
 
-# define EXECUTION_ERROR_MSG_PREFIX "minishell: "
 # define COMMAND_ERROR_MSG ": command not found\n"
 # define AMBIGUOUS_REDIRECT "minishell: %s: ambiguous redirect\n"
 
@@ -113,9 +118,9 @@ void				exit_shell(t_minishell *msh, int exit_code);
 void				close_pipes(t_execution_info *info);
 void				free_f_command_table_node(t_final_cmd_table **cmd_table);
 int					execute_in_fork(t_minishell *msh, t_execution_info *info,
-						int *i);
-int					set_in(t_final_cmd_table *final_cmd_table);
-int					set_out(t_final_cmd_table *final_cmd_table);
+						int *i, int *status);
+int					set_in(t_final_cmd_table *final_cmd_table, int *status);
+int					set_out(t_final_cmd_table *final_cmd_table, int *status);
 void				reset_std_fds(t_minishell *msh);
 int					get_pipeline_size(t_final_cmd_table *final_cmd_table);
 void				check_if_pipefd_needed(t_execution_info **info);
@@ -123,6 +128,10 @@ t_execution_info	*exec_info_init(t_final_cmd_table *final_cmd_table);
 int					init_pipeline(t_execution_info **info, int *i);
 void				child_signals_init(void);
 void				ignore_signals_init(void);
-void				set_dups(t_execution_info *info, int fd_in, int fd_out, int *i);
+void				set_dups(t_execution_info *info, int fd_in, int fd_out,
+						int *i);
+int					exec_checks(char *cmd, int *status);
+void				get_path(t_minishell *msh,
+						t_final_cmd_table *final_cmd_table, char **path);
 
 #endif

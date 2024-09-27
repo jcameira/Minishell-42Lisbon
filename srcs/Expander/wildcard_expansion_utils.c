@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:41:41 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/04 18:44:15 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 00:55:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	match_wildcard_pattern(char *pattern, char *file)
 
 int	needs_wildcard_expansion(char *content)
 {
+	int	expanded_len;
 	int	quotes[2];
 	int	i;
 
@@ -39,7 +40,11 @@ int	needs_wildcard_expansion(char *content)
 		else if (content[i] == '"' && !quotes[S])
 			quotes[D] = !quotes[D];
 		else if (content[i] == '*' && !quotes[S] && !quotes[D])
-			return (1);
+		{
+			expanded_len = get_wildcards_len(content);
+			if (expanded_len)
+				return (1);
+		}
 	}
 	return (0);
 }

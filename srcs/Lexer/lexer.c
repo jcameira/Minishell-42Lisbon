@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 00:11:14 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 01:16:05 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ int	lexer(t_minishell *msh, char *line)
 		return (-1);
 	token_list = set_token_list_types(token_list);
 	if (check_syntax_errors(token_list))
-		return (free_token_list(token_list), -1);
+		return (free_token_list(token_list), 2);
 	return (parser(msh, token_list));
 }

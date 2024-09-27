@@ -99,16 +99,22 @@ t_simplecmd	*simplecmdcpy(t_simplecmd *simplecmd)
 {
 	t_simplecmd	*new_simplecmd;
 
+
 	new_simplecmd = malloc(sizeof(t_simplecmd));
 	if (!new_simplecmd)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-	new_simplecmd->arg_nbr = simplecmd->arg_nbr;
 	new_simplecmd->arg_arr = NULL;
-	new_simplecmd->arg_arr = arrdup(simplecmd->arg_arr);
-	free_arr(simplecmd->arg_arr);
-	if (!new_simplecmd->arg_arr)
-		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-	free(simplecmd);
+	if (simplecmd)
+	{
+		new_simplecmd->arg_nbr = simplecmd->arg_nbr;
+		new_simplecmd->arg_arr = arrdup(simplecmd->arg_arr);
+		free_arr(simplecmd->arg_arr);
+		if (!new_simplecmd->arg_arr)
+			return (ft_putstr_fd(NO_SPACE, 2), NULL);
+		free(simplecmd);
+	}
+	else
+		new_simplecmd->arg_nbr = 0;
 	return (new_simplecmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 04:13:32 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 01:31:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,16 @@
 # define PRINT_BAD_TOKEN	"BAD_TOKEN"
 # define PRINT_END	"END"
 
-# define AND_PARSE_ERROR "minishell: parse error near '&&'\n"
-# define OR_PARSE_ERROR "minishell: parse error near '||'\n"
-# define PIPE_PARSE_ERROR "minishell: parse error near '|'\n"
-# define OPEN_PARENTESIS_PARSE_ERROR "minishell: parse error near '('\n"
-# define CLOSE_PARENTESIS_PARSE_ERROR "minishell: parse error near ')'\n"
-# define INFILE_PARSE_ERROR "minishell: parse error near '<'\n"
-# define OUTFILE_PARSE_ERROR "minishell: parse error near '>'\n"
-# define APPEND_PARSE_ERROR "minishell: parse error near '>>'\n"
-# define HERE_DOC_PARSE_ERROR "minishell: parse error near '<<'\n"
+# define AND_PARSE_ERROR "minishell: syntax error near unexpected token `&&'\n"
+# define OR_PARSE_ERROR "minishell: syntax error near unexpected token `||'\n"
+# define PIPE_PARSE_ERROR "minishell: syntax error near unexpected token `|'\n"
+# define OPEN_PARENTESIS_PARSE_ERROR "minishell: syntax error near unexpected token `('\n"
+# define CLOSE_PARENTESIS_PARSE_ERROR "minishell: syntax error near unexpected token `)'\n"
+# define INFILE_PARSE_ERROR "minishell: syntax error near unexpected token `<'\n"
+# define OUTFILE_PARSE_ERROR "minishell: syntax error near unexpected token `>'\n"
+# define APPEND_PARSE_ERROR "minishell: syntax error near unexpected token `>>'\n"
+# define HERE_DOC_PARSE_ERROR "minishell: syntax error near unexpected token `<<'\n"
+# define NEWLINE_PARSE_ERROR "minishell: syntax error near unexpected token `newline'\n"
 
 typedef enum s_token_list_type
 {
@@ -111,7 +112,7 @@ int					check_and_or_syntax_errors(t_token_list *token_list,
 						t_token_list *previous);
 int					check_pipe_syntax_errors(t_token_list *token_list,
 						t_token_list *previous);
-int					check_subshell_syntax_errors(t_token_list *token_list);
-int					check_redirection_syntax_errors(t_token_list *token_list);
+int					check_subshell_syntax_errors(t_token_list *token_list, t_token_list *previous);
+int					check_redirection_syntax_errors(t_token_list *token_list, t_token_list *previous);
 
 #endif

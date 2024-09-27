@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 20:03:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 00:55:39 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ char	*expand_content(t_minishell *msh, t_command_table *table,
 		return (free((*content)[i]), NULL);
 	// printf("Content -> %s\n", expanded_content);
 	expanded_len = wildcards_str_len(expanded_content);
+	// printf("Content_len -> %d\n", expanded_len);
 	expanded_content = expand_wildcards(expanded_content, expanded_len,
 			needs_wildcard_expansion(expanded_content));
 	if (!expanded_content)
@@ -97,6 +98,7 @@ char	*expand_content(t_minishell *msh, t_command_table *table,
 	expanded_content = remove_quotes_expansion(expanded_content, expanded_len);
 	if (!expanded_content)
 		return (free((*content)[i]), NULL);
+	// printf("Content -> %s\n", expanded_content);
 	free((*content)[i]);
 	return (expanded_content);
 }
