@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:01:25 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/25 17:15:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 01:31:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	check_odd_number_tokens(char *line)
 			s_quotes++;
 		else if (line[i] == '"' && s_quotes % 2 == 0)
 			d_quotes++;
-		else if (line[i] == '(')
+		else if (line[i] == '(' && s_quotes % 2 == 0 && d_quotes % 2 == 0)
 			o_par++;
-		else if (line[i] == ')')
+		else if (line[i] == ')' && s_quotes % 2 == 0 && d_quotes % 2 == 0)
 			c_par++;
 	}
 	return (validate_odd_number_tokens(s_quotes, d_quotes, o_par, c_par));
@@ -78,9 +78,9 @@ int	check_syntax_errors(t_token_list *token_list)
 			return (1);
 		else if (check_pipe_syntax_errors(token_list, previous))
 			return (1);
-		else if (check_subshell_syntax_errors(token_list))
+		else if (check_subshell_syntax_errors(token_list, previous))
 			return (1);
-		else if (check_redirection_syntax_errors(token_list))
+		else if (check_redirection_syntax_errors(token_list, previous))
 			return (1);
 		previous = token_list;
 		token_list = token_list->next;

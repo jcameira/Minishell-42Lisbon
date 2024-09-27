@@ -45,7 +45,10 @@ t_final_cmd_table	*new_f_cmd_table_node(t_command_table *command_table,
 	new_node->simplecmd = simplecmdcpy(command_table->simplecmd);
 	if (!new_node->simplecmd)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-	new_node->builtin = builtin_arr(new_node->simplecmd->arg_arr[0]);
+	if (new_node->simplecmd->arg_arr)
+		new_node->builtin = builtin_arr(new_node->simplecmd->arg_arr[0]);
+	else
+		new_node->builtin = NULL;
 	new_node->ambiguous_redirect = 0;
 	new_node = set_final_redirs(new_node, command_table->redirs);
 	if (!new_node)
@@ -106,7 +109,13 @@ t_final_cmd_table	*create_final_cmd_table(t_command_table *command_table)
 		command_table = tmp;
 		if (new_table_node->next_symbol != NO_SYMBOL)
 			free_symbol_node(&command_table);
-		add_f_cmd_table_node(new_table_node, &final_cmd_table);
+		if (new_table_node->simplecmd->arg_nbr == 1 
+			&& !new_table_node->simplecmd->arg_arr[0][0])
+			free_f_command_table_node(&new_table_node);
+		else
+			add_f_cmd_table_node(new_table_node, &final_cmd_table);
 	}
+	if (!final_cmd_table)
+		return (0);
 	return (final_cmd_table);
 }

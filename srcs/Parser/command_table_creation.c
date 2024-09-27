@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/22 02:37:01 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:15:02 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	add_more_content_to_table_node(t_minishell *msh, t_ast **root,
 	t_redir_list	*last_redir;
 
 	last_node = last_table_node(*command_table);
-	last_redir = last_redir_node((*command_table)->redirs);
+	last_redir = last_redir_node(last_node->redirs);
 	if ((*root)->type == REDIRECTION)
 	{
 		if (last_redir)

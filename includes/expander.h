@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 20:00:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/27 00:52:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,63 +120,65 @@ typedef struct s_final_cmd_table
 	struct s_final_cmd_table		*next;
 }				t_final_cmd_table;
 
-void					free_command_table(t_command_table *command_table,
-							int close_all_fds);
-void					print_cmd_table(t_command_table *command_table);
-void					free_arr(char **array);
-int						quote_removal_str_len(char *content);
-char					*remove_quotes_expansion(char *content, int len);
-int						parameter_expansion_str_len(t_minishell *msh,
-							t_command_table *table, char *content);
-char					*expand_parameter(t_minishell *msh,
-							t_command_table *table, char *content, int len);
-int						needs_wildcard_expansion(char *content);
-int						wildcards_str_len(char *content);
-char					*expand_wildcards(char *content, int len,
-							int needs_expansion);
-int						str_len_no_quotes(char *content);
-char					*set_no_quotes_content(char	*content, int real_len);
-int						isenvchar(int c);
-char					*get_env_value(t_minishell *msh, char *env_name);
-char					*get_env_name(char *content, int *i);
-int						get_env_variable_len(t_minishell *msh,
-							t_command_table *table, char *content, int *i);
-char					*add_expanded_parameter(t_minishell *msh,
-							t_command_table *table, char **contents,
-							int (*indexes)[2]);
-int						expansion_inside_quotes(char *content, int i, char c,
-							t_quote_flag flag);
-int						len_inside_quotes(char *content, int *i, char c);
-void					add_content_inside_quotes(char *content,
-							char *new_content, int *i, int *j);
-int						match_wildcard_pattern(char *pattern, char *file);
-DIR						*get_directory_info(DIR *directory, char **new_content,
-							struct dirent **file, int flag);
-char					*append_more_wildcard_content(char *new_content,
-							struct dirent *file);
-t_final_cmd_table		*set_final_redirs(t_final_cmd_table	*new_table_node,
-							t_redir_list *redirs);
-void					free_redir_list(t_redir_list *redirs,
-							int close_all_fds);
-void					free_f_command_table(t_final_cmd_table *cmd_table);
-t_simplecmd				*simplecmdcpy(t_simplecmd *simplecmd);
-t_symbol				check_next_symbol(t_command_table *next_node);
-char					**arrdup(char **array);
-int						executor(t_minishell *msh,
-							t_final_cmd_table *final_cmd_table);
-t_final_cmd_table		*create_final_cmd_table(t_command_table *command_table);
-void					skip_until_char(char *line, int *i, char c);
-int						(*builtin_arr(char *command))(t_minishell *msh,
-							t_simplecmd *cmd);
-void					free_symbol_node(t_command_table **command_table);
-t_final_cmd_table		*set_redir_info(t_final_cmd_table *new_table_node,
-							t_redir_list *redirs);
-t_final_cmd_table		*set_redir_info_infile(t_final_cmd_table *node,
-							t_redir_list *redirs);
-int						array_size(char **array);
-int						has_space(char *content);
-int						space_not_in_quotes(char *str);
-int						set_ambiguous_redirect(t_minishell *msh,
-							t_command_table *table, char *content);
+void				free_command_table(t_command_table *command_table,
+						int close_all_fds);
+void				print_cmd_table(t_command_table *command_table);
+void				free_arr(char **array);
+int					quote_removal_str_len(char *content);
+char				*remove_quotes_expansion(char *content, int len);
+int					parameter_expansion_str_len(t_minishell *msh,
+						t_command_table *table, char *content);
+char				*expand_parameter(t_minishell *msh,
+						t_command_table *table, char *content, int len);
+int					needs_wildcard_expansion(char *content);
+int					wildcards_str_len(char *content);
+char				*expand_wildcards(char *content, int len,
+						int needs_expansion);
+int					str_len_no_quotes(char *content);
+char				*set_no_quotes_content(char	*content, int real_len);
+int					isenvchar(int c);
+char				*get_env_value(t_minishell *msh, char *env_name);
+char				*get_env_name(char *content, int *i);
+int					get_env_variable_len(t_minishell *msh,
+						t_command_table *table, char *content, int *i);
+char				*add_expanded_parameter(t_minishell *msh,
+						t_command_table *table, char **contents,
+						int (*indexes)[2]);
+int					expansion_inside_quotes(char *content, int i, char c,
+						t_quote_flag flag);
+int					len_inside_quotes(char *content, int *i, char c);
+void				add_content_inside_quotes(char *content,
+						char *new_content, int *i, int *j);
+int					match_wildcard_pattern(char *pattern, char *file);
+DIR					*get_directory_info(DIR *directory, char **new_content,
+						struct dirent **file, int flag);
+char				*append_more_wildcard_content(char *new_content,
+						struct dirent *file);
+t_final_cmd_table	*set_final_redirs(t_final_cmd_table	*new_table_node,
+						t_redir_list *redirs);
+void				free_redir_list(t_redir_list *redirs,
+						int close_all_fds);
+void				free_f_command_table(t_final_cmd_table *cmd_table);
+t_simplecmd			*simplecmdcpy(t_simplecmd *simplecmd);
+t_symbol			check_next_symbol(t_command_table *next_node);
+char				**arrdup(char **array);
+int					executor(t_minishell *msh,
+						t_final_cmd_table *final_cmd_table);
+t_final_cmd_table	*create_final_cmd_table(t_command_table *command_table);
+void				skip_until_char(char *line, int *i, char c);
+int					(*builtin_arr(char *command))(t_minishell *msh,
+						t_simplecmd *cmd);
+void				free_symbol_node(t_command_table **command_table);
+t_final_cmd_table	*set_redir_info(t_final_cmd_table *new_table_node,
+						t_redir_list *redirs);
+t_final_cmd_table	*set_redir_info_infile(t_final_cmd_table *node,
+						t_redir_list *redirs);
+int					array_size(char **array);
+int					has_space(char *content);
+int					space_not_in_quotes(char *str);
+int					set_ambiguous_redirect(t_minishell *msh,
+						t_command_table *table, char *content);
+void				free_f_command_table_node(t_final_cmd_table **cmd_table);
+int					get_wildcards_len(char *content);
 
 #endif
