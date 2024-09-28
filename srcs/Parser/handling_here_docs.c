@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 04:29:22 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 18:20:53 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,25 @@ void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **re
 {
 	char	*line;
 	int		line_nbr;
+	char	*line_nbr_str;
 
 	line_nbr = 0;
 	here_doc_signals_init();
 	while (true && ++line_nbr)
 	{
-		ft_putstr_fd(HERE_DOC_INDICATOR, 1);
+		ft_putstr_fd(HERE_DOC_INDICATOR, 2);
 		line = get_next_line(INPUT);
 		if (g_sigint)
 			break ;
 		if (!line)
 		{
-			printf(NO_HERE_DOC_LINE, line_nbr, (*redirs)->here_doc_limiter);
+			line_nbr_str = ft_itoa(line_nbr);
+			ft_putstr_fd(NO_HERE_DOC_LINE_START, 2);
+			ft_putstr_fd(line_nbr_str, 2);
+			ft_putstr_fd(NO_HERE_DOC_LINE_MIDDLE, 2);
+			ft_putstr_fd((*redirs)->here_doc_limiter, 2);
+			ft_putstr_fd(NO_HERE_DOC_LINE_END, 2);
+			free(line_nbr_str);
 			break ;
 		}
 		if (line[0] != '\n' && !ft_strncmp(line, (*redirs)->here_doc_limiter, ft_strlen(line) - 1))

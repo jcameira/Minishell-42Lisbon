@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/25 12:25:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 14:45:44 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 # include <libft.h>
 
 # define NO_SPACE "No more space left in device\n"
+
+# define ENV_PREFIX "env: ‘"
+# define ENV_FILE_DIR "’: No such file or directory\n"
 
 # define CD_PREFIX "minishell: cd: "
 # define CD_NO_FILE_DIR ": No such file or directory\n"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parameter_expansion_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:36:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 15:47:57 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/28 14:14:11 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ char	*get_env_name(char *content, int *i)
 	env_name = ft_substr(content, env_name_start, (*i) - env_name_start);
 	if (!env_name)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
+	while (content[*i] == '*')
+		(*i)++;
 	(*i)--;
 	return (env_name);
 }
