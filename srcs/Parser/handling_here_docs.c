@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handling_here_docs.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 21:56:01 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/28 04:29:22 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	disable_quit_character(struct termios *old_term)
 	struct	termios new_term;
 
 	tcgetattr(STDIN_FILENO, old_term);
-	printf("HERE\n");
 	new_term = *old_term;
 	new_term.c_cc[VQUIT] = _POSIX_VDISABLE;
 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
@@ -50,12 +49,14 @@ void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **re
 	{
 		ft_putstr_fd(HERE_DOC_INDICATOR, 1);
 		line = get_next_line(INPUT);
+		if (g_sigint)
+			break ;
 		if (!line)
 		{
 			printf(NO_HERE_DOC_LINE, line_nbr, (*redirs)->here_doc_limiter);
 			break ;
 		}
-		if (!ft_strncmp(line, (*redirs)->here_doc_limiter, ft_strlen(line) - 1) || g_sigint)
+		if (line[0] != '\n' && !ft_strncmp(line, (*redirs)->here_doc_limiter, ft_strlen(line) - 1))
 		{
 			free(line);
 			break ;
@@ -96,8 +97,7 @@ int	fork_here_doc(t_minishell *msh, t_ast *root,
 	}
 	close(fd[WRITE]);
 	waitpid(fork_here_doc, &status, 0);
-	//printf("%d\n", g_sigint);
-	//if (WEXITSTATUS(status) == 130)
-	//	g_sigint = !g_sigint;
+	if (WEXITSTATUS(status) == 130)
+		g_sigint = !g_sigint;
 	return (fd[READ]);
 }

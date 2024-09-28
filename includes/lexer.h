@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 01:31:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 03:46:50 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,6 @@ int					check_pipe_syntax_errors(t_token_list *token_list,
 						t_token_list *previous);
 int					check_subshell_syntax_errors(t_token_list *token_list, t_token_list *previous);
 int					check_redirection_syntax_errors(t_token_list *token_list, t_token_list *previous);
+void				ignore_signals_init(void);
 
 #endif

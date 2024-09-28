@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:05 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 01:16:05 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 03:46:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	lexer(t_minishell *msh, char *line)
 {
 	t_token_list	*token_list;
 
+	ignore_signals_init();
 	if (!check_odd_number_tokens(line))
 		return (-1);
 	token_list = get_initial_list(line);
