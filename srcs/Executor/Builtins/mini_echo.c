@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:42 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 20:35:21 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 14:18:03 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,18 @@ int	flag_handler(char *str)
 int	mini_echo(t_minishell *msh, t_simplecmd *cmd)
 {
 	int		i;
+	int		enter_flag_handler;
 	int		flag;
 
 	i = 0;
 	flag = 0;
+	enter_flag_handler = 1;
 	(void)msh;
 	while (cmd->arg_arr[++i])
 	{
-		if (flag_handler(cmd->arg_arr[i]))
+		if (cmd->arg_arr[i][0] != '-')
+			enter_flag_handler = !enter_flag_handler;
+		if (enter_flag_handler && flag_handler(cmd->arg_arr[i]))
 			flag = 1;
 		else
 		{

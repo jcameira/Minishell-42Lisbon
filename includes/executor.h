@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/26 23:16:56 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 18:09:52 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define SUCCESS 1
 # define FAILURE 0
 
-# define ERROR_PREFIX "minshell: "
+# define ERROR_PREFIX "minishell: "
 # define ERROR_NO_FILE ": No such file or directory\n"
 # define ERROR_NO_PERMISSION ": Permission denied\n"
 # define ERROR_DIRECTORY ": Is a directory\n"

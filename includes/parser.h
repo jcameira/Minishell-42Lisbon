@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 03:46:41 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 17:12:19 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@
 # define FAILURE 0
 
 # define NO_SPACE "No more space left in device\n"
-# define NO_HERE_DOC_LINE "\nminishell: warning: here-document at line %d \
-delimited by end-of-file (wanted `%s')\n"
+# define NO_HERE_DOC_LINE_START "\nminishell: warning: here-document at line "
+# define NO_HERE_DOC_LINE_MIDDLE " delimited by end-of-file (wanted `"
+# define NO_HERE_DOC_LINE_END "')\n"
 # define OPEN_PIPE_ERROR "Error opening pipe\n"
 # define FORK_ERROR "Error creating fork\n"
 

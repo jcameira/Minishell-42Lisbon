@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:12:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/14 17:25:09 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 18:18:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	free_command_table(t_command_table *command_table, int close_all_fds)
 	while (command_table)
 	{
 		tmp = command_table->next;
-		free_arr(command_table->simplecmd->arg_arr);
+		if (command_table->simplecmd)
+			free_arr(command_table->simplecmd->arg_arr);
 		free(command_table->simplecmd);
 		free_redir_list(command_table->redirs, close_all_fds);
 		free(command_table);

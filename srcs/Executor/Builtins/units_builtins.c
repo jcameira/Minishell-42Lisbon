@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 22:11:27 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:51:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,14 @@ int	check_non_identifier_char(char **str, char *full_str)
 	int	j;
 
 	j = -1;
-	if (!str[0])
-		return (ft_putstr_fd(EXPORT_PREFIX, 2),
-			ft_putstr_fd(full_str, 2),
-			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
-			free(str[1]), free(str), FAILURE);
-	if (!ft_isalpha(str[0][0]) && str[0][0] != '_')
+	// if (!str[0])
+		// return (ft_putstr_fd(EXPORT_PREFIX, 2),
+		// 	ft_putstr_fd(full_str, 2),
+		// 	ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
+		// 	free(str[1]), free(str), FAILURE);
+		// return (SUCCESS);
+	if (!ft_strcmp(full_str, "=")
+		|| (!ft_isalpha(str[0][0]) && str[0][0] != '_'))
 		return (ft_putstr_fd(EXPORT_PREFIX, 2),
 			ft_putstr_fd(full_str, 2),
 			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),

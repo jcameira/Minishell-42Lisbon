@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 04:17:46 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 18:01:52 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ t_minishell	*init_envs(t_minishell *msh, char **envp)
 	msh->export_list = arrdup(envp);
 	if (!msh->envp || !msh->export_list)
 		return (free_arr(msh->envp), free_arr(msh->export_list), NULL);
+	bubble_sort(msh->export_list);
 	msh->private_path = NULL;
 	if (msh->envp && !msh->envp[0])
 	{
@@ -101,21 +102,22 @@ void	minishell_init(t_minishell *msh, char **envp)
 	msh = init_envs(msh, envp);
 	if (!msh)
 		return ;
-	bubble_sort(msh->export_list);
 	if (msh->envp && !msh->envp[0])
 	{
 		msh->envp = set_pwd(msh->envp);
 		if (!msh->envp)
 			return (free(msh->envp), free(msh->export_list));
 		msh->envp = set_shlvl(msh->envp);
+		msh->export_list = set_shlvl(msh->export_list);
 		if (!msh->envp)
 			return (free(msh->envp), free(msh->export_list));
 	}
 	else
 	{
 		msh->envp = increment_shlvl(msh->envp);
-		if (!msh->envp)
-			return (free(msh->envp), free(msh->export_list));
+		msh->export_list = increment_shlvl(msh->export_list);
+		if (!msh->envp || !msh->export_list)
+			return (free_arr(msh->envp), free_arr(msh->export_list));
 	}
 	msh->prompt = MSH_PROMPT;
 	msh->exit_code = 0;

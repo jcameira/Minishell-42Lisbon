@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 21:59:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:26:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ int	mini_export(t_minishell *msh, t_simplecmd *cmd)
 	while (cmd->arg_arr[++i])
 	{
 		tmp_cmd = split_by_char(cmd->arg_arr[i], '=');
+		if (!tmp_cmd[0])
+		{
+			free_arr(tmp_cmd);
+			continue ;
+		}
 		if (!check_non_identifier_char(tmp_cmd, cmd->arg_arr[i]))
 			return (EXIT_FAILURE);
 		aux_export(msh, cmd->arg_arr[i], tmp_cmd, &msh->export_list);
