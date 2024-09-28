@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 21:46:28 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/28 03:19:46 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	parser(t_minishell *msh, t_token_list *token_list)
 	if (g_sigint)
 	{
 		g_sigint = !g_sigint;
-		return (free_ast(root), 130);
+		return (free_ast(root), free_command_table(command_table, 1), 130);
 	}
 	free_ast(root);
 	return (expander(msh, command_table));

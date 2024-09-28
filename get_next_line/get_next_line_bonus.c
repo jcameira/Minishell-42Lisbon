@@ -6,11 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 01:48:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/07/03 21:14:05 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 03:15:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <get_next_line_bonus.h>
+
+extern int g_sigint;
 
 char	*get_next_line(int fd)
 {
@@ -31,6 +33,11 @@ char	*get_next_line(int fd)
 	flag2 = 1;
 	while (!flag && (*buffer[fd] != 0 || read(fd, buffer[fd], BUFFER_SIZE) > 0))
 	{
+		//if (g_sigint) {
+        //    printf("\nSIGINT received, exiting get_next_line.\n");
+        //    //free(line); // Free the line before exiting
+        //    return NULL;
+        //}
 		line = ft_strjoin_gnl(line, buffer[fd]);
 		ft_remove_last_line(buffer[fd], &flag, &flag2);
 	}

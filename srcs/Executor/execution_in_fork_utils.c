@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 23:08:36 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 00:16:37 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 03:54:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*find_cmd_path(char **envp, char *cmd)
 
 int	exec_checks(char *cmd, int *status)
 {
-	DIR *dir;
+	DIR	*dir;
 	int	fd;
 
 	fd = open(cmd, O_RDONLY);
@@ -76,7 +76,8 @@ int	exec_checks(char *cmd, int *status)
 	dir = opendir(cmd);
 	if ((!ft_strncmp(cmd, "./", 2) || cmd[0] == '/') && dir)
 		*status = 126;
-	if ((!ft_strncmp(cmd, "./", 2) || cmd[0] == '/') && !dir)
+	if ((!ft_strncmp(cmd, "./", 2) || cmd[0] == '/') && !dir
+		&& access(cmd, X_OK))
 		*status = 127;
 	if (*status == 126)
 		return (ft_putstr_fd(ERROR_PREFIX, 2), ft_putstr_fd(cmd, 2),
