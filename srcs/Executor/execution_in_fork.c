@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 03:47:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 20:32:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,14 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 	if (final_cmd_table->outfile_fd)
 		dup2(final_cmd_table->outfile_fd, STDOUT_FILENO);
 	close_pipes(info);
-	while (final_cmd_table->simplecmd->arg_arr
+	while (*final_cmd_table->simplecmd->arg_arr
 		&& !(*final_cmd_table->simplecmd->arg_arr)[0])
+	{
+		//printf("Empty\n");
+		//free(*final_cmd_table->simplecmd->arg_arr);
 		++final_cmd_table->simplecmd->arg_arr;
-	if (!final_cmd_table->simplecmd->arg_arr
+	}
+	if (!(*final_cmd_table->simplecmd->arg_arr)
 		|| !exec_checks(*final_cmd_table->simplecmd->arg_arr, status))
 	{
 		free_f_command_table(info->tmp_table);

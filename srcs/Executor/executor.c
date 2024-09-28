@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 18:51:56 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 20:51:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ int	next_command_setup(t_minishell *msh, t_execution_info **info, int *status, i
 			while (++(*i) < (*info)->pipeline_size)
 				waitpid((*info)->pid[*i], status, 0);
 			*status = WEXITSTATUS(*status);
-			printf("Exit_code -> %d\n", *status);
 		}
+		// printf("Exit_code -> %d\n", *status);
 		msh->exit_code = *status;
 		(*info)->pipeline_start = !(*info)->pipeline_start;
 		if (((*info)->tmp_table->next_symbol == AND && *status != 0)
@@ -102,6 +102,7 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 		if (pipe(info->out_pipe) == -1)
 			return (free(info), free_f_command_table(info->tmp_table),
 				ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
+		// printf("Pipeline size -> %d\n", info->pipeline_size	);
 		check_if_pipefd_needed(&info);
 		execution_setup(msh, info, &status, &i);
 		if (!next_command_setup(msh, &info, &status, &i))
