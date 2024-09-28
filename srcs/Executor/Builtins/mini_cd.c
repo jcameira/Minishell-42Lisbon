@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/24 23:06:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 20:51:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	cd_special_checks(t_minishell *msh, t_simplecmd *cmd, char **final_path,
 	}
 	else if (cmd->arg_arr[1][0] == '/')
 	{
-		*final_path = ft_strdup(cur_path);
+		*final_path = ft_strdup(cmd->arg_arr[1]);
 		if (!(*final_path))
 			return (ft_putstr_fd(NO_SPACE, 2), FAILURE);
 	}

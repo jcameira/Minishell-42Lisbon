@@ -109,11 +109,11 @@ t_final_cmd_table	*create_final_cmd_table(t_command_table *command_table)
 		command_table = tmp;
 		if (new_table_node->next_symbol != NO_SYMBOL)
 			free_symbol_node(&command_table);
-		if (new_table_node->simplecmd->arg_nbr == 1 
-			&& !new_table_node->simplecmd->arg_arr[0][0])
-			free_f_command_table_node(&new_table_node);
-		else
-			add_f_cmd_table_node(new_table_node, &final_cmd_table);
+		// if (new_table_node->simplecmd->arg_nbr == 1 
+		// 	&& !new_table_node->simplecmd->arg_arr[0][0])
+		// 	free_f_command_table_node(&new_table_node);
+		// else
+		add_f_cmd_table_node(new_table_node, &final_cmd_table);
 	}
 	if (!final_cmd_table)
 		return (0);
