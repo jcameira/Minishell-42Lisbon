@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 17:12:19 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/29 01:41:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,14 @@ typedef enum s_token_list_type
 	BAD_TOKEN
 }				t_token_list_type;
 
+typedef enum s_symbol
+{
+	NO_SYMBOL = -1,
+	S_PIPE,
+	S_AND,
+	S_OR
+}				t_symbol;
+
 typedef struct s_simplecmd
 {
 	int		arg_nbr;
@@ -132,6 +140,7 @@ typedef struct s_command_table
 	t_redir_list			*redirs;
 	struct s_command_table	*next;
 }				t_command_table;
+
 typedef struct s_token_list
 {
 	t_token_list_type	token_type;
@@ -162,6 +171,24 @@ typedef struct s_minishell
 	int					original_stdout;
 	int					original_stderr;
 }				t_minishell;
+
+typedef struct s_final_cmd_table
+{
+	int								subshell_level;
+	t_simplecmd						*simplecmd;
+	int								(*builtin)(t_minishell *, t_simplecmd *);
+	t_redir_type					in_type;
+	char							*infile;
+	int								infile_fd;
+	int								here_doc_fd;
+	t_redir_type					out_type;
+	char							*outfile;
+	int								outfile_fd;
+	int								ambiguous_redirect;
+	t_symbol						previous_symbol;
+	t_symbol						next_symbol;
+	struct s_final_cmd_table		*next;
+}				t_final_cmd_table;
 
 t_ast_token_type	set_ast_node_type(t_token_list *token_node);
 char				*get_node_content(t_token_list *token_node);
@@ -233,5 +260,7 @@ void				exit_shell(t_minishell *msh, int exit_code);
 void				free_redir_list(t_redir_list *redirs, int close_all_fds);
 void				visit_node(t_minishell *msh, t_ast **root,
 						t_command_table **command_table);
+t_final_cmd_table	*create_final_cmd_table(t_minishell *msh, t_command_table *command_table);
+int					executor(t_minishell *msh, t_final_cmd_table *final_cmd_table);
 
 #endif

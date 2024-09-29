@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 20:51:57 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/29 01:28:52 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	execution_setup(t_minishell *msh, t_execution_info *info,
 
 int	next_command_setup(t_minishell *msh, t_execution_info **info, int *status, int *i)
 {
-	if ((*info)->tmp_table->next_symbol != PIPE)
+	if ((*info)->tmp_table->next_symbol != S_PIPE)
 	{
 		close_pipes((*info));
 		*i = -1;
@@ -66,8 +66,8 @@ int	next_command_setup(t_minishell *msh, t_execution_info **info, int *status, i
 		// printf("Exit_code -> %d\n", *status);
 		msh->exit_code = *status;
 		(*info)->pipeline_start = !(*info)->pipeline_start;
-		if (((*info)->tmp_table->next_symbol == AND && *status != 0)
-			|| ((*info)->tmp_table->next_symbol == OR && *status == 0))
+		if (((*info)->tmp_table->next_symbol == S_AND && *status != 0)
+			|| ((*info)->tmp_table->next_symbol == S_OR && *status == 0))
 			return (FAILURE);
 	}
 	else
@@ -104,6 +104,7 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 				ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
 		// printf("Pipeline size -> %d\n", info->pipeline_size	);
 		check_if_pipefd_needed(&info);
+		expander(msh, info->tmp_table);
 		execution_setup(msh, info, &status, &i);
 		if (!next_command_setup(msh, &info, &status, &i))
 		{
@@ -117,6 +118,14 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 			}
 		}
 		i++;
+		if (info->tmp_table->infile_fd > -1
+			&& info->tmp_table->infile_fd != info->in_pipe[WRITE]
+			&& info->tmp_table->infile_fd != info->in_pipe[READ])
+			close (info->tmp_table->infile_fd);
+		if (info->tmp_table->outfile_fd > -1
+			&& info->tmp_table->outfile_fd != info->in_pipe[WRITE]
+			&& info->tmp_table->outfile_fd != info->in_pipe[READ])
+			close (info->tmp_table->outfile_fd);
 		free_f_command_table_node(&info->tmp_table);
 	}
 	free(info->pid);

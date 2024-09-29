@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/28 18:09:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 23:11:15 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ typedef enum s_redir_type
 typedef enum s_symbol
 {
 	NO_SYMBOL = -1,
-	PIPE,
-	AND,
-	OR
+	S_PIPE,
+	S_AND,
+	S_OR
 }				t_symbol;
 
 typedef struct s_simplecmd
@@ -128,10 +128,9 @@ t_execution_info	*exec_info_init(t_final_cmd_table *final_cmd_table);
 int					init_pipeline(t_execution_info **info, int *i);
 void				child_signals_init(void);
 void				ignore_signals_init(void);
-void				set_dups(t_execution_info *info, int fd_in, int fd_out,
-						int *i);
 int					exec_checks(char *cmd, int *status);
 void				get_path(t_minishell *msh,
 						t_final_cmd_table *final_cmd_table, char **path);
+int					expander(t_minishell *msh, t_final_cmd_table *command_table);
 
 #endif
