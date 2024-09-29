@@ -39,19 +39,36 @@ t_final_cmd_table	*set_redir_info_infile(t_final_cmd_table *node,
 
 int	check_io_files(t_final_cmd_table *node)
 {
-	int	in_fd;
-	int	out_fd;
+	int		in_fd;
+	int		out_fd;
+	char	*tmp;
+	char	*cpy;
 
 	in_fd = -2;
 	out_fd = -2;
 	if (node->infile)
-		in_fd = open(node->infile, O_RDONLY);
+	{
+		cpy = ft_strdup(node->infile);
+		tmp = remove_quotes_expansion(cpy, quote_removal_str_len(cpy));
+		in_fd = open(tmp, O_RDONLY);
+		free(tmp);
+	}
 	if (in_fd == -1)
 		return (0);
-	if (node->outfile && node->out_type == OUTFILE)
-		out_fd = open(node->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	else if (node->outfile && node->out_type == APPEND)
-		out_fd = open(node->outfile, O_CREAT | O_APPEND | O_WRONLY, 0644);
+	// if (node->outfile && node->out_type == OUTFILE)
+	// 	out_fd = open(node->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	// else if (node->outfile && node->out_type == APPEND)
+	// 	out_fd = open(node->outfile, O_CREAT | O_APPEND | O_WRONLY, 0644);
+	if (node->outfile)
+	{
+		cpy = ft_strdup(node->outfile);
+		tmp = remove_quotes_expansion(cpy, quote_removal_str_len(cpy));
+		if (node->out_type == OUTFILE)
+			out_fd = open(tmp, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+		if (node->out_type == APPEND)
+			out_fd = open(tmp, O_CREAT | O_APPEND | O_WRONLY, 0644);
+		free(tmp);
+	}
 	if (out_fd == -1)
 	{
 		if (in_fd > -1)
@@ -85,12 +102,15 @@ t_final_cmd_table	*set_final_redirs(t_minishell *msh, t_final_cmd_table *new_tab
 		new_table_node = set_redir_info(new_table_node, tmp);
 		if (!new_table_node)
 			return (NULL);
-		if (new_table_node->infile)
-			new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->infile);
-		if (new_table_node->outfile)
-			new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->outfile);
-		if (new_table_node->ambiguous_redirect)
-			break ;
+		// printf("Infile -> %s\n", new_table_node->infile);
+		// printf("Outfile -> %s\n", new_table_node->outfile);
+		(void)msh;
+		// if (new_table_node->infile)
+		// 	new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->infile);
+		// if (new_table_node->outfile)
+		// 	new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->outfile);
+		// if (new_table_node->ambiguous_redirect)
+		// 	break ;
 		if (!check_io_files(new_table_node))
 			break ;
 		tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 01:51:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/29 11:21:59 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void	expand_redirs(t_minishell *msh, t_final_cmd_table *command_table)
 {
 	char	**tmp_file;
 
-	printf("Infile -> %s\n", command_table->infile);
+	// printf("Infile -> %s\n", command_table->infile);
 	if (command_table->infile)
 		command_table->ambiguous_redirect = set_ambiguous_redirect(
 			msh, command_table, command_table->infile);

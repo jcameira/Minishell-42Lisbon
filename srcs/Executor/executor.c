@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 01:28:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/29 16:11:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 		if (pipe(info->out_pipe) == -1)
 			return (free(info), free_f_command_table(info->tmp_table),
 				ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
-		// printf("Pipeline size -> %d\n", info->pipeline_size	);
+		printf("Pipeline size -> %d On subshell level -> %d\n", info->pipeline_size, info->tmp_table->subshell_level);
 		check_if_pipefd_needed(&info);
 		expander(msh, info->tmp_table);
 		execution_setup(msh, info, &status, &i);
