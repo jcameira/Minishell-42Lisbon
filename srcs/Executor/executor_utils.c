@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:43:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/26 22:25:20 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/28 23:11:57 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	get_pipeline_size(t_final_cmd_table *final_cmd_table)
 
 	size = 1;
 	tmp = final_cmd_table;
-	while (tmp->next_symbol == PIPE)
+	while (tmp->next_symbol == S_PIPE)
 	{
 		tmp = tmp->next;
 		size++;
@@ -80,10 +80,10 @@ int	get_pipeline_size(t_final_cmd_table *final_cmd_table)
 
 void	check_if_pipefd_needed(t_execution_info **info)
 {
-	if ((*info)->tmp_table->previous_symbol == PIPE
+	if ((*info)->tmp_table->previous_symbol == S_PIPE
 		&& (*info)->tmp_table->infile_fd == -2)
 		(*info)->tmp_table->infile_fd = (*info)->in_pipe[READ];
-	if ((*info)->tmp_table->next_symbol == PIPE
+	if ((*info)->tmp_table->next_symbol == S_PIPE
 		&& (*info)->tmp_table->outfile_fd == -2)
 		(*info)->tmp_table->outfile_fd = (*info)->out_pipe[WRITE];
 }

@@ -65,7 +65,7 @@ int	check_io_files(t_final_cmd_table *node)
 	return (1);
 }
 
-t_final_cmd_table	*set_final_redirs(t_final_cmd_table	*new_table_node,
+t_final_cmd_table	*set_final_redirs(t_minishell *msh, t_final_cmd_table *new_table_node,
 	t_redir_list *redirs)
 {
 	t_redir_list	*tmp;
@@ -82,12 +82,15 @@ t_final_cmd_table	*set_final_redirs(t_final_cmd_table	*new_table_node,
 	tmp = redirs;
 	while (tmp)
 	{
-		new_table_node->ambiguous_redirect = tmp->ambiguous_redirect;
-		if (new_table_node->ambiguous_redirect)
-			break ;
 		new_table_node = set_redir_info(new_table_node, tmp);
 		if (!new_table_node)
 			return (NULL);
+		if (new_table_node->infile)
+			new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->infile);
+		if (new_table_node->outfile)
+			new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->outfile);
+		if (new_table_node->ambiguous_redirect)
+			break ;
 		if (!check_io_files(new_table_node))
 			break ;
 		tmp = tmp->next;
@@ -123,9 +126,9 @@ t_symbol	check_next_symbol(t_command_table *next_node)
 	if (!next_node)
 		return (NO_SYMBOL);
 	else if (next_node->type == TABLE_AND)
-		return (AND);
+		return (S_AND);
 	else if (next_node->type == TABLE_OR)
-		return (OR);
+		return (S_OR);
 	else
-		return (PIPE);
+		return (S_PIPE);
 }

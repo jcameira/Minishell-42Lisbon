@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 03:19:46 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/29 01:57:08 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,49 @@ void	set_original_root(t_ast *original_root, t_ast *root)
 	root->original_root = original_root;
 }
 
+void	print_cmd_table(t_command_table *command_table)
+{
+	t_redir_list	*tmp_redir;
+	int				i;
+
+	while (command_table)
+	{
+		printf("\nTYPE:	%d	SUBSHELL_LVL:	%d\n", command_table->type,
+			command_table->subshell_level);
+		i = -1;
+		printf("\nCommand\n");
+		if (command_table->simplecmd)
+		{
+			while (command_table->simplecmd->arg_arr[++i])
+				printf("%s->", command_table->simplecmd->arg_arr[i]);
+			printf("\n");
+		}
+		printf("\nRedirections\n");
+		tmp_redir = command_table->redirs;
+		while (tmp_redir)
+		{
+			if (tmp_redir->type == HERE_DOC)
+				printf("'<<'\n%s\n", tmp_redir->here_doc_limiter);
+			else if (tmp_redir->type == INFILE)
+				printf("'<'\n%s\n", tmp_redir->file);
+			else if (tmp_redir->type == APPEND)
+				printf("'>>'\n%s\n", tmp_redir->file);
+			else if (tmp_redir->type == OUTFILE)
+				printf("'>'\n%s\n", tmp_redir->file);
+			else
+				printf("Empty redir node\n");
+			tmp_redir = tmp_redir->next;
+		}
+		printf("\n");
+		command_table = command_table->next;
+	}
+}
+
 int	parser(t_minishell *msh, t_token_list *token_list)
 {
-	t_ast			*root;
-	t_command_table	*command_table;
+	t_ast					*root;
+	t_command_table			*command_table;
+	t_final_cmd_table		*final_cmd_table;
 
 	(void)msh;
 	root = add_ast_node(&token_list, 0);
@@ -44,5 +83,8 @@ int	parser(t_minishell *msh, t_token_list *token_list)
 		return (free_ast(root), free_command_table(command_table, 1), 130);
 	}
 	free_ast(root);
-	return (expander(msh, command_table));
+	print_cmd_table(command_table);
+	final_cmd_table = create_final_cmd_table(msh, command_table);
+	// return (expander(msh, command_table));
+	return (executor(msh, final_cmd_table));
 }
