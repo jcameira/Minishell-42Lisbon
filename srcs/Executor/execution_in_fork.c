@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 13:11:41 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/29 16:51:15 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,14 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 	char	*path;
 
 	path = NULL;
-	if (final_cmd_table->infile_fd)
+	if (final_cmd_table->infile_fd> -1)
 		dup2(final_cmd_table->infile_fd, STDIN_FILENO);
-	if (final_cmd_table->outfile_fd)
+	if (final_cmd_table->outfile_fd > -1)
+	{
+		// printf("Here\n");
 		dup2(final_cmd_table->outfile_fd, STDOUT_FILENO);
+	}
+	// fprintf(stderr, "Command being executed %s, STDIN -> %d STDOUT-> %d\n", info->tmp_table->simplecmd->arg_arr[0], isatty(0), isatty(1));
 	close_pipes(info);
 	while (*final_cmd_table->simplecmd->arg_arr
 		&& !(*final_cmd_table->simplecmd->arg_arr)[0])
@@ -71,6 +75,7 @@ int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *statu
 	info->pid[*i] = fork();
 	if (info->pid[*i] == 0)
 	{
+		// fprintf(stderr, "Command to be executed in fork -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
 		if (info->tmp_table->builtin && set_in(info->tmp_table, status)
 			&& set_out(info->tmp_table, status))
 		{
@@ -86,6 +91,7 @@ int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *statu
 		if (*status)
 			return (free_f_command_table(info->tmp_table), free(info->pid),
 				FAILURE);
+		// fprintf(stderr, "Command to be executed in fork -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
 		if (set_in(info->tmp_table, status) && set_out(info->tmp_table, status))
 			child(msh, info->tmp_table, info, status);
 		else
