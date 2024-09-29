@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 20:32:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/29 13:11:41 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 
 int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *status)
 {
+	child_signals_init();
 	info->pid[*i] = fork();
 	if (info->pid[*i] == 0)
 	{
-		child_signals_init();
 		if (info->tmp_table->builtin && set_in(info->tmp_table, status)
 			&& set_out(info->tmp_table, status))
 		{
