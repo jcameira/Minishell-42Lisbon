@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:43:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 23:11:57 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:12:39 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,5 @@ void	check_if_pipefd_needed(t_execution_info **info)
 	if ((*info)->tmp_table->next_symbol == S_PIPE
 		&& (*info)->tmp_table->outfile_fd == -2)
 		(*info)->tmp_table->outfile_fd = (*info)->out_pipe[WRITE];
+	// printf("Read from pipe fd -> %d Write to pipe fd -> %d\n", (*info)->tmp_table->infile_fd, (*info)->tmp_table->outfile_fd);
 }
