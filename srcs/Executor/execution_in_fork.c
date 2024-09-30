@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 16:51:15 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:12:33 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,13 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 
 	path = NULL;
 	if (final_cmd_table->infile_fd> -1)
+	{
+		// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->infile_fd);
 		dup2(final_cmd_table->infile_fd, STDIN_FILENO);
+	}
 	if (final_cmd_table->outfile_fd > -1)
 	{
-		// printf("Here\n");
+		// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->infile_fd);
 		dup2(final_cmd_table->outfile_fd, STDOUT_FILENO);
 	}
 	// fprintf(stderr, "Command being executed %s, STDIN -> %d STDOUT-> %d\n", info->tmp_table->simplecmd->arg_arr[0], isatty(0), isatty(1));
@@ -79,10 +82,16 @@ int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *statu
 		if (info->tmp_table->builtin && set_in(info->tmp_table, status)
 			&& set_out(info->tmp_table, status))
 		{
-			if (info->tmp_table->infile_fd)
+			if (info->tmp_table->infile_fd > -1)
+			{
+				// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->infile_fd);
 				dup2(info->tmp_table->infile_fd, STDIN_FILENO);
-			if (info->tmp_table->outfile_fd)
+			}
+			if (info->tmp_table->outfile_fd > -1)
+			{
+				// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->outfile_fd);
 				dup2(info->tmp_table->outfile_fd, STDOUT_FILENO);
+			}
 			*status = info->tmp_table->builtin(msh, info->tmp_table->simplecmd);
 			reset_std_fds(msh);
 			return (free_f_command_table(info->tmp_table), free(info->pid),

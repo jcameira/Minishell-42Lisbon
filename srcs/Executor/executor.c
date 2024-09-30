@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 20:30:12 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:12:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 	status = 0;
 	while (info->tmp_table)
 	{
-		// printf("Command to be executed -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
+		// printf("Command to be executed -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], status);
 		if (!init_pipeline(&info, &i))
 			return (EXIT_FAILURE);
 		if (pipe(info->out_pipe) == -1)
@@ -108,18 +108,32 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 		// printf("Command to be executed -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
 		expander(msh, info->tmp_table);
 		// printf("Command to be executed -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
-		status = 0;
+		// status = 0;
 		execution_setup(msh, info, &status, &i);
 		// printf("Command to be executed -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
 		if (!next_command_setup(msh, &info, &status, &i))
 		{
 			if (info->tmp_table->next->subshell_level == info->tmp_table->subshell_level)
-				free_f_command_table_node(&info->tmp_table);
+			{
+				while (info->tmp_table->next_symbol != NO_SYMBOL)
+				{
+					while (info->tmp_table->next_symbol != S_AND && info->tmp_table->next_symbol != S_OR && info->tmp_table->next_symbol != NO_SYMBOL)
+						free_f_command_table_node(&info->tmp_table);
+					if ((info->tmp_table->next_symbol == S_AND && status != 0) || (info->tmp_table->next_symbol == S_OR && status == 0))
+						free_f_command_table_node(&info->tmp_table);
+					else
+						break ;
+				}
+			}
 			else
 			{
 				skip = info->tmp_table->subshell_level;
 				while (info->tmp_table->next && info->tmp_table->next->subshell_level != skip)
 					free_f_command_table_node(&info->tmp_table);
+			}
+			while ((info->tmp_table->next_symbol == S_AND && status != 0) || (info->tmp_table->next_symbol == S_OR && status == 0))
+			{
+				free_f_command_table_node(&info->tmp_table);
 			}
 		}
 		i++;
