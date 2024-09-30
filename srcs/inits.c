@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 18:01:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:18:21 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	here_doc_signals_init(void)
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = SA_RESTART;
 	sa_quit.sa_handler = SIG_IGN;
-	//sigaddset(&sa_quit.sa_mask, SIGQUIT);
+	sigaddset(&sa_quit.sa_mask, SIGQUIT);
 	sigaction(SIGQUIT, &sa_quit, 0);
 }
 
