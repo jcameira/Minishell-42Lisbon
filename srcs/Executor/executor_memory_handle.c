@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:37:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/26 21:06:02 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/01 18:08:35 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,25 @@
 void	close_pipes(t_execution_info *info)
 {
 	if (info->in_pipe[READ] > -1)
+	{
 		close(info->in_pipe[READ]);
+		info->in_pipe[READ] = -1;
+	}
 	if (info->in_pipe[WRITE] > -1)
+	{
 		close(info->in_pipe[WRITE]);
+		info->in_pipe[WRITE] = -1;
+	}
 	if (info->out_pipe[READ] > -1)
+	{
 		close(info->out_pipe[READ]);
+		info->out_pipe[READ] = -1;
+	}
 	if (info->out_pipe[WRITE] > -1)
+	{
 		close(info->out_pipe[WRITE]);
+		info->out_pipe[WRITE] = -1;
+	}
 }
 
 void	free_f_command_table_node(t_final_cmd_table **cmd_table)

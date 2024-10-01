@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/01 16:33:30 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:49:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 {
 	int					i;
 	int					status;
+	// static int			level_in_execution;
 	int					skip;
 	t_execution_info	*info;
 
@@ -97,6 +98,14 @@ int	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
 	status = 0;
 	while (info->tmp_table)
 	{
+		// fork
+		// dentro do fork
+		// {
+		// 	level_in_execution++;
+		// 	executor(t_minishell *msh, t_final_cmd_table *final_cmd_table)
+		// }
+		// wait
+		// dar free dos nodes com level x
 		// printf("Command to be executed -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], status);
 		if (!init_pipeline(&info, &i))
 			return (EXIT_FAILURE);
