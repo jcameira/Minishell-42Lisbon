@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:52:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 19:15:14 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:12:07 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,22 @@
 static int	check_if_only_subshell_inside_subshell(t_token_list *token_list)
 {
 	int	parentesis;
+	int	content;
 
-	parentesis = 0;
-	while (token_list->token_type == L_PARENTESIS)
+	content = 0;
+	parentesis = 1;
+	token_list = token_list->next;
+	while(token_list)
 	{
-		parentesis++;
+		if (token_list->token_type == L_PARENTESIS)
+			parentesis++;
+		if (token_list->token_type == R_PARENTESIS)
+			parentesis--;
+		if (token_list->token_type != L_PARENTESIS && token_list->token_type != R_PARENTESIS && parentesis == 1)
+			return (0);
 		token_list = token_list->next;
 	}
-	if (parentesis == 1)
-		return (0);
-	while (token_list->token_type != R_PARENTESIS)
-		token_list = token_list->next;
-	while (token_list && token_list->token_type == R_PARENTESIS)
-	{
-		parentesis--;
-		token_list = token_list->next;
-	}
-	return (parentesis == 0);
+	return (1);
 }
 
 int	choose_syntax_error_message(t_token_list *token_list, t_token_list *previous)
