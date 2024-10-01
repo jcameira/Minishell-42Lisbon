@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 18:20:53 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:32:00 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	fork_here_doc(t_minishell *msh, t_ast *root,
 		free_ast(root->original_root);
 		if (g_sigint)
 			exit_shell(msh, 130);
-		exit_shell(msh, FAILURE);
+		exit_shell(msh, EXIT_SUCCESS);
 	}
 	close(fd[WRITE]);
 	waitpid(fork_here_doc, &status, 0);
