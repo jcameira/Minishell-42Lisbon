@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:30 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 11:21:59 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 21:33:02 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,52 +72,38 @@ char	*word_split(char *str, char ***content, int i)
 	return (str);
 }
 
-// char	*expand_content(t_minishell *msh, t_command_table *table,
-// 	char ***content, int i)
-// {
-// 	char	*expanded_content;
-// 	int		expanded_len;
+void	clean_up_arg_arr(char ***content, int index)
+{
+	char	**new_content;
+	int		arr_size;
+	int		i;
+	int		j;
 
-// 	expanded_content = ft_strdup((*content)[i]);
-// 	if (!expanded_content)
-// 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-// 	// printf("Content -> %s\n", expanded_content);
-// 	expanded_len = parameter_expansion_str_len(msh, table, expanded_content);
-// 	// printf("%d\n", expanded_len);
-// 	expanded_content = expand_parameter(msh, table, expanded_content,
-// 			expanded_len);
-// 	if (!expanded_content)
-// 		return (free((*content)[i]), NULL);
-// 	// printf("Content -> %s\n", expanded_content);
-// 	expanded_content = word_split(expanded_content, content, i);
-// 	if (!expanded_content)
-// 		return (free((*content)[i]), NULL);
-// 	// printf("Content -> %s\n", expanded_content);
-// 	expanded_len = wildcards_str_len(expanded_content);
-// 	// printf("Content_len -> %d\n", expanded_len);
-// 	expanded_content = expand_wildcards(expanded_content, expanded_len,
-// 			needs_wildcard_expansion(expanded_content));
-// 	if (!expanded_content)
-// 		return (free((*content)[i]), NULL);
-// 	// printf("Content -> %s\n", expanded_content);
-// 	expanded_len = quote_removal_str_len(expanded_content);
-// 	expanded_content = remove_quotes_expansion(expanded_content, expanded_len);
-// 	if (!expanded_content)
-// 		return (free((*content)[i]), NULL);
-// 	// printf("Content -> %s\n", expanded_content);
-// 	free((*content)[i]);
-// 	return (expanded_content);
-// }
+	arr_size = array_size(*content);
+	// printf("Array size -> %d\n", arr_size);
+	new_content = malloc(sizeof(char *) * arr_size);
+	i = -1;
+	j = -1;
+	while ((*content)[++i])
+		if (i != index)
+		{
+			// printf("HERE -> %s\n", (*content)[i]);
+			new_content[++j] = ft_strdup((*content)[i]);
+		}
+	new_content[++j] = NULL;
+	free_arr(*content);
+	*content = new_content;
+}
 
 char	*expand_content(t_minishell *msh, t_final_cmd_table *table,
-	char ***content, int i)
+	char ***content, int *i)
 {
 	char	*expanded_content;
 	int		expanded_len;
 	int		original_i;
 
-	original_i = i;
-	expanded_content = ft_strdup((*content)[i]);
+	original_i = *i;
+	expanded_content = ft_strdup((*content)[*i]);
 	if (!expanded_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
 	// printf("Content -> %s\n", expanded_content);
@@ -126,18 +112,24 @@ char	*expand_content(t_minishell *msh, t_final_cmd_table *table,
 	expanded_content = expand_parameter(msh, table, expanded_content,
 			expanded_len);
 	if (!expanded_content)
-		return (free((*content)[i]), NULL);
+		return (free((*content)[*i]), NULL);
 	// printf("Content -> %s\n", expanded_content);
-	expanded_content = word_split(expanded_content, content, i);
+	if (!expanded_content[0])
+	{
+		clean_up_arg_arr(content, *i);
+		(*i)--;
+		return (free(expanded_content), NULL);
+	}
+	expanded_content = word_split(expanded_content, content, *i);
 	if (!expanded_content)
-		return (free((*content)[i]), NULL);
+		return (free((*content)[*i]), NULL);
 	// printf("Content -> %s\n", expanded_content);
 	expanded_len = wildcards_str_len(expanded_content);
 	// printf("Content_len -> %d\n", expanded_len);
 	expanded_content = expand_wildcards(expanded_content, expanded_len,
 			needs_wildcard_expansion(expanded_content));
 	if (!expanded_content)
-		return (free((*content)[i]), NULL);
+		return (free((*content)[*i]), NULL);
 	// printf("Content -> %s\n", expanded_content);
 	// expanded_content = word_split(expanded_content, content, i);
 	// if (!expanded_content)
@@ -145,45 +137,17 @@ char	*expand_content(t_minishell *msh, t_final_cmd_table *table,
 	expanded_len = quote_removal_str_len(expanded_content);
 	expanded_content = remove_quotes_expansion(expanded_content, expanded_len);
 	if (!expanded_content)
-		return (free((*content)[i]), NULL);
+		return (free((*content)[*i]), NULL);
 	// printf("Content -> %s\n", expanded_content);
 	// printf("Free position %d to put %s\n", original_i, expanded_content);
 	free((*content)[original_i]);
 	return (expanded_content);
 }
 
-// t_redir_list	*expand_redirs(t_minishell *msh, t_command_table *command_table)
-// {
-// 	t_redir_list	*tmp_redir;
-// 	char			**tmp_file;
-
-// 	tmp_redir = command_table->redirs;
-// 	while (tmp_redir)
-// 	{
-// 		if (tmp_redir->type != HERE_DOC)
-// 		{
-// 			tmp_redir->ambiguous_redirect = set_ambiguous_redirect(
-// 					msh, command_table, tmp_redir->file);
-// 			if (tmp_redir->ambiguous_redirect == -1)
-// 				return (free_command_table(command_table, 1), NULL);
-// 			tmp_file = &tmp_redir->file;
-// 			if (tmp_redir->ambiguous_redirect)
-// 				tmp_redir->file = remove_quotes_expansion(tmp_redir->file,
-// 						quote_removal_str_len(tmp_redir->file));
-// 			else
-// 				tmp_redir->file = expand_content(msh, command_table,
-// 						&tmp_file, 0);
-// 			if (!tmp_redir->file)
-// 				return (free_command_table(command_table, 1), NULL);
-// 		}
-// 		tmp_redir = tmp_redir->next;
-// 	}
-// 	return (command_table->redirs);
-// }
-
 void	expand_redirs(t_minishell *msh, t_final_cmd_table *command_table)
 {
 	char	**tmp_file;
+	int		tmp;
 
 	// printf("Infile -> %s\n", command_table->infile);
 	if (command_table->infile)
@@ -199,46 +163,15 @@ void	expand_redirs(t_minishell *msh, t_final_cmd_table *command_table)
 		command_table->outfile = remove_quotes_expansion(command_table->outfile,
 				quote_removal_str_len(command_table->outfile));
 	tmp_file = &command_table->infile;
+	tmp = 0;
 	if (!command_table->ambiguous_redirect && command_table->infile)
 		command_table->infile = expand_content(msh, command_table,
-				&tmp_file, 0);
+				&tmp_file, &tmp);
 	tmp_file = &command_table->outfile;
 	if (!command_table->ambiguous_redirect && command_table->outfile)
 		command_table->outfile = expand_content(msh, command_table,
-				&tmp_file, 0);
+				&tmp_file, &tmp);
 }
-
-// int	expander(t_minishell *msh, t_command_table *command_table)
-// {
-// 	t_command_table			*tmp_table;
-// 	t_final_cmd_table		*final_cmd_table;
-// 	char					*tmp; 
-// 	int						i;
-
-// 	tmp_table = command_table;
-// 	while (tmp_table)
-// 	{
-// 		if (tmp_table->simplecmd)
-// 		{
-// 			i = -1;
-// 			while (tmp_table->simplecmd->arg_arr[++i])
-// 			{
-// 				tmp = expand_content(msh,
-// 						tmp_table, &tmp_table->simplecmd->arg_arr, i);
-// 				tmp_table->simplecmd->arg_arr[i] = ft_strdup(tmp);
-// 				free(tmp);
-// 				if (!tmp_table->simplecmd->arg_arr[i])
-// 					return (free_command_table(command_table, 1), -1);
-// 			}
-// 		}
-// 		if (tmp_table->redirs && (tmp_table->redirs->file
-// 				|| tmp_table->redirs->here_doc_limiter))
-// 			tmp_table->redirs = expand_redirs(msh, tmp_table);
-// 		tmp_table = tmp_table->next;
-// 	}
-// 	final_cmd_table = create_final_cmd_table(command_table);
-// 	return (executor(msh, final_cmd_table));
-// }
 
 int	expander(t_minishell *msh, t_final_cmd_table *command_table)
 {
@@ -250,16 +183,21 @@ int	expander(t_minishell *msh, t_final_cmd_table *command_table)
 	if (tmp_table->simplecmd)
 	{
 		i = -1;
-		while (tmp_table->simplecmd->arg_arr[++i])
+		while (tmp_table->simplecmd->arg_arr && tmp_table->simplecmd->arg_arr[++i])
 		{
 			tmp = expand_content(msh,
-					tmp_table, &tmp_table->simplecmd->arg_arr, i);
-			tmp_table->simplecmd->arg_arr[i] = ft_strdup(tmp);
+					tmp_table, &tmp_table->simplecmd->arg_arr, &i);
+			if (tmp)
+				tmp_table->simplecmd->arg_arr[i] = ft_strdup(tmp);
 			free(tmp);
 			// if (!tmp_table->simplecmd->arg_arr[i])
 			// 	return (free_command_table(command_table, 1), -1);
 		}
 	}
 	expand_redirs(msh, tmp_table);
+	if (command_table->simplecmd && command_table->simplecmd->arg_arr)
+		command_table->builtin = builtin_arr(command_table->simplecmd->arg_arr[0]);
+	command_table->simplecmd->arg_nbr = array_size(command_table->simplecmd->arg_arr);
+	// printf("Arg number -> %d\n", command_table->simplecmd->arg_nbr);
 	return (1);
 }

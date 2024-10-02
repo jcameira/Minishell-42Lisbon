@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:34:32 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/28 15:51:16 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 22:09:17 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**get_new_strs(char **new_strs, char *str, char c)
 	while (str[i])
 	{
 		if (str[i] == c)
-			i++;
+			break ;
 		else
 		{
 			j = 0;
@@ -112,23 +112,23 @@ int	check_non_identifier_char(char **str, char *full_str)
 	int	j;
 
 	j = -1;
-	// if (!str[0])
-		// return (ft_putstr_fd(EXPORT_PREFIX, 2),
-		// 	ft_putstr_fd(full_str, 2),
-		// 	ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
-		// 	free(str[1]), free(str), FAILURE);
+	if (!str[0])
+		return (ft_putstr_fd(EXPORT_PREFIX, 2),
+			ft_putstr_fd(full_str, 2),
+			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
+			free(str[1]), free(str), FAILURE);
 		// return (SUCCESS);
-	if (!ft_strcmp(full_str, "=")
-		|| (!ft_isalpha(str[0][0]) && str[0][0] != '_'))
+	// printf("STRING -> %s\n", full_str);
+	if ((!ft_isalpha(str[0][0]) && str[0][0] != '_'))
 		return (ft_putstr_fd(EXPORT_PREFIX, 2),
 			ft_putstr_fd(full_str, 2),
 			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
 			free_arr(str), FAILURE);
 	while (str[0][++j])
-	if (!isenvchar(str[0][j]))
-		return (ft_putstr_fd(EXPORT_PREFIX, 2),
-			ft_putstr_fd(full_str, 2),
-			ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
-			free_arr(str), FAILURE);
+		if (!isenvchar(str[0][j]))
+			return (ft_putstr_fd(EXPORT_PREFIX, 2),
+				ft_putstr_fd(full_str, 2),
+				ft_putstr_fd(EXPORT_NOT_IDENTIFIER, 2),
+				free_arr(str), FAILURE);
 	return (SUCCESS);
 }

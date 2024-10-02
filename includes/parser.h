@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 01:41:45 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:50:25 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,16 @@ typedef struct s_final_cmd_table
 	struct s_final_cmd_table		*next;
 }				t_final_cmd_table;
 
+typedef struct s_execution_info
+{
+	t_final_cmd_table		*tmp_table;
+	pid_t					*pid;
+	int						pipeline_start;
+	int						pipeline_size;
+	int						in_pipe[2];
+	int						out_pipe[2];
+}				t_execution_info;
+
 t_ast_token_type	set_ast_node_type(t_token_list *token_node);
 char				*get_node_content(t_token_list *token_node);
 char				*get_subshell_content(t_token_list *token_node);
@@ -261,6 +271,6 @@ void				free_redir_list(t_redir_list *redirs, int close_all_fds);
 void				visit_node(t_minishell *msh, t_ast **root,
 						t_command_table **command_table);
 t_final_cmd_table	*create_final_cmd_table(t_minishell *msh, t_command_table *command_table);
-int					executor(t_minishell *msh, t_final_cmd_table *final_cmd_table);
+int					executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_cmd_table, int level_in_execution);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/30 16:12:33 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 22:39:22 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,7 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 	}
 	// fprintf(stderr, "Command being executed %s, STDIN -> %d STDOUT-> %d\n", info->tmp_table->simplecmd->arg_arr[0], isatty(0), isatty(1));
 	close_pipes(info);
-	while (*final_cmd_table->simplecmd->arg_arr
-		&& !(*final_cmd_table->simplecmd->arg_arr)[0])
-	{
-		//printf("Empty\n");
-		//free(*final_cmd_table->simplecmd->arg_arr);
-		++final_cmd_table->simplecmd->arg_arr;
-	}
-	if (!(*final_cmd_table->simplecmd->arg_arr)
+	if (!final_cmd_table->simplecmd->arg_arr || !(*final_cmd_table->simplecmd->arg_arr)
 		|| !exec_checks(*final_cmd_table->simplecmd->arg_arr, status))
 	{
 		free_f_command_table(info->tmp_table);
@@ -75,10 +68,12 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *status)
 {
 	child_signals_init();
+	fprintf(stderr, "Command to be in executed fork -> %s in process index %d\n", info->tmp_table->simplecmd->arg_arr[0], *i);
 	info->pid[*i] = fork();
 	if (info->pid[*i] == 0)
 	{
-		// fprintf(stderr, "Command to be executed in fork -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
+		// *status = 0;
+		// fprintf(stderr, "Command to be in executed fork -> %s Status -> %d\n", info->tmp_table->simplecmd->arg_arr[0]);
 		if (info->tmp_table->builtin && set_in(info->tmp_table, status)
 			&& set_out(info->tmp_table, status))
 		{

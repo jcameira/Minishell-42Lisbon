@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:52:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/01 16:12:07 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:57:09 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	check_if_only_subshell_inside_subshell(t_token_list *token_list)
 {
-	int	parentesis;
-	int	content;
+	int		parentesis;
+	int		content;
 
 	content = 0;
 	parentesis = 1;
@@ -27,7 +27,7 @@ static int	check_if_only_subshell_inside_subshell(t_token_list *token_list)
 		if (token_list->token_type == R_PARENTESIS)
 			parentesis--;
 		if (token_list->token_type != L_PARENTESIS && token_list->token_type != R_PARENTESIS && parentesis == 1)
-			return (0);
+				return (0);
 		token_list = token_list->next;
 	}
 	return (1);
@@ -56,8 +56,8 @@ int	choose_syntax_error_message(t_token_list *token_list, t_token_list *previous
 		return (ft_putstr_fd(OPEN_PARENTESIS_PARSE_ERROR, 2), 1);
 	if (token_list->next->token_type == R_PARENTESIS)
 		return (ft_putstr_fd(CLOSE_PARENTESIS_PARSE_ERROR, 2), 1);
-	// if (token_list->next->token_type == )
-	// 	return (ft_putstr_fd(_PARSE_ERROR, 2), 1);
+	if (previous->token_type == WORD)
+		return (ft_putstr_fd(OPEN_PARENTESIS_PARSE_ERROR, 2), 1);
 	return (0);
 }
 
@@ -98,8 +98,9 @@ int	check_pipe_syntax_errors(t_token_list *token_list, t_token_list *previous)
 int	check_subshell_syntax_errors(t_token_list *token_list, t_token_list *previous)
 {
 	if (token_list->token_type == L_PARENTESIS
-		&& (token_list->next->token_type == R_PARENTESIS
-			|| check_if_only_subshell_inside_subshell(token_list)))
+		&& ((previous && previous->token_type == WORD)
+		|| token_list->next->token_type == R_PARENTESIS
+		|| check_if_only_subshell_inside_subshell(token_list)))
 		// return (ft_putstr_fd(OPEN_PARENTESIS_PARSE_ERROR, 2), 1);
 		return (choose_syntax_error_message(token_list, previous));
 	else if (token_list->token_type == R_PARENTESIS)
