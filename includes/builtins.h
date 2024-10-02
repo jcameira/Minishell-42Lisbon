@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/28 14:45:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:08:10 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ char	**arrcpy(char **dest, char **src);
 char	**split_by_char(char *str, char c);
 int		isenvchar(int c);
 int		check_non_identifier_char(char **str, char *full_str);
+void	bubble_sort(char **matrix);
 
 #endif

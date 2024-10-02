@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/29 01:42:09 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:50:06 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,6 @@ void				free_f_command_table(t_final_cmd_table *cmd_table);
 t_simplecmd			*simplecmdcpy(t_simplecmd *simplecmd);
 t_symbol			check_next_symbol(t_command_table *next_node);
 char				**arrdup(char **array);
-int					executor(t_minishell *msh,
-						t_final_cmd_table *final_cmd_table);
 t_final_cmd_table	*create_final_cmd_table(t_minishell *msh, t_command_table *command_table);
 void				skip_until_char(char *line, int *i, char c);
 int					(*builtin_arr(char *command))(t_minishell *msh,

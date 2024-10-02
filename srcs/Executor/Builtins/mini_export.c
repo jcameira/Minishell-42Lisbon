@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:59 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/28 16:26:32 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 22:09:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	print_declare(char **env)
 	int		i;
 
 	i = -1;
+	bubble_sort(env);
 	while (env[++i])
 	{
 		if (!ft_strncmp(env[i], "_=", 2))
@@ -106,12 +107,13 @@ int	mini_export(t_minishell *msh, t_simplecmd *cmd)
 	i = 0;
 	while (cmd->arg_arr[++i])
 	{
+		// printf("Argument -> %s\n", cmd->arg_arr[i]);
 		tmp_cmd = split_by_char(cmd->arg_arr[i], '=');
-		if (!tmp_cmd[0])
-		{
-			free_arr(tmp_cmd);
-			continue ;
-		}
+		// if (!tmp_cmd[0])
+		// {
+		// 	free_arr(tmp_cmd);
+		// 	continue ;
+		// }
 		if (!check_non_identifier_char(tmp_cmd, cmd->arg_arr[i]))
 			return (EXIT_FAILURE);
 		aux_export(msh, cmd->arg_arr[i], tmp_cmd, &msh->export_list);

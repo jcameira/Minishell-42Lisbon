@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:43:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/30 16:12:39 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 22:42:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	get_pipeline_size(t_final_cmd_table *final_cmd_table)
 
 	size = 1;
 	tmp = final_cmd_table;
-	while (tmp->next_symbol == S_PIPE)
+	while (tmp->next_symbol == S_PIPE && tmp->next && tmp->next->subshell_level == tmp->subshell_level)
 	{
 		tmp = tmp->next;
 		size++;

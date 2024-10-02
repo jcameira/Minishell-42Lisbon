@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/28 23:11:15 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:06:09 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct s_final_cmd_table
 	t_symbol						next_symbol;
 	struct s_final_cmd_table		*next;
 }				t_final_cmd_table;
+
 typedef struct s_execution_info
 {
 	t_final_cmd_table		*tmp_table;
