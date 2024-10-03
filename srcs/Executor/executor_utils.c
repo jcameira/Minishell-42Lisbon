@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:43:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 10:09:37 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:04:30 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,17 @@ int	get_pipeline_size(t_final_cmd_table *final_cmd_table)
 
 void	check_if_pipefd_needed(t_execution_info **info)
 {
+	if ((*info)->tmp_table->next
+		&& (*info)->tmp_table->next->subshell_level < (*info)->tmp_table->subshell_level
+		&& (*info)->descending_subshell_pipe[WRITE] > -1
+		&& (*info)->descending_subshell_pipe[READ] > -1
+		&& (*info)->tmp_table->outfile_fd == -2)
+	{
+		(*info)->tmp_table->outfile_fd = (*info)->descending_subshell_pipe[WRITE];
+		close((*info)->descending_subshell_pipe[READ]);
+		(*info)->descending_subshell_pipe[READ] = -1;
+	}
+	// printf("Read from pipe fd -> %d Write to pipe fd -> %d\n", (*info)->tmp_table->infile_fd, (*info)->tmp_table->outfile_fd);
 	if ((*info)->tmp_table->previous_symbol == S_PIPE
 		&& (*info)->tmp_table->infile_fd == -2)
 		(*info)->tmp_table->infile_fd = (*info)->in_pipe[READ];

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 10:38:55 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:59:43 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	execution_setup(t_minishell *msh, t_execution_info *info,
 			if (info->tmp_table->outfile_fd > -1)
 				dup2(info->tmp_table->outfile_fd, STDOUT_FILENO);
 			if (!ft_strcmp(info->tmp_table->simplecmd->arg_arr[0], "exit") && info->tmp_table->subshell_level == 0)
-				ft_putstr_fd("exit\n", 1);
+				ft_putstr_fd("exit\n", 2);
 			*status = info->tmp_table->builtin(msh, info->tmp_table->simplecmd);
 			reset_std_fds(msh);
 		}
@@ -90,6 +90,28 @@ int	next_command_setup(t_minishell *msh, t_execution_info **info, int *status, i
 	return (SUCCESS);
 }
 
+int	end_of_level_pipe(t_execution_info *info, int level_in_execution)
+{
+	t_final_cmd_table	*tmp;
+
+	// printf("HERE\n");
+	tmp = info->tmp_table;
+	// printf("1Cmd level-> %d, Level in execution -> %d\n", info->tmp_table->subshell_level, level_in_execution);
+	while (tmp->next)
+	{
+		if (tmp->next->subshell_level < tmp->subshell_level && tmp->next->subshell_level == level_in_execution && tmp->next_symbol == S_PIPE)
+		{
+			// printf("Creating end of subshell level pipe\n");
+			if (pipe(info->descending_subshell_pipe) == -1)
+				return (ft_putstr_fd(OPEN_PIPE_ERROR, 2), FAILURE);
+			break ;
+		}
+		tmp = tmp->next;
+	}
+	// printf("2Cmd level-> %d, Level in execution -> %d\n", info->tmp_table->subshell_level, level_in_execution);
+	return (SUCCESS);
+}
+
 int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_cmd_table, int level_in_execution)
 {
 	static int	i;
@@ -97,6 +119,7 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 	int			skip;
 	pid_t		subshell;
 
+	// printf("Level in execution -> %d\n", level_in_execution);
 	if (!info)
 	{
 		info = exec_info_init(final_cmd_table);
@@ -106,20 +129,25 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 	status = 0;
 	while (info->tmp_table)
 	{
+		// printf("Command to be executed -> %s With argument -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->simplecmd->arg_arr[1], status);
+		// printf("Cmd level-> %d, Level in execution -> %d\n", info->tmp_table->subshell_level, level_in_execution);
 		if (info->tmp_table->subshell_level > level_in_execution)
 		{
+			// printf("Command to be executed -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], status);
+			if (!end_of_level_pipe(info, level_in_execution))
+				return (free(info), free_f_command_table(info->tmp_table), -1);
 			subshell = fork();
 			if (subshell == 0)
 			{
 				// printf("Next subshell\n");
-				executor(info, msh, final_cmd_table, ++level_in_execution);
+				executor(info, msh, info->tmp_table, ++level_in_execution);
 			}
 			close_pipes(info);
 			// printf("Waiting for subshell level %d to finish executing\n", level_in_execution + 1);
 			waitpid(subshell, &status, 0);
 			// printf("Finished waiting for subshell level %d to finish executing\n", level_in_execution + 1);
 			msh->exit_code = WEXITSTATUS(status);
-			// printf("Command to be executed -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], msh->exit_code);
+			// printf("Command to be executed -> %s With argument -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->simplecmd->arg_arr[1], msh->exit_code);
 			// if (((info->tmp_table->next && info->tmp_table->next->subshell_level < level_in_execution) || (!info->tmp_table->next && info->tmp_table->subshell_level > 0)))
 			if (info->tmp_table->next && info->tmp_table->next->subshell_level < level_in_execution)
 			{
@@ -130,9 +158,20 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 				free(info);
 				exit_shell(msh, msh->exit_code);
 			}
+			if (info->descending_subshell_pipe[WRITE] > -1
+				&& info->descending_subshell_pipe[WRITE] > -1)
+			{
+				info->in_pipe[WRITE] = info->descending_subshell_pipe[WRITE];
+				info->descending_subshell_pipe[WRITE] = -1;
+				info->in_pipe[READ] = info->descending_subshell_pipe[READ];
+				info->descending_subshell_pipe[READ] = -1;
+			}
 		}
 		while (info->tmp_table && info->tmp_table->subshell_level > level_in_execution)
+		{
+			// printf("HERE\n");
 			free_f_command_table_node(&info->tmp_table);
+		}
 		if (!info->tmp_table)
 			break ;
 		// printf("Executing subshell level %d\n", level_in_execution);
@@ -154,13 +193,20 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 		{
 			if ((info->tmp_table->next && info->tmp_table->next->subshell_level < level_in_execution) || (!info->tmp_table->next && info->tmp_table->subshell_level > 0))
 			{
+				// printf("Exiting subshell level %d\n", level_in_execution);
+				if (info->descending_subshell_pipe[WRITE] > -1)
+				{
+					// printf("Closing special pipe\n");
+					close(info->descending_subshell_pipe[WRITE]);
+					info->descending_subshell_pipe[WRITE] = -1;
+				}
 				close_pipes(info);
 				free_f_command_table(info->tmp_table);
 				free(info->pid);
 				free(info);
 				exit_shell(msh, status);
 			}
-			if (info->tmp_table->next->subshell_level == info->tmp_table->subshell_level)
+			if (info->tmp_table->next && (info->tmp_table->next->subshell_level > info->tmp_table->subshell_level))
 			{
 				while (info->tmp_table->next_symbol != NO_SYMBOL)
 				{
@@ -174,12 +220,20 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 			}
 			else
 			{
-				skip = info->tmp_table->subshell_level;
-				while (info->tmp_table->next && info->tmp_table->next->subshell_level != skip)
-					free_f_command_table_node(&info->tmp_table);
+				// printf("SKIP HERE!!!!!!!!!!!!!!!!!\n");
+				if (info->tmp_table->next)
+				{
+					skip = info->tmp_table->next->subshell_level;
+					while (info->tmp_table->next && info->tmp_table->next->subshell_level >= skip)
+					{
+						// printf("Free node\n");
+						free_f_command_table_node(&info->tmp_table);
+					}
+				}
 			}
 			while ((info->tmp_table->next_symbol == S_AND && status != 0) || (info->tmp_table->next_symbol == S_OR && status == 0))
 			{
+				// printf("Free node\n");
 				free_f_command_table_node(&info->tmp_table);
 			}
 		}
@@ -192,9 +246,13 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 			&& info->tmp_table->outfile_fd != info->in_pipe[WRITE]
 			&& info->tmp_table->outfile_fd != info->in_pipe[READ])
 			close (info->tmp_table->outfile_fd);
+		// printf("Free node\n");
 		free_f_command_table_node(&info->tmp_table);
+		// printf("Pointer -> %p\n", info->tmp_table);
 	}
 	free(info->pid);
 	free(info);
+	if (level_in_execution > 0)
+		exit_shell(msh, msh->exit_code);
 	return (status);
 }

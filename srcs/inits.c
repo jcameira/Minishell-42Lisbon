@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 12:12:48 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/02 16:55:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:49:08 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	here_doc_signals_init(void)
 
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
-	sa_int.sa_handler = here_doc_handler;
+	sa_int.sa_handler = child_handler;
 	sigaddset(&sa_int.sa_mask, SIGINT);
 	sigaction(SIGINT, &sa_int, 0);
 	sigemptyset(&sa_quit.sa_mask);
@@ -70,12 +70,12 @@ void	child_signals_init(void)
 
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
-	sa_int.sa_handler = here_doc_handler;
+	sa_int.sa_handler = child_handler;
 	sigaddset(&sa_int.sa_mask, SIGINT);
 	sigaction(SIGINT, &sa_int, 0);
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = SA_RESTART;
-	sa_quit.sa_handler = SIG_DFL;
+	sa_quit.sa_handler = child_handler;
 	sigaddset(&sa_quit.sa_mask, SIGQUIT);
 	sigaction(SIGQUIT, &sa_quit, 0);
 }

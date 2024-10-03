@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:33:19 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/02 12:52:26 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:50:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-extern int g_sigint;
+extern int g_signal;
 
 void	set_original_root(t_ast *original_root, t_ast *root)
 {
@@ -77,9 +77,9 @@ int	parser(t_minishell *msh, t_token_list *token_list)
 	create_command_table(msh, root, &command_table);
 	if (!command_table)
 		return (free_ast(root), -1);
-	if (g_sigint)
+	if (g_signal)
 	{
-		g_sigint = !g_sigint;
+		// g_signal = 0;
 		return (free_ast(root), free_command_table(command_table, 1), 130);
 	}
 	free_ast(root);
