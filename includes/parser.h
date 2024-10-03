@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/02 12:50:25 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 10:45:08 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ typedef struct s_execution_info
 	int						pipeline_size;
 	int						in_pipe[2];
 	int						out_pipe[2];
+	int						descending_subshell_pipe[2];
 }				t_execution_info;
 
 t_ast_token_type	set_ast_node_type(t_token_list *token_node);

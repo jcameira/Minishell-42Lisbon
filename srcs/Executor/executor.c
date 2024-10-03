@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/02 23:28:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 10:38:55 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	next_command_setup(t_minishell *msh, t_execution_info **info, int *status, i
 		(*info)->out_pipe[WRITE] = -1;
 		(*info)->in_pipe[READ] = (*info)->out_pipe[READ];
 		(*info)->out_pipe[READ] = -1;
+		if ((*info)->tmp_table->next && (*info)->tmp_table->next->subshell_level > (*info)->tmp_table->subshell_level)
+			(*info)->pipeline_start = !(*info)->pipeline_start;
 	}
 	return (SUCCESS);
 }
@@ -113,15 +115,15 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 				executor(info, msh, final_cmd_table, ++level_in_execution);
 			}
 			close_pipes(info);
-			printf("Waiting for subshell level %d to finish executing\n", level_in_execution + 1);
+			// printf("Waiting for subshell level %d to finish executing\n", level_in_execution + 1);
 			waitpid(subshell, &status, 0);
-			printf("Finished waiting for subshell level %d to finish executing\n", level_in_execution + 1);
+			// printf("Finished waiting for subshell level %d to finish executing\n", level_in_execution + 1);
 			msh->exit_code = WEXITSTATUS(status);
 			// printf("Command to be executed -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], msh->exit_code);
 			// if (((info->tmp_table->next && info->tmp_table->next->subshell_level < level_in_execution) || (!info->tmp_table->next && info->tmp_table->subshell_level > 0)))
 			if (info->tmp_table->next && info->tmp_table->next->subshell_level < level_in_execution)
 			{
-				printf("Exiting subshell level %d\n", level_in_execution);
+				// printf("Exiting subshell level %d\n", level_in_execution);
 				close_pipes(info);
 				free_f_command_table(info->tmp_table);
 				free(info->pid);
@@ -129,25 +131,25 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 				exit_shell(msh, msh->exit_code);
 			}
 		}
-		printf("Executing subshell level %d\n", level_in_execution);
 		while (info->tmp_table && info->tmp_table->subshell_level > level_in_execution)
 			free_f_command_table_node(&info->tmp_table);
 		if (!info->tmp_table)
 			break ;
+		// printf("Executing subshell level %d\n", level_in_execution);
 		// printf("Command to be executed -> %s Exit code -> %d\n", info->tmp_table->simplecmd->arg_arr[0], status);
 		if (!init_pipeline(&info, &i))
 			return (EXIT_FAILURE);
 		if (pipe(info->out_pipe) == -1)
 			return (free(info), free_f_command_table(info->tmp_table),
 				ft_putstr_fd(OPEN_PIPE_ERROR, 2), -1);
-		printf("Pipeline size -> %d On subshell level -> %d\n", info->pipeline_size, info->tmp_table->subshell_level);
+		// printf("Pipeline size -> %d On subshell level -> %d Command with index %d\n", info->pipeline_size, info->tmp_table->subshell_level, i);
 		check_if_pipefd_needed(&info);
-		// printf("Command to be executed -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
+		// printf("Command to be executed -> %s With index %d\n", info->tmp_table->simplecmd->arg_arr[0], i);
 		expander(msh, info->tmp_table);
-		// printf("Command to be executed -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
+		// printf("Command to be executed -> %s With index %d\n", info->tmp_table->simplecmd->arg_arr[0], i);
 		// status = 0;
 		execution_setup(msh, info, &status, &i);
-		// printf("Command to be executed -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
+		// printf("Command to be executed -> %s With index %d\n", info->tmp_table->simplecmd->arg_arr[0], i);
 		if (!next_command_setup(msh, &info, &status, &i))
 		{
 			if ((info->tmp_table->next && info->tmp_table->next->subshell_level < level_in_execution) || (!info->tmp_table->next && info->tmp_table->subshell_level > 0))

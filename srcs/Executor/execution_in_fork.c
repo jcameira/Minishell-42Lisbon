@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/02 22:39:22 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 10:35:25 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *status)
 {
 	child_signals_init();
-	fprintf(stderr, "Command to be in executed fork -> %s in process index %d\n", info->tmp_table->simplecmd->arg_arr[0], *i);
+	// fprintf(stderr, "Command to be in executed fork -> %s in process index %d\n", info->tmp_table->simplecmd->arg_arr[0], *i);
 	info->pid[*i] = fork();
 	if (info->pid[*i] == 0)
 	{
