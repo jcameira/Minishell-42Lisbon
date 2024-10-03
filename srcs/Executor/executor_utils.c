@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:43:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/02 22:42:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 10:09:37 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	set_in(t_final_cmd_table *final_cmd_table, int *status)
 {
+	// printf("Infile -> %s\n", final_cmd_table->infile);
 	if (final_cmd_table->ambiguous_redirect)
 		return (printf(AMBIGUOUS_REDIRECT, final_cmd_table->infile), 0);
 	if (final_cmd_table->in_type == INFILE)

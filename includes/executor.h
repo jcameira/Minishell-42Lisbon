@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/10/02 15:06:09 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 10:44:48 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct s_execution_info
 	int						pipeline_size;
 	int						in_pipe[2];
 	int						out_pipe[2];
+	int						descending_subshell_pipe[2];
 }				t_execution_info;
 
 void				free_f_command_table(t_final_cmd_table *command_table);
