@@ -6,13 +6,13 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/01 21:32:00 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:51:54 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-extern int g_sigint;
+extern int g_signal;
 
 char	*add_line_to_buffer(char *new_line, char *previous_buffer)
 {
@@ -50,7 +50,7 @@ void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **re
 	{
 		ft_putstr_fd(HERE_DOC_INDICATOR, 2);
 		line = get_next_line(INPUT);
-		if (g_sigint)
+		if (g_signal)
 			break ;
 		if (!line)
 		{
@@ -98,13 +98,13 @@ int	fork_here_doc(t_minishell *msh, t_ast *root,
 			free(*redirs);
 		}
 		free_ast(root->original_root);
-		if (g_sigint)
-			exit_shell(msh, 130);
+		if (g_signal)
+			exit_shell(msh, g_signal);
 		exit_shell(msh, EXIT_SUCCESS);
 	}
 	close(fd[WRITE]);
 	waitpid(fork_here_doc, &status, 0);
 	if (WEXITSTATUS(status) == 130)
-		g_sigint = !g_sigint;
+		g_signal = 130;
 	return (fd[READ]);
 }

@@ -55,10 +55,6 @@ int	check_io_files(t_final_cmd_table *node)
 	}
 	if (in_fd == -1)
 		return (0);
-	// if (node->outfile && node->out_type == OUTFILE)
-	// 	out_fd = open(node->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	// else if (node->outfile && node->out_type == APPEND)
-	// 	out_fd = open(node->outfile, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (node->outfile)
 	{
 		cpy = ft_strdup(node->outfile);

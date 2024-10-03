@@ -6,19 +6,19 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:51:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/01 21:29:11 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:48:50 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-extern int g_sigint;
+extern int g_signal;
 
 void	interactive_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_sigint = !g_sigint;
+		g_signal = 130;
 		ft_putchar_fd('\n', 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -26,11 +26,15 @@ void	interactive_handler(int sig)
 	}
 }
 
-void	here_doc_handler(int sig)
+void	child_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_sigint = !g_sigint;
-		ft_putchar_fd('\n', 1);
+		g_signal = 130;
+		//ft_putchar_fd('\n', 1);
+	}
+	if (sig == SIGQUIT)
+	{
+		g_signal = 131;
 	}
 }

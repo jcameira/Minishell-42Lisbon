@@ -144,3 +144,6 @@ void	print_list(t_token_list *token_list)
 		token_list = token_list->next;
 	}
 }
+
+
+((cat << EOF > OUT && cat OUT > OUT2) || (cat << EOF > OUT3 && cat OUT3 > OUT4))
