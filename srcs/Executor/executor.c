@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 20:59:43 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/04 19:04:36 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,16 +220,19 @@ int	executor(t_execution_info *info, t_minishell *msh, t_final_cmd_table *final_
 			}
 			else
 			{
-				// printf("SKIP HERE!!!!!!!!!!!!!!!!!\n");
-				if (info->tmp_table->next)
-				{
-					skip = info->tmp_table->next->subshell_level;
-					while (info->tmp_table->next && info->tmp_table->next->subshell_level >= skip)
-					{
-						// printf("Free node\n");
-						free_f_command_table_node(&info->tmp_table);
-					}
-				}
+				skip = info->tmp_table->subshell_level;
+				while (info->tmp_table->next && info->tmp_table->next->subshell_level > skip)
+					free_f_command_table_node(&info->tmp_table);
+				// // printf("SKIP HERE!!!!!!!!!!!!!!!!!\n");
+				// if (info->tmp_table->next)
+				// {
+				// 	skip = info->tmp_table->next->subshell_level;
+				// 	while (info->tmp_table->next && info->tmp_table->next->subshell_level == skip)
+				// 	{
+				// 		// printf("Free node\n");
+				// 		free_f_command_table_node(&info->tmp_table);
+				// 	}
+				// }
 			}
 			while ((info->tmp_table->next_symbol == S_AND && status != 0) || (info->tmp_table->next_symbol == S_OR && status == 0))
 			{

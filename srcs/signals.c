@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:51:47 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 16:48:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:47:38 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	child_handler(int sig)
 	if (sig == SIGINT)
 	{
 		g_signal = 130;
-		//ft_putchar_fd('\n', 1);
+		// ft_putchar_fd('\n', 1);
+		write(1, "\n", 1);
 	}
 	if (sig == SIGQUIT)
 	{
