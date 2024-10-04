@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:54:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 10:45:08 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/04 19:11:03 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <errno.h>
 # include <libft.h>
 # include <sys/wait.h>
+# include <readline/readline.h>
 # include <get_next_line_bonus.h>
 
 # define HERE_DOC_INDICATOR "> "

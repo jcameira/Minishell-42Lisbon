@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 16:51:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:50:18 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **re
 	{
 		ft_putstr_fd(HERE_DOC_INDICATOR, 2);
 		line = get_next_line(INPUT);
+		// line = readline("> ");
 		if (g_signal)
 			break ;
 		if (!line)
@@ -69,7 +70,7 @@ void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **re
 			break ;
 		}
 		line = expansion_inside_here_doc(msh, table, line, (*redirs)->expand_here_doc);
-		ft_putstr_fd(line, fd[WRITE]);
+		ft_putendl_fd(line, fd[WRITE]);
 		free(line);
 	}
 	close(fd[READ]);
