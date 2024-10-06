@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:26:59 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 23:31:23 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:33:53 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,6 @@ void	parameter_expansion_str_len_aux(char *content, int *quotes, int *i,
 	}
 	(*real_len)++;
 }
-
-// int	parameter_expansion_str_len(t_minishell *msh, t_command_table *table,
-// 	char *content)
-// {
-// 	int	real_len;
-// 	int	quotes[2];
-// 	int	i;
-
-// 	real_len = 0;
-// 	quotes[S] = 0;
-// 	quotes[D] = 0;
-// 	i = -1;
-// 	while (content[++i])
-// 	{
-// 		if (content[i] == '\'' || content[i] == '"')
-// 			parameter_expansion_str_len_aux(content, quotes, &i, &real_len);
-// 		else if (content[i] == '$' && quotes[D] && content[i + 1] == '"')
-// 			real_len++;
-// 		else if (content[i] == '$' && content[i + 1]
-// 			&& (isenvchar(content[i + 1]) || content[i + 1] == '?')
-// 			&& !quotes[S])
-// 			real_len += get_env_variable_len(msh, table, content, &i);
-// 		else
-// 			real_len++;
-// 	}
-// 	return (real_len);
-// }
 
 int	parameter_expansion_str_len(t_minishell *msh, t_final_cmd_table *table,
 	char *content)
@@ -111,62 +84,32 @@ void	init_needed_variables(char *content, int (*quotes)[2],
 	(*contents)[0] = content;
 }
 
-// char	*expand_parameter(t_minishell *msh, t_command_table *table,
-// 	char *content, int len)
-// {
-// 	char	*new_content;
-// 	char	*contents[2];
-// 	int		quotes[2];
-// 	int		indexes[2];
-
-// 	new_content = malloc(sizeof(char) * (len + 1));
-// 	if (!new_content)
-// 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-// 	init_needed_variables(content, &quotes, &indexes, &contents);
-// 	contents[1] = new_content;
-// 	while (contents[0][++indexes[0]])
-// 	{
-// 		if (contents[0][indexes[0]] == '\'' || contents[0][indexes[0]] == '"')
-// 			check_parameter_quotes(contents[0], &new_content, indexes, quotes);
-// 		else if (contents[0][indexes[0]] == '$' && quotes[D] && contents[0][indexes[0] + 1] == '"')
-// 			contents[1][++indexes[1]] = contents[0][indexes[0]];
-// 		else if (contents[0][indexes[0]] == '$' && contents[0][indexes[0] + 1]
-// 			&& contents[0][indexes[0] + 1] != ' ' && !quotes[S])
-// 			contents[1] = add_expanded_parameter(msh, table, contents, &indexes);
-// 		else
-// 			contents[1][++indexes[1]] = contents[0][indexes[0]];
-// 	}
-// 	contents[1][++indexes[1]] = '\0';
-// 	free(contents[0]);
-// 	return (contents[1]);
-// }
-
 char	*expand_parameter(t_minishell *msh, t_final_cmd_table *table,
 	char *content, int len)
 {
 	char	*new_content;
 	char	*contents[2];
 	int		quotes[2];
-	int		indexes[2];
+	int		index[2];
 
 	new_content = malloc(sizeof(char) * (len + 1));
 	if (!new_content)
 		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-	init_needed_variables(content, &quotes, &indexes, &contents);
+	init_needed_variables(content, &quotes, &index, &contents);
 	contents[1] = new_content;
-	while (contents[0][++indexes[0]])
+	while (contents[0][++index[0]])
 	{
-		if (contents[0][indexes[0]] == '\'' || contents[0][indexes[0]] == '"')
-			check_parameter_quotes(contents[0], &new_content, indexes, quotes);
-		else if (contents[0][indexes[0]] == '$' && quotes[D] && contents[0][indexes[0] + 1] == '"')
-			contents[1][++indexes[1]] = contents[0][indexes[0]];
-		else if (contents[0][indexes[0]] == '$' && contents[0][indexes[0] + 1]
-			&& contents[0][indexes[0] + 1] != ' ' && !quotes[S])
-			contents[1] = add_expanded_parameter(msh, table, contents, &indexes);
+		if (contents[0][index[0]] == '\'' || contents[0][index[0]] == '"')
+			check_parameter_quotes(contents[0], &new_content, index, quotes);
+		else if (contents[0][index[0]] == '$'
+			&& quotes[D] && contents[0][index[0] + 1] == '"')
+			contents[1][++index[1]] = contents[0][index[0]];
+		else if (contents[0][index[0]] == '$' && contents[0][index[0] + 1]
+			&& contents[0][index[0] + 1] != ' ' && !quotes[S])
+			contents[1] = add_expanded_parameter(msh, table, contents, &index);
 		else
-			contents[1][++indexes[1]] = contents[0][indexes[0]];
+			contents[1][++index[1]] = contents[0][index[0]];
 	}
-	contents[1][++indexes[1]] = '\0';
-	free(contents[0]);
-	return (contents[1]);
+	contents[1][++index[1]] = '\0';
+	return (free(contents[0]), contents[1]);
 }

@@ -6,13 +6,14 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:24:57 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 17:49:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 00:07:07 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expander.h>
 
-void	quote_removal_expansion_aux(char *content, char *new_content, int (*indexes)[2], int *quotes)
+void	quote_removal_expansion_aux(char *content, char *new_content,
+	int (*indexes)[2], int *quotes)
 {
 	if (content[(*indexes)[0]] == '\'' && !quotes[D])
 	{
@@ -27,7 +28,8 @@ void	quote_removal_expansion_aux(char *content, char *new_content, int (*indexes
 	new_content[++(*indexes)[1]] = content[(*indexes)[0]];
 }
 
-void	quote_removal_expansion_len_aux(char *content, int *i, int *quotes, int *real_len)
+void	quote_removal_expansion_len_aux(char *content, int *i, int *quotes,
+	int *real_len)
 {
 	if (content[*i] == '\'' && !quotes[D])
 	{
@@ -58,6 +60,8 @@ int	quote_removal_str_len(char *content)
 			quote_removal_expansion_len_aux(content, &i, quotes, &real_len);
 		else
 			real_len++;
+		if (!content[i])
+			break ;
 	}
 	return (real_len);
 }
@@ -78,7 +82,8 @@ char	*remove_quotes_expansion(char *content, int len)
 	while (content[++indexes[0]])
 	{
 		if (content[indexes[0]] == '\'' || content[indexes[0]] == '"')
-			quote_removal_expansion_aux(content, new_content, &indexes, quotes);
+			quote_removal_expansion_aux(content, new_content, &indexes,
+				quotes);
 		else
 			new_content[++indexes[1]] = content[indexes[0]];
 	}

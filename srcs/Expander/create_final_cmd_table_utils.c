@@ -37,87 +37,65 @@ t_final_cmd_table	*set_redir_info_infile(t_final_cmd_table *node,
 	return (node);
 }
 
-int	check_io_files(t_final_cmd_table *node)
+int	check_io_files(t_final_cmd_table *node, char *file, int flag)
 {
-	int		in_fd;
-	int		out_fd;
+	int		fd;
 	char	*tmp;
 	char	*cpy;
 
-	in_fd = -2;
-	out_fd = -2;
-	if (node->infile)
+	fd = -2;
+	cpy = ft_strdup(file);
+	tmp = remove_quotes_expansion(cpy, quote_removal_str_len(cpy));
+	if (flag)
+		fd = open(tmp, O_RDONLY);
+	else
 	{
-		cpy = ft_strdup(node->infile);
-		tmp = remove_quotes_expansion(cpy, quote_removal_str_len(cpy));
-		in_fd = open(tmp, O_RDONLY);
-		free(tmp);
-	}
-	if (in_fd == -1)
-		return (0);
-	if (node->outfile)
-	{
-		cpy = ft_strdup(node->outfile);
-		tmp = remove_quotes_expansion(cpy, quote_removal_str_len(cpy));
 		if (node->out_type == OUTFILE)
-			out_fd = open(tmp, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			fd = open(tmp, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		if (node->out_type == APPEND)
-			out_fd = open(tmp, O_CREAT | O_APPEND | O_WRONLY, 0644);
-		free(tmp);
+			fd = open(tmp, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	}
-	if (out_fd == -1)
-	{
-		if (in_fd > -1)
-			close(in_fd);
+	free(tmp);
+	if (fd == -1)
 		return (0);
-	}
-	if (in_fd > -1)
-		close(in_fd);
-	if (out_fd > -1)
-		close(out_fd);
+	if (fd > -1)
+		close(fd);
 	return (1);
 }
 
-t_final_cmd_table	*set_final_redirs(t_minishell *msh, t_final_cmd_table *new_table_node,
-	t_redir_list *redirs)
+t_final_cmd_table	*set_final_redirs(t_minishell *msh,
+	t_final_cmd_table *newnode, t_redir_list *redirs)
 {
 	t_redir_list	*tmp;
 
-	new_table_node->in_type = NO_REDIR;
-	new_table_node->infile = NULL;
-	new_table_node->infile_fd = -2;
-	new_table_node->here_doc_fd = -2;
-	new_table_node->out_type = NO_REDIR;
-	new_table_node->outfile = NULL;
-	new_table_node->outfile_fd = -2;
+	newnode->in_type = NO_REDIR;
+	newnode->infile = NULL;
+	newnode->infile_fd = -2;
+	newnode->here_doc_fd = -2;
+	newnode->out_type = NO_REDIR;
+	newnode->outfile = NULL;
+	newnode->outfile_fd = -2;
 	if (!redirs)
-		return (new_table_node);
+		return (newnode);
 	tmp = redirs;
 	while (tmp)
 	{
-		new_table_node = set_redir_info(new_table_node, tmp);
-		if (!new_table_node)
+		newnode = set_redir_info(newnode, tmp);
+		if (!newnode)
 			return (NULL);
-		// printf("Infile -> %s\n", new_table_node->infile);
-		// printf("Outfile -> %s\n", new_table_node->outfile);
 		(void)msh;
-		// if (new_table_node->infile)
-		// 	new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->infile);
-		// if (new_table_node->outfile)
-		// 	new_table_node->ambiguous_redirect = set_ambiguous_redirect(msh, new_table_node, new_table_node->outfile);
-		// if (new_table_node->ambiguous_redirect)
-		// 	break ;
-		if (!check_io_files(new_table_node))
+		if (newnode->outfile && !check_io_files(newnode, newnode->outfile, 0))
+			break ;
+		if (newnode->infile && !check_io_files(newnode, newnode->infile, 1))
 			break ;
 		tmp = tmp->next;
 	}
-	return (new_table_node);
+	return (newnode);
 }
 
 t_simplecmd	*simplecmdcpy(t_simplecmd *simplecmd)
 {
 	t_simplecmd	*new_simplecmd;
-
 
 	new_simplecmd = malloc(sizeof(t_simplecmd));
 	if (!new_simplecmd)

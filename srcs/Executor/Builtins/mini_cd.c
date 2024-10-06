@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/28 20:51:38 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:41:47 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int	chdir_cd(char *cur_path, char *final_path, t_simplecmd *cmd)
 		free(final_path);
 		free(cur_path);
 		free(tmp);
-		return (ft_putstr_fd(CD_PREFIX, 2), ft_putstr_fd(cmd->arg_arr[1], 2), ft_putstr_fd(CD_NO_FILE_DIR, 2), 0);
+		return (ft_putstr_fd(CD_PREFIX, 2), ft_putstr_fd(cmd->arg_arr[1], 2),
+			ft_putstr_fd(CD_NO_FILE_DIR, 2), 0);
 	}
 	free(tmp);
 	return (1);
@@ -62,8 +63,7 @@ int	cd_special_checks(t_minishell *msh, t_simplecmd *cmd, char **final_path,
 	*final_path = NULL;
 	if (cmd->arg_nbr > 2)
 		return (ft_putstr_fd(CD_TOO_MANY_ARGS, 2), FAILURE);
-	else if (cmd->arg_nbr == 1 || (cmd->arg_nbr == 2
-			&& *cmd->arg_arr[1] == '~'))
+	else if (cmd->arg_nbr == 1)
 	{
 		*final_path = find_path(msh, HOME);
 		if (!(*final_path))

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/10/02 17:08:10 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:39:19 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <libft.h>
+
+// extern int g_signal;
 
 # define NO_SPACE "No more space left in device\n"
 

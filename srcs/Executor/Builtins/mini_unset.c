@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:48:08 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/09/30 15:25:24 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:40:41 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	unset_aux(t_minishell *msh, t_simplecmd *cmd, int j)
 		}
 		if (!ft_strncmp(cmd->arg_arr[j], msh->envp[i],
 				ft_strlen(cmd->arg_arr[j]))
-				&& msh->envp[i][ft_strlen(cmd->arg_arr[j])] == '=')
+			&& msh->envp[i][ft_strlen(cmd->arg_arr[j])] == '=')
 		{
 			msh->envp = rm_env(msh->envp, cmd->arg_arr[j]);
 			msh->export_list = rm_env(msh->export_list, cmd->arg_arr[j]);

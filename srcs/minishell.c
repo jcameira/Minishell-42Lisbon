@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:26:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 20:59:40 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 00:17:48 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	g_signal;
 
 void	msh_loop(t_minishell *msh)
 {
-	char	*line;
+	char		*line;
 
 	while (1)
 	{

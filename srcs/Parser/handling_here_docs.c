@@ -6,74 +6,52 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 01:45:13 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/04 21:50:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:29:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-extern int g_signal;
-
-char	*add_line_to_buffer(char *new_line, char *previous_buffer)
+void	here_doc_warning(t_redir_list **redirs, int line_nbr)
 {
-	char	*new_buffer;
+	char	*line_nbr_str;
 
-	if (!previous_buffer)
-		new_buffer = ft_strdup(new_line);
-	else
-		new_buffer = ft_strjoin(previous_buffer, new_line);
-	free(previous_buffer);
-	if (!new_buffer)
-		return (ft_putstr_fd(NO_SPACE, 2), NULL);
-	return (new_buffer);
+	line_nbr_str = ft_itoa(line_nbr);
+	ft_putstr_fd(NO_HERE_DOC_LINE_START, 2);
+	ft_putstr_fd(line_nbr_str, 2);
+	ft_putstr_fd(NO_HERE_DOC_LINE_MIDDLE, 2);
+	ft_putstr_fd((*redirs)->here_doc_limiter, 2);
+	ft_putstr_fd(NO_HERE_DOC_LINE_END, 2);
+	free(line_nbr_str);
 }
 
-void	disable_quit_character(struct termios *old_term)
-{
-	struct	termios new_term;
-
-	tcgetattr(STDIN_FILENO, old_term);
-	new_term = *old_term;
-	new_term.c_cc[VQUIT] = _POSIX_VDISABLE;
-	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
-}
-
-void	handle_here_doc(t_minishell *msh, t_command_table *table, t_redir_list **redirs, int *fd)
+void	handle_here_doc(t_minishell *msh, t_command_table *table,
+	t_redir_list **redirs, int *fd)
 {
 	char	*line;
 	int		line_nbr;
-	char	*line_nbr_str;
 
 	line_nbr = 0;
-	here_doc_signals_init();
 	while (true && ++line_nbr)
 	{
-		ft_putstr_fd(HERE_DOC_INDICATOR, 2);
-		line = get_next_line(INPUT);
-		// line = readline("> ");
+		line = readline("> ");
 		if (g_signal)
 			break ;
 		if (!line)
 		{
-			line_nbr_str = ft_itoa(line_nbr);
-			ft_putstr_fd(NO_HERE_DOC_LINE_START, 2);
-			ft_putstr_fd(line_nbr_str, 2);
-			ft_putstr_fd(NO_HERE_DOC_LINE_MIDDLE, 2);
-			ft_putstr_fd((*redirs)->here_doc_limiter, 2);
-			ft_putstr_fd(NO_HERE_DOC_LINE_END, 2);
-			free(line_nbr_str);
+			here_doc_warning(redirs, line_nbr);
 			break ;
 		}
-		if (line[0] != '\n' && !ft_strncmp(line, (*redirs)->here_doc_limiter, ft_strlen(line) - 1))
+		if (!ft_strncmp(line, (*redirs)->here_doc_limiter, ft_strlen(line)))
 		{
 			free(line);
 			break ;
 		}
-		line = expansion_inside_here_doc(msh, table, line, (*redirs)->expand_here_doc);
+		line = expansion_inside_here_doc(msh, table, line,
+				(*redirs)->expand_here_doc);
 		ft_putendl_fd(line, fd[WRITE]);
 		free(line);
 	}
-	close(fd[READ]);
 	close(fd[WRITE]);
 }
 
@@ -91,17 +69,10 @@ int	fork_here_doc(t_minishell *msh, t_ast *root,
 		return (ft_putstr_fd(FORK_ERROR, 2), -1);
 	if (fork_here_doc == 0)
 	{
+		here_doc_signals_init();
+		close(fd[READ]);
 		handle_here_doc(msh, command_table, redirs, fd);
-		free_command_table(command_table, 1);
-		if (*redirs)
-		{
-			free((*redirs)->here_doc_limiter);
-			free(*redirs);
-		}
-		free_ast(root->original_root);
-		if (g_signal)
-			exit_shell(msh, g_signal);
-		exit_shell(msh, EXIT_SUCCESS);
+		here_doc_fork_exit(msh, root, command_table, redirs);
 	}
 	close(fd[WRITE]);
 	waitpid(fork_here_doc, &status, 0);

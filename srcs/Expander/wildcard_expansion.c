@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:28:03 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/27 00:55:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:34:01 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int	wildcards_str_len(char *content)
 	return (real_len);
 }
 
-char	*expand_wildcards_aux(char *new_content, char *content, int needs_expansion)
+char	*expand_wildcards_aux(char *new_content, char *content,
+	int needs_expansion)
 {
 	int		quotes[2];
 	int		i;
@@ -113,7 +114,8 @@ char	*expand_wildcards_aux(char *new_content, char *content, int needs_expansion
 			quotes[S] = !quotes[S];
 		else if (content[i] == '"' && !quotes[S])
 			quotes[D] = !quotes[D];
-		else if (content[i] == '*' && !quotes[S] && !quotes[D] && needs_expansion)
+		else if (content[i] == '*' && !quotes[S] && !quotes[D]
+			&& needs_expansion)
 		{
 			new_content = add_wildcard_content(content);
 			break ;

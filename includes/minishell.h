@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:47:42 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 16:48:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:36:49 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@
 # include <termios.h>
 # include <libft.h>
 
+extern int	g_signal;
+
 # define MSH_PROMPT "Minishell >$"
 # define SHLVL "SHLVL="
 # define SET_SHLVL "SHLVL=1"
 # define PWD "PWD="
-# define PRIVATE_PATH "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# define PRIVATE_PATH "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin\
+:/usr/bin:/sbin:/bin"
 
 # define STDIN_FD 0
 # define STDOUT_FD 1
@@ -73,6 +76,7 @@ void	free_arr(char **array);
 void	interactive_signals_init(void);
 void	interactive_handler(int sig);
 void	child_handler(int sig);
+void	here_handler(int sig);
 void	exit_shell(t_minishell *msh, int exit_code);
 void	bubble_sort(char **matrix);
 int		lexer(t_minishell *msh, char *line);

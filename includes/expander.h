@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:40:24 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/02 12:50:06 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:25:16 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <errno.h>
 # include <dirent.h>
 # include <libft.h>
+
+// extern int g_signal;
 
 # define NO_SPACE "No more space left in device\n"
 
@@ -154,7 +156,8 @@ DIR					*get_directory_info(DIR *directory, char **new_content,
 						struct dirent **file, int flag);
 char				*append_more_wildcard_content(char *new_content,
 						struct dirent *file);
-t_final_cmd_table	*set_final_redirs(t_minishell *msh, t_final_cmd_table	*new_table_node,
+t_final_cmd_table	*set_final_redirs(t_minishell *msh,
+						t_final_cmd_table *new_table_node,
 						t_redir_list *redirs);
 void				free_redir_list(t_redir_list *redirs,
 						int close_all_fds);
@@ -162,7 +165,8 @@ void				free_f_command_table(t_final_cmd_table *cmd_table);
 t_simplecmd			*simplecmdcpy(t_simplecmd *simplecmd);
 t_symbol			check_next_symbol(t_command_table *next_node);
 char				**arrdup(char **array);
-t_final_cmd_table	*create_final_cmd_table(t_minishell *msh, t_command_table *command_table);
+t_final_cmd_table	*create_final_cmd_table(t_minishell *msh,
+						t_command_table *command_table);
 void				skip_until_char(char *line, int *i, char c);
 int					(*builtin_arr(char *command))(t_minishell *msh,
 						t_simplecmd *cmd);
@@ -178,5 +182,6 @@ int					set_ambiguous_redirect(t_minishell *msh,
 						t_final_cmd_table *table, char *content);
 void				free_f_command_table_node(t_final_cmd_table **cmd_table);
 int					get_wildcards_len(char *content);
+char				*word_split(char *str, char ***content, int i);
 
 #endif

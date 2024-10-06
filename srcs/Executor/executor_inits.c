@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:46:15 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 11:17:11 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:00:29 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,22 @@ int	init_pipeline(t_execution_info **info, int *i)
 		(*info)->pipeline_start = !(*info)->pipeline_start;
 		if ((*info)->pid)
 			free((*info)->pid);
-		// fprintf(stderr, "Allocating memory for %d processes\n", (*info)->pipeline_size);
 		(*info)->pid = malloc(sizeof (pid_t) * (*info)->pipeline_size);
 		if (!(*info)->pid)
 			return (free((*info)), free_f_command_table((*info)->tmp_table),
 				ft_putstr_fd(NO_SPACE, 2), FAILURE);
 		*i = 0;
+	}
+	return (SUCCESS);
+}
+
+int	set_info(t_execution_info **info, t_final_cmd_table *final_cmd_table)
+{
+	if (!(*info))
+	{
+		(*info) = exec_info_init(final_cmd_table);
+		if (!(*info))
+			return (FAILURE);
 	}
 	return (SUCCESS);
 }

@@ -6,13 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 01:48:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 17:49:10 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:25:45 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <get_next_line_bonus.h>
-
-extern int g_signal;
 
 char	*get_next_line(int fd)
 {
