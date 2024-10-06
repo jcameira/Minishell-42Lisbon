@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/10/05 23:12:32 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 06:46:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define ERROR_NO_FILE ": No such file or directory\n"
 # define ERROR_NO_PERMISSION ": Permission denied\n"
 # define ERROR_DIRECTORY ": Is a directory\n"
+# define ERROR_NO_FILENAME ": filename argument required\n"
 
 # define OPEN_IN_ERROR "Error opening infile\n"
 # define OPEN_OUT_ERROR "Error opening outfile\n"
@@ -150,9 +151,11 @@ void				check_if_exit_process_needed(t_execution_info *info,
 int					set_info(t_execution_info **info,
 						t_final_cmd_table *final_cmd_table);
 int					subshell_fork_exec(t_execution_info *info, t_minishell *msh,
-						int status, int level_in_execution);
+						int *status, int level_in_execution);
 int					skip_executed_commands(t_execution_info *info,
-						int level_in_execution);
+						t_minishell *msh, int status, int level_in_execution);
 void				check_close_io(t_execution_info *info);
+void				logical_operator_skip(t_execution_info *info,
+						t_minishell *msh, int status, int level_in_execution);
 
 #endif

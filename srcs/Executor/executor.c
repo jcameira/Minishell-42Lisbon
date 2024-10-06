@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/06 00:12:13 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 06:28:52 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,9 @@ int	executor(t_execution_info *info, t_minishell *msh,
 	while (info->tmp_table)
 	{
 		if (info->tmp_table->subshell_level > level_in_execution)
-			if (!subshell_fork_exec(info, msh, status, level_in_execution))
+			if (!subshell_fork_exec(info, msh, &status, level_in_execution))
 				return (EXIT_FAILURE);
-		if (!skip_executed_commands(info, level_in_execution))
+		if (!skip_executed_commands(info, msh, status, level_in_execution))
 			break ;
 		if (!prepare_and_execute_cmd(info, msh, &status, level_in_execution))
 			return (EXIT_FAILURE);

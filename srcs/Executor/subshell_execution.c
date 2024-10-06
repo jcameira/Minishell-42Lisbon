@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:32:16 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/05 19:43:31 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 05:35:33 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	end_of_level_pipe(t_execution_info *info, int level_in_execution)
 }
 
 int	subshell_fork_exec(t_execution_info *info, t_minishell *msh,
-	int status, int level_in_execution)
+	int *status, int level_in_execution)
 {
 	pid_t	subshell;
 
@@ -60,8 +60,9 @@ int	subshell_fork_exec(t_execution_info *info, t_minishell *msh,
 	if (subshell == 0)
 		executor(info, msh, info->tmp_table, ++level_in_execution);
 	close_pipes(info);
-	waitpid(subshell, &status, 0);
-	msh->exit_code = WEXITSTATUS(status);
+	waitpid(subshell, status, 0);
+	*status = WEXITSTATUS(*status);
+	msh->exit_code = *status;
 	if (info->tmp_table->next
 		&& info->tmp_table->next->subshell_level < level_in_execution)
 		execution_info_cleanup(msh, info, msh->exit_code);
