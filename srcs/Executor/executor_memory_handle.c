@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:37:37 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/06 06:15:04 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 13:11:29 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,17 @@ void	execution_info_cleanup(t_minishell *msh, t_execution_info *info,
 int	skip_executed_commands(t_execution_info *info, t_minishell *msh,
 	int status, int level_in_execution)
 {
-	t_final_cmd_table	*tmp;
-
 	while (info->tmp_table
 		&& info->tmp_table->subshell_level > level_in_execution)
 	{
 		free_f_command_table_node(&info->tmp_table);
 		if (info->tmp_table && info->tmp_table->next
+			&& (info->tmp_table->next_symbol == S_AND
+				|| info->tmp_table->next_symbol == S_OR)
 			&& info->tmp_table->next->subshell_level == level_in_execution)
 		{
-			tmp = info->tmp_table;
 			logical_operator_skip(info, msh, status, level_in_execution);
-			if (info->tmp_table != tmp)
-				free_f_command_table_node(&info->tmp_table);
+			free_f_command_table_node(&info->tmp_table);
 			break ;
 		}
 	}

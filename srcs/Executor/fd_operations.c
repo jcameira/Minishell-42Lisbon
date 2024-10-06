@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:42:55 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/06 06:29:18 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 12:37:35 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	prepare_next_fds(t_execution_info **info)
 	(*info)->out_pipe[READ] = -1;
 	if ((*info)->tmp_table->next
 		&& (*info)->tmp_table->next->subshell_level \
-		> (*info)->tmp_table->subshell_level)
+		> (*info)->tmp_table->subshell_level && !(*info)->pipeline_start)
 		(*info)->pipeline_start = !(*info)->pipeline_start;
 }
 
