@@ -6,11 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 23:08:36 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 03:54:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 19:53:54 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <executor.h>
+#include <executor.h>
 
 char	*write_command_path(char **cmd_paths, char *cmd)
 {
@@ -95,7 +95,7 @@ void	get_path(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 
 	if (!access(final_cmd_table->simplecmd->arg_arr[0], X_OK)
 		&& (!ft_strncmp(final_cmd_table->simplecmd->arg_arr[0], "./", 2)
-		|| final_cmd_table->simplecmd->arg_arr[0][0] == '/'))
+			|| final_cmd_table->simplecmd->arg_arr[0][0] == '/'))
 		*path = final_cmd_table->simplecmd->arg_arr[0];
 	else if (msh->private_path)
 	{
@@ -110,5 +110,5 @@ void	get_path(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 	}
 	else
 		*path = find_cmd_path(msh->envp,
-			final_cmd_table->simplecmd->arg_arr[0]);
+				final_cmd_table->simplecmd->arg_arr[0]);
 }

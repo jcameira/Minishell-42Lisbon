@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:02:12 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 03:46:50 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:38:12 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <string.h>
 # include <errno.h>
 # include <libft.h>
+
+// extern int g_signal;
 
 # define WHITESPACE "\t\n\v\f\r "
 
@@ -43,16 +45,26 @@
 # define PRINT_BAD_TOKEN	"BAD_TOKEN"
 # define PRINT_END	"END"
 
-# define AND_PARSE_ERROR "minishell: syntax error near unexpected token `&&'\n"
-# define OR_PARSE_ERROR "minishell: syntax error near unexpected token `||'\n"
-# define PIPE_PARSE_ERROR "minishell: syntax error near unexpected token `|'\n"
-# define OPEN_PARENTESIS_PARSE_ERROR "minishell: syntax error near unexpected token `('\n"
-# define CLOSE_PARENTESIS_PARSE_ERROR "minishell: syntax error near unexpected token `)'\n"
-# define INFILE_PARSE_ERROR "minishell: syntax error near unexpected token `<'\n"
-# define OUTFILE_PARSE_ERROR "minishell: syntax error near unexpected token `>'\n"
-# define APPEND_PARSE_ERROR "minishell: syntax error near unexpected token `>>'\n"
-# define HERE_DOC_PARSE_ERROR "minishell: syntax error near unexpected token `<<'\n"
-# define NEWLINE_PARSE_ERROR "minishell: syntax error near unexpected token `newline'\n"
+# define AND_PARSE_ERROR "minishell: syntax error near unexpected \
+token `&&'\n"
+# define OR_PARSE_ERROR "minishell: syntax error near unexpected \
+token `||'\n"
+# define PIPE_PARSE_ERROR "minishell: syntax error near unexpected \
+token `|'\n"
+# define OPEN_PARENTESIS_PARSE_ERROR "minishell: syntax error near \
+unexpected token `('\n"
+# define CLOSE_PARENTESIS_PARSE_ERROR "minishell: syntax error near \
+unexpected token `)'\n"
+# define INFILE_PARSE_ERROR "minishell: syntax error near unexpected \
+token `<'\n"
+# define OUTFILE_PARSE_ERROR "minishell: syntax error near unexpected \
+token `>'\n"
+# define APPEND_PARSE_ERROR "minishell: syntax error near unexpected \
+token `>>'\n"
+# define HERE_DOC_PARSE_ERROR "minishell: syntax error near unexpected \
+token `<<'\n"
+# define NEWLINE_PARSE_ERROR "minishell: syntax error near unexpected \
+token `newline'\n"
 
 typedef enum s_token_list_type
 {
@@ -97,7 +109,8 @@ int					check_odd_number_tokens(char *line);
 t_token_list		*set_token_list_types(t_token_list *token_list);
 t_token_list_type	set_token_type(char	*c);
 t_token_list		*new_token(int type, char *data);
-void				add_new_token(t_token_list **token_list, t_token_list *new);
+void				add_new_token(t_token_list **token_list,
+						t_token_list *new);
 void				add_token_middle_list(t_token_list **token_list,
 						t_token_list *new);
 t_token_list		*last_token(t_token_list *token_list);
@@ -112,8 +125,12 @@ int					check_and_or_syntax_errors(t_token_list *token_list,
 						t_token_list *previous);
 int					check_pipe_syntax_errors(t_token_list *token_list,
 						t_token_list *previous);
-int					check_subshell_syntax_errors(t_token_list *token_list, t_token_list *previous);
-int					check_redirection_syntax_errors(t_token_list *token_list, t_token_list *previous);
+int					check_subshell_syntax_errors(t_token_list *token_list,
+						t_token_list *previous);
+int					check_redirection_syntax_errors(t_token_list *token_list,
+						t_token_list *previous);
+int					choose_syntax_error_message(t_token_list *token_list,
+						t_token_list *previous);
 void				ignore_signals_init(void);
 
 #endif

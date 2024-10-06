@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:41:43 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 10:35:25 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 20:29:51 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,13 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 	char	*path;
 
 	path = NULL;
-	if (final_cmd_table->infile_fd> -1)
-	{
-		// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->infile_fd);
+	if (final_cmd_table->infile_fd > -1)
 		dup2(final_cmd_table->infile_fd, STDIN_FILENO);
-	}
 	if (final_cmd_table->outfile_fd > -1)
-	{
-		// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->infile_fd);
 		dup2(final_cmd_table->outfile_fd, STDOUT_FILENO);
-	}
-	// fprintf(stderr, "Command being executed %s, STDIN -> %d STDOUT-> %d\n", info->tmp_table->simplecmd->arg_arr[0], isatty(0), isatty(1));
 	close_pipes(info);
-	if (!final_cmd_table->simplecmd->arg_arr || !(*final_cmd_table->simplecmd->arg_arr)
+	if (!final_cmd_table->simplecmd->arg_arr
+		|| !(*final_cmd_table->simplecmd->arg_arr)
 		|| !exec_checks(*final_cmd_table->simplecmd->arg_arr, status))
 	{
 		free_f_command_table(info->tmp_table);
@@ -65,37 +59,27 @@ void	child(t_minishell *msh, t_final_cmd_table *final_cmd_table,
 	execute_cmd(msh, path, final_cmd_table->simplecmd->arg_arr, info);
 }
 
-int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i, int *status)
+int	execute_in_fork(t_minishell *msh, t_execution_info *info, int *i,
+	int *status)
 {
-	child_signals_init();
-	// fprintf(stderr, "Command to be in executed fork -> %s in process index %d\n", info->tmp_table->simplecmd->arg_arr[0], *i);
 	info->pid[*i] = fork();
 	if (info->pid[*i] == 0)
 	{
-		// *status = 0;
-		// fprintf(stderr, "Command to be in executed fork -> %s Status -> %d\n", info->tmp_table->simplecmd->arg_arr[0]);
+		*status = 0;
 		if (info->tmp_table->builtin && set_in(info->tmp_table, status)
 			&& set_out(info->tmp_table, status))
 		{
 			if (info->tmp_table->infile_fd > -1)
-			{
-				// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->infile_fd);
 				dup2(info->tmp_table->infile_fd, STDIN_FILENO);
-			}
 			if (info->tmp_table->outfile_fd > -1)
-			{
-				// fprintf(stderr, "Command to be executed in fork -> %s On fd -> %d\n", info->tmp_table->simplecmd->arg_arr[0], info->tmp_table->outfile_fd);
 				dup2(info->tmp_table->outfile_fd, STDOUT_FILENO);
-			}
 			*status = info->tmp_table->builtin(msh, info->tmp_table->simplecmd);
-			reset_std_fds(msh);
-			return (free_f_command_table(info->tmp_table), free(info->pid),
-				FAILURE);
+			return (reset_std_fds(msh), free_f_command_table(info->tmp_table),
+				free(info->pid), FAILURE);
 		}
 		if (*status)
 			return (free_f_command_table(info->tmp_table), free(info->pid),
 				FAILURE);
-		// fprintf(stderr, "Command to be executed in fork -> %s\n", info->tmp_table->simplecmd->arg_arr[0]);
 		if (set_in(info->tmp_table, status) && set_out(info->tmp_table, status))
 			child(msh, info->tmp_table, info, status);
 		else

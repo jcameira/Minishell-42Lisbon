@@ -33,8 +33,8 @@ t_final_cmd_table	*set_redir_info(t_final_cmd_table *new_table_node,
 	return (new_table_node);
 }
 
-t_final_cmd_table	*new_f_cmd_table_node(t_minishell *msh, t_command_table *command_table,
-	t_symbol previous_symbol)
+t_final_cmd_table	*new_f_cmd_table_node(t_minishell *msh,
+	t_command_table *command_table, t_symbol previous_symbol)
 {
 	t_final_cmd_table	*new_node;
 
@@ -86,7 +86,8 @@ void	add_f_cmd_table_node(t_final_cmd_table *new_node,
 	last_node->next = new_node;
 }
 
-t_final_cmd_table	*create_final_cmd_table(t_minishell *msh, t_command_table *command_table)
+t_final_cmd_table	*create_final_cmd_table(t_minishell *msh,
+	t_command_table *command_table)
 {
 	t_final_cmd_table		*final_cmd_table;
 	t_final_cmd_table		*new_table_node;
@@ -97,7 +98,8 @@ t_final_cmd_table	*create_final_cmd_table(t_minishell *msh, t_command_table *com
 	previous_symbol = NO_SYMBOL;
 	while (command_table)
 	{
-		new_table_node = new_f_cmd_table_node(msh, command_table, previous_symbol);
+		new_table_node = new_f_cmd_table_node(msh, command_table,
+				previous_symbol);
 		if (!new_table_node)
 		{
 			free_f_command_table(final_cmd_table);
@@ -109,13 +111,7 @@ t_final_cmd_table	*create_final_cmd_table(t_minishell *msh, t_command_table *com
 		command_table = tmp;
 		if (new_table_node->next_symbol != NO_SYMBOL)
 			free_symbol_node(&command_table);
-		// if (new_table_node->simplecmd->arg_nbr == 1 
-		// 	&& !new_table_node->simplecmd->arg_arr[0][0])
-		// 	free_f_command_table_node(&new_table_node);
-		// else
 		add_f_cmd_table_node(new_table_node, &final_cmd_table);
 	}
-	if (!final_cmd_table)
-		return (0);
 	return (final_cmd_table);
 }

@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:19:08 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/24 04:10:44 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:12:56 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_token_list_type	set_token_type(char	*c)
 {
-	if (*c == '&')
+	if (*c == '&' && *(c + 1) == '&')
 		return (AND);
 	else if (*c == '|' && *(c + 1) == '|')
 		return (OR);

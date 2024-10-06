@@ -6,13 +6,11 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:22:38 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/03 16:45:31 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:53:20 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
-
-extern int g_signal;
 
 t_redir_list	*new_command_table_redir(t_minishell *msh, t_ast **root,
 	t_command_table *command_table)

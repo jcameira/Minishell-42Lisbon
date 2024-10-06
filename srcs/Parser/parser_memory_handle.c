@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:12:52 by jcameira          #+#    #+#             */
-/*   Updated: 2024/09/28 18:18:51 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:24:27 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,19 @@ void	free_command_table(t_command_table *command_table, int close_all_fds)
 		free(command_table);
 		command_table = tmp;
 	}
+}
+
+void	here_doc_fork_exit(t_minishell *msh, t_ast *root,
+	t_command_table *command_table, t_redir_list **redirs)
+{
+	free_command_table(command_table, 1);
+	if (*redirs)
+	{
+		free((*redirs)->here_doc_limiter);
+		free(*redirs);
+	}
+	free_ast(root->original_root);
+	if (g_signal)
+		exit_shell(msh, g_signal);
+	exit_shell(msh, EXIT_SUCCESS);
 }

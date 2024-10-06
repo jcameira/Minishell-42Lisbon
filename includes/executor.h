@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/10/03 10:44:48 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/05 23:12:32 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <errno.h>
 # include <dirent.h>
 # include <libft.h>
+
+// extern int g_signal;
 
 # define NO_SPACE "No more space left in device\n"
 
@@ -40,7 +42,7 @@
 # define OPEN_PIPE_ERROR "Error opening pipe\n"
 
 # define COMMAND_ERROR_MSG ": command not found\n"
-# define AMBIGUOUS_REDIRECT "minishell: %s: ambiguous redirect\n"
+# define AMBIGUOUS_REDIRECT ": ambiguous redirect\n"
 
 # define COMMAND_NOT_FOUND_CODE 127
 
@@ -133,6 +135,24 @@ void				ignore_signals_init(void);
 int					exec_checks(char *cmd, int *status);
 void				get_path(t_minishell *msh,
 						t_final_cmd_table *final_cmd_table, char **path);
-int					expander(t_minishell *msh, t_final_cmd_table *command_table);
+int					expander(t_minishell *msh,
+						t_final_cmd_table *command_table);
+void				execution_info_cleanup(t_minishell *msh,
+						t_execution_info *info, int exit_code);
+int					executor(t_execution_info *info, t_minishell *msh,
+						t_final_cmd_table *final_cmd_table,
+						int level_in_execution);
+void				special_case_exit(t_minishell *msh, t_execution_info *info,
+						int *status);
+void				prepare_next_fds(t_execution_info **info);
+void				check_if_exit_process_needed(t_execution_info *info,
+						t_minishell *msh, int status, int level_in_execution);
+int					set_info(t_execution_info **info,
+						t_final_cmd_table *final_cmd_table);
+int					subshell_fork_exec(t_execution_info *info, t_minishell *msh,
+						int status, int level_in_execution);
+int					skip_executed_commands(t_execution_info *info,
+						int level_in_execution);
+void				check_close_io(t_execution_info *info);
 
 #endif
