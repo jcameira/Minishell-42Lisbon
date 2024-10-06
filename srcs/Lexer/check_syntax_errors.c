@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:52:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/06 03:48:39 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 12:14:06 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 static int	check_if_only_subshell_inside_subshell(t_token_list *token_list)
 {
 	int		parentesis;
-	//int		content;
 
-	//content = 0;
 	parentesis = 1;
 	token_list = token_list->next;
 	while (token_list)

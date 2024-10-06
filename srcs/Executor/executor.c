@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:22:22 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/06 06:28:52 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 13:12:58 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	execute_setup(t_minishell *msh, t_execution_info *info,
 				dup2(info->tmp_table->outfile_fd, STDOUT_FILENO);
 			if (!ft_strcmp(info->tmp_table->simplecmd->arg_arr[0], "exit")
 				&& info->tmp_table->subshell_level == 0)
-				ft_putstr_fd("exit\n", 2);
+				ft_putstr_fd("exit\n", 1);
 			*status = info->tmp_table->builtin(msh, info->tmp_table->simplecmd);
 			reset_std_fds(msh);
 		}
@@ -75,7 +75,8 @@ void	logical_operator_skip(t_execution_info *info, t_minishell *msh,
 {
 	int	skip;
 
-	check_if_exit_process_needed(info, msh, status, level_in_execution);
+	(void)level_in_execution;
+	(void)msh;
 	while (info->tmp_table->next_symbol != NO_SYMBOL)
 	{
 		if (info->tmp_table->next->subshell_level \
@@ -113,7 +114,10 @@ int	prepare_and_execute_cmd(t_execution_info *info, t_minishell *msh,
 	expander(msh, info->tmp_table);
 	execute_setup(msh, info, status, &i);
 	if (!next_command_setup(msh, &info, status, &i))
+	{
+		check_if_exit_process_needed(info, msh, *status, level_in_execution);
 		logical_operator_skip(info, msh, *status, level_in_execution);
+	}
 	i++;
 	return (SUCCESS);
 }
