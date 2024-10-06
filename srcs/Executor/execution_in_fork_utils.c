@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 23:08:36 by jcameira          #+#    #+#             */
-/*   Updated: 2024/10/05 19:53:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 06:46:36 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,20 @@ char	*find_cmd_path(char **envp, char *cmd)
 	return (write_command_path(cmd_paths, cmd));
 }
 
+int	exec_checks_error(int *status, char *cmd, DIR *dir)
+{
+	if (*status == 2)
+		return (ft_putstr_fd(ERROR_PREFIX, 2), ft_putstr_fd(cmd, 2),
+			ft_putstr_fd(ERROR_NO_FILENAME, 2), closedir(dir), 0);
+	if (*status == 126)
+		return (ft_putstr_fd(ERROR_PREFIX, 2), ft_putstr_fd(cmd, 2),
+			ft_putstr_fd(ERROR_DIRECTORY, 2), closedir(dir), 0);
+	if (*status == 127)
+		return (ft_putstr_fd(ERROR_PREFIX, 2), ft_putstr_fd(cmd, 2),
+			ft_putstr_fd(ERROR_NO_FILE, 2), closedir(dir), 0);
+	return (1);
+}
+
 int	exec_checks(char *cmd, int *status)
 {
 	DIR	*dir;
@@ -74,18 +88,16 @@ int	exec_checks(char *cmd, int *status)
 	if (fd > -1)
 		close(fd);
 	dir = opendir(cmd);
+	if (cmd[0] == '.' && !cmd[1])
+		*status = 2;
 	if ((!ft_strncmp(cmd, "./", 2) || cmd[0] == '/') && dir)
 		*status = 126;
 	if ((!ft_strncmp(cmd, "./", 2) || cmd[0] == '/') && !dir
 		&& access(cmd, X_OK))
 		*status = 127;
-	if (*status == 126)
-		return (ft_putstr_fd(ERROR_PREFIX, 2), ft_putstr_fd(cmd, 2),
-			ft_putstr_fd(ERROR_DIRECTORY, 2), free(dir), 0);
-	if (*status == 127)
-		return (ft_putstr_fd(ERROR_PREFIX, 2), ft_putstr_fd(cmd, 2),
-			ft_putstr_fd(ERROR_NO_FILE, 2), free(dir), 0);
-	return (1);
+	if (!exec_checks_error(status, cmd, dir))
+		return (0);
+	return (closedir(dir), 1);
 }
 
 void	get_path(t_minishell *msh, t_final_cmd_table *final_cmd_table,
