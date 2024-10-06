@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/10/05 22:41:47 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/06 01:36:58 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ int	cd_special_checks(t_minishell *msh, t_simplecmd *cmd, char **final_path,
 {
 	*final_path = NULL;
 	if (cmd->arg_nbr > 2)
-		return (ft_putstr_fd(CD_TOO_MANY_ARGS, 2), FAILURE);
+		return (free(cur_path), ft_putstr_fd(CD_TOO_MANY_ARGS, 2), FAILURE);
 	else if (cmd->arg_nbr == 1)
 	{
 		*final_path = find_path(msh, HOME);
 		if (!(*final_path))
-			return (ft_putstr_fd(CD_NO_HOME, 2), FAILURE);
+			return (free(cur_path), ft_putstr_fd(CD_NO_HOME, 2), FAILURE);
 	}
 	else if (cmd->arg_nbr > 1 && !ft_strncmp(cmd->arg_arr[1], "..", 2))
 		*final_path = parent_dir(cur_path);
@@ -75,13 +75,13 @@ int	cd_special_checks(t_minishell *msh, t_simplecmd *cmd, char **final_path,
 	{
 		*final_path = find_path(msh, OLDPWD);
 		if (!(*final_path))
-			return (ft_putstr_fd(CD_NO_OLDPWD, 2), FAILURE);
+			return (free(cur_path), ft_putstr_fd(CD_NO_OLDPWD, 2), FAILURE);
 	}
 	else if (cmd->arg_arr[1][0] == '/')
 	{
 		*final_path = ft_strdup(cmd->arg_arr[1]);
 		if (!(*final_path))
-			return (ft_putstr_fd(NO_SPACE, 2), FAILURE);
+			return (free(cur_path), ft_putstr_fd(NO_SPACE, 2), FAILURE);
 	}
 	return (SUCCESS);
 }
