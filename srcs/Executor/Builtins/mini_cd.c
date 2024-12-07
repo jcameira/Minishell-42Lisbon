@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:47:46 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/10/06 13:35:54 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:28:05 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	chdir_cd(char *cur_path, char *final_path, t_simplecmd *cmd)
 	char	*tmp;
 
 	tmp = getcwd(NULL, 0);
+	if (!tmp)
+		return (ft_putstr_fd(CD_CANNOT_ACCESS_PARENT_DIR, 2), FAILURE);
 	if (strcmp(final_path, tmp) && chdir(final_path) == -1)
 	{
 		free(final_path);
@@ -93,6 +95,8 @@ int	mini_cd(t_minishell *msh, t_simplecmd *cmd)
 	char	*final_path;
 
 	cur_path = getcwd(NULL, 0);
+	if (!cur_path)
+		return (ft_putstr_fd(CD_CANNOT_ACCESS_PARENT_DIR, 2), FAILURE);
 	if (!cd_special_checks(msh, cmd, &final_path, cur_path))
 		return (EXIT_FAILURE);
 	if (!final_path)
