@@ -6,7 +6,7 @@
 /*   By: jcameira <jcameira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:04:23 by mpais-go          #+#    #+#             */
-/*   Updated: 2024/10/05 15:39:19 by jcameira         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:23:47 by jcameira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # define CD_TOO_MANY_ARGS "minishell: cd: too many arguments\n"
 # define CD_NO_HOME "minishell: cd: HOME not set\n"
 # define CD_NO_OLDPWD "minishell: cd: OLDPWD not set\n"
+# define CD_CANNOT_ACCESS_PARENT_DIR "chdir: error retrieving current \
+directory: getcwd: cannot access parent directories: No such file or directory\n"
 
 # define EXPORT_PREFIX "minishell: export: `"
 # define EXPORT_NOT_IDENTIFIER "': not a valid identifier\n"
@@ -41,6 +43,9 @@
 # define EXIT_PREFIX "minishell: exit: "
 # define EXIT_NON_NUMERIC_ARGUMENT ": numeric argument required\n"
 # define EXIT_TOO_MANY_ARGUMENTS "minishell: exit: too many arguments\n"
+
+# define PWD_CANNOT_ACCESS_PARENT_DIR "pwd: error retrieving current directory:\
+ getcwd: cannot access parent directories: No such file or directory\n"
 
 # define PWD "PWD="
 # define OLDPWD "OLDPWD="

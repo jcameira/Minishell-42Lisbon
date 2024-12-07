@@ -57,7 +57,7 @@ $(OBJ_DIR)%.o: 		%.c
 
 all:				$(NAME)
 
-$(NAME):			$(OBJ_DIR) $(LIBFT) $(GNL) $(OBJS) 
+$(NAME):			$(OBJ_DIR) $(LIBFT) $(OBJS) 
 					@$(CC) $(CFLAGS) $(IFLAGS) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $@
 					@echo "\033[2F\033[0K$(CYAN)$@$(DEFAULT) successfully created\033[E"
 					@if norminette | grep -q -v "OK!"; then \
@@ -66,11 +66,11 @@ $(NAME):			$(OBJ_DIR) $(LIBFT) $(GNL) $(OBJS)
 						echo "Norminette$(GRN) OK!!$(DEFAULT)"; \
 					fi
 
-sanitize:			$(OBJ_DIR) $(LIBFT) $(GNL) $(OBJS)
+sanitize:			$(OBJ_DIR) $(LIBFT) $(OBJS)
 					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
-random_m:			$(OBJ_DIR) $(LIBFT) $(GNL) $(OBJS)
+random_m:			$(OBJ_DIR) $(LIBFT) $(OBJS)
 					@$(CC) $(CFLAGS) $(IFLAGS) $(SANITIZE) $(RANDOM_MALLOC) $(ALL_OBJECTS) $(EXTRA_LIBS) -o $(NAME)
 					@echo "\033[2F\033[0K$(CYAN)$(NAME)$(DEFAULT) successfully created\033[E"
 
@@ -78,9 +78,6 @@ bonus:				$(NAME)
 
 v:					$(NAME)
 					clear && valgrind --show-leak-kinds=all --leak-check=full --track-fds=all --track-origins=yes --suppressions=readline.supp ./minishell
-
-$(GNL):
-					@make -s -C $(GNL_PATH) all
 
 $(LIBFT):
 					@make -s -C $(LIBFT_PATH) all
